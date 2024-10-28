@@ -1,4 +1,4 @@
-
+# Link Devices process
 
 ```mermaid
 sequenceDiagram

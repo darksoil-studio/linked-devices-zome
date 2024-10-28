@@ -24,18 +24,18 @@ fn secret_from_passcode(passcode: Vec<u8>) -> CapSecret {
 }
 
 #[hdk_extern]
-pub fn prepare_link_devices(passcode: Vec<u8>) -> ExternResult<()> {
+pub fn prepare_link_devices(my_passcode: Vec<u8>) -> ExternResult<()> {
     let mut functions = BTreeSet::new();
     functions.insert((
         zome_info()?.name,
-        FunctionName("receive_initialize_link_devices".into()),
+        FunctionName("receive_init_link_devices".into()),
     ));
     functions.insert((
         zome_info()?.name,
         FunctionName("receive_request_link_devices".into()),
     ));
     let access = CapAccess::Transferable {
-        secret: secret_from_passcode(passcode),
+        secret: secret_from_passcode(my_passcode),
     };
     let cap_grant_entry: CapGrantEntry = CapGrantEntry::new(
         String::from("link-devices"), // A string by which to later query for saved grants.
@@ -99,7 +99,7 @@ fn query_link_agents_cap_grants() -> ExternResult<Vec<Record>> {
 }
 
 #[hdk_extern]
-pub fn clear_link_agent() -> ExternResult<()> {
+pub fn clear_link_devices() -> ExternResult<()> {
     let link_agent_cap_grants = query_link_agents_cap_grants()?;
 
     for record in link_agent_cap_grants {
@@ -170,12 +170,18 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
         timestamp: sys_time()?,
     };
 
+    let my_signature = sign(my_pub_key.clone(), linked_devices.clone())?;
+    let incomplete_proof = LinkedDevicesProof {
+        linked_devices: linked_devices.clone(),
+        signatures: vec![my_signature.clone()],
+    };
+
     let response = call_remote(
         input.requestor.clone(),
         zome_info()?.name,
         "receive_request_link_devices".into(),
         Some(secret_from_passcode(input.requestor_passcode)),
-        linked_devices.clone(),
+        incomplete_proof,
     )?;
 
     let ZomeCallResponse::Ok(result) = response else {
@@ -184,7 +190,6 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
 
     let signature: Signature = result.decode().map_err(|err| wasm_error!(err))?;
 
-    let my_signature = sign(my_pub_key.clone(), linked_devices.clone())?;
     let proof = LinkedDevicesProof {
         linked_devices,
         signatures: vec![my_signature, signature],
@@ -200,12 +205,8 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
         LinkTypes::AgentToLinkedDevices,
         tag_bytes.bytes().clone(),
     )?;
-    create_link_relaxed(
-        input.requestor,
-        my_pub_key,
-        LinkTypes::AgentToLinkedDevices,
-        tag_bytes.bytes().clone(),
-    )?;
+
+    clear_link_devices(())?;
 
     Ok(())
 }
@@ -213,7 +214,10 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
 pub const LINKED_DEVICES_PROOF_TTL_US: u64 = 5_000_000; // 5 seconds
 
 #[hdk_extern]
-pub fn receive_request_link_devices(linked_devices: LinkedDevices) -> ExternResult<Signature> {
+pub fn receive_request_link_devices(
+    incomplete_proof: LinkedDevicesProof,
+) -> ExternResult<Signature> {
+    let linked_devices = incomplete_proof.linked_devices;
     let my_pub_key = agent_info()?.agent_latest_pubkey;
     let caller = call_info()?.provenance;
 
@@ -232,7 +236,25 @@ pub fn receive_request_link_devices(linked_devices: LinkedDevices) -> ExternResu
         ))));
     }
 
-    let my_signature = sign(my_pub_key, linked_devices.clone())?;
+    let my_signature = sign(my_pub_key.clone(), linked_devices.clone())?;
+
+    let proof = LinkedDevicesProof {
+        linked_devices,
+        signatures: vec![incomplete_proof.signatures[0].clone(), my_signature.clone()],
+    };
+
+    let tag = AgentToLinkedDevicesLinkTag(vec![proof]);
+
+    let tag_bytes = SerializedBytes::try_from(tag).map_err(|err| wasm_error!(err))?;
+
+    create_link_relaxed(
+        my_pub_key,
+        caller,
+        LinkTypes::AgentToLinkedDevices,
+        tag_bytes.bytes().clone(),
+    )?;
+
+    clear_link_devices(())?;
 
     Ok(my_signature)
 }

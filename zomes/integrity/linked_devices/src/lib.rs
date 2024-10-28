@@ -70,9 +70,20 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             )),
             _ => Ok(ValidateCallbackResult::Valid),
         },
-        FlatOp::RegisterDelete(delete_entry) => Ok(ValidateCallbackResult::Invalid(
-            "There are no entry types in this integrity zome".to_string(),
-        )),
+        FlatOp::RegisterDelete(delete_entry) => {
+            let record = must_get_valid_record(delete_entry.action.deletes_address)?;
+            let Action::Create(create) = record.action() else {
+                return Ok(ValidateCallbackResult::Invalid(
+                    "There are no entry types in this integrity zome".to_string(),
+                ));
+            };
+            if let EntryType::CapGrant = create.entry_type {
+                return Ok(ValidateCallbackResult::Valid);
+            }
+            Ok(ValidateCallbackResult::Invalid(
+                "There are no entry types in this integrity zome".to_string(),
+            ))
+        }
         FlatOp::RegisterCreateLink {
             link_type,
             base_address,
@@ -118,9 +129,14 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 // Complementary validation to the `StoreEntry` Op, in which the record itself is validated
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `StoreEntry`
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the `StoreEntry` validation failed
-                OpRecord::CreateEntry { app_entry, action } => Ok(ValidateCallbackResult::Invalid(
-                    "There are no entry types in this integrity zome".to_string(),
-                )),
+                OpRecord::CreateEntry { app_entry, action } => {
+                    if let EntryType::CapGrant = action.entry_type {
+                        return Ok(ValidateCallbackResult::Valid);
+                    }
+                    Ok(ValidateCallbackResult::Invalid(
+                        "There are no entry types in this integrity zome".to_string(),
+                    ))
+                }
                 // Complementary validation to the `RegisterUpdate` Op, in which the record itself is validated
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `StoreEntry` and in `RegisterUpdate`
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the other validations failed
@@ -139,9 +155,20 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     original_action_hash,
                     action,
                     ..
-                } => Ok(ValidateCallbackResult::Invalid(
-                    "There are no entry types in this integrity zome".to_string(),
-                )),
+                } => {
+                    let record = must_get_valid_record(original_action_hash)?;
+                    let Action::Create(create) = record.action() else {
+                        return Ok(ValidateCallbackResult::Invalid(
+                            "There are no entry types in this integrity zome".to_string(),
+                        ));
+                    };
+                    if let EntryType::CapGrant = create.entry_type {
+                        return Ok(ValidateCallbackResult::Valid);
+                    }
+                    Ok(ValidateCallbackResult::Invalid(
+                        "There are no entry types in this integrity zome".to_string(),
+                    ))
+                }
                 // Complementary validation to the `RegisterCreateLink` Op, in which the record itself is validated
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `RegisterCreateLink`
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the `RegisterCreateLink` validation failed

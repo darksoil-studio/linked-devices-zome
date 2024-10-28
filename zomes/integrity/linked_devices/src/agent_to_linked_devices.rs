@@ -33,7 +33,7 @@ fn validate_linked_devices_proof(
 }
 
 pub fn validate_create_link_agent_to_linked_devices(
-    _action: CreateLink,
+    action: CreateLink,
     base_address: AnyLinkableHash,
     target_address: AnyLinkableHash,
     tag: LinkTag,
@@ -43,6 +43,11 @@ pub fn validate_create_link_agent_to_linked_devices(
             "No AgentPubKey as the base of an AgentToLinkedDevices link",
         )));
     };
+    if base_agent.ne(&action.author) {
+        return Ok(ValidateCallbackResult::Invalid(String::from(
+            "Only agents can author AgentToLinkedDevices links using themselves as the base.",
+        )));
+    }
     let Some(target_agent) = target_address.clone().into_agent_pub_key() else {
         return Ok(ValidateCallbackResult::Invalid(String::from(
             "No AgentPubKey as the target of an AgentToLinkedDevices link",
