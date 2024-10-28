@@ -5,14 +5,10 @@ opt-level = "z"
 opt-level = "z"
 
 [workspace]
-members = [ "crates/*","zomes/coordinator/*", "zomes/integrity/*"]
+members = ["crates/*", "zomes/coordinator/*", "zomes/integrity/*"]
 resolver = "2"
 
 [workspace.dependencies]
-holochain = { version = "0.3.2", default-features = false, features = [
-  "test_utils",
-] }
-hdi = "0.4.2"
-hdk = "0.3.2"
-serde = "1"
-
+hdi = "=0.4.2"
+hdk = "=0.3.2"
+serde = "1.0"

@@ -11,8 +11,6 @@
     p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard";
     playground.url = "github:darksoil-studio/holochain-playground";
     scaffolding.url = "github:holochain-open-dev/templates";
-
-    profiles.url = "github:holochain-open-dev/profiles/nixify";
   };
 
   nixConfig = {
@@ -31,6 +29,8 @@
       imports = [
         ./zomes/integrity/linked_devices/zome.nix
         ./zomes/coordinator/linked_devices/zome.nix
+        ./zomes/integrity/example/zome.nix
+        ./zomes/coordinator/example/zome.nix
         # Just for testing purposes
         ./workdir/dna.nix
         ./workdir/happ.nix

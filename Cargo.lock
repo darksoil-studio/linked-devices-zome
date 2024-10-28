@@ -1603,6 +1603,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "example"
+version = "0.0.1"
+dependencies = [
+ "example_integrity",
+ "hdk",
+ "serde",
+]
+
+[[package]]
+name = "example_integrity"
+version = "0.0.1"
+dependencies = [
+ "hdi",
+ "serde",
+]
+
+[[package]]
 name = "fallible-iterator"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2135,9 +2152,9 @@ dependencies = [
 
 [[package]]
 name = "hdi"
-version = "0.4.4"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d39173c3c05d81f2ad851588de91b991619ed398e201cb60829d060de88f609"
+checksum = "ece9b147d5e9ebc0a1f47a180a31436f4390a060ad46aa325d1fb851321ec3c7"
 dependencies = [
  "getrandom 0.2.15",
  "hdk_derive",
@@ -2153,9 +2170,9 @@ dependencies = [
 
 [[package]]
 name = "hdk"
-version = "0.3.4"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2af08cc1dacd885294bc55d5f688ceb938dccb5be29bebf9d927985a9365073"
+checksum = "01ba518e916e7eb29cf4a3b4c0d853fefab76bffc19939f8e0e5925581c67da7"
 dependencies = [
  "getrandom 0.2.15",
  "hdi",
@@ -2287,9 +2304,9 @@ dependencies = [
 
 [[package]]
 name = "holochain"
-version = "0.3.4"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2ba0848591df566b252d5198af3cc7c98662a4995237a7079cbbc06798916179"
+checksum = "a1eb75811baa0598d13a0b01d0b0becc54e26efda9effc20a03e9557367e3d0c"
 dependencies = [
  "aitia",
  "anyhow",
@@ -2684,9 +2701,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_test_wasm_common"
-version = "0.3.4"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1379bf1a68ed7ddca04bc590ced2a1b6c75ac94c70f99c802d89de8f18d26e30"
+checksum = "2b3e521892e6aa14cb856f373e0b2a9deaca5923e1f06de3b92fc89e9b1c44fb"
 dependencies = [
  "hdk",
  "serde",

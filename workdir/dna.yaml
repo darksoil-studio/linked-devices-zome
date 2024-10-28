@@ -9,20 +9,35 @@ integrity:
     - name: linked_devices_integrity
       hash: ~
       bundled: "../target/wasm32-unknown-unknown/release/linked_devices_integrity.wasm"
-      dependencies: ~    
+      dependencies: ~
+      dylib: ~
     - name: profiles_integrity
       hash: ~
-      bundled: <NIX PACKAGE>
+      bundled: "<NIX PACKAGE>"
       dependencies: ~
+      dylib: ~
+    - name: example_integrity
+      hash: ~
+      bundled: "../target/wasm32-unknown-unknown/release/example_integrity.wasm"
+      dependencies: ~
+      dylib: ~
 coordinator:
   zomes:
     - name: linked_devices
       hash: ~
       bundled: "../target/wasm32-unknown-unknown/release/linked_devices.wasm"
       dependencies:
-        - name: linked_devices_integrity    
+        - name: linked_devices_integrity
+      dylib: ~
     - name: profiles
       hash: ~
-      bundled: <NIX PACKAGE>
+      bundled: "<NIX PACKAGE>"
       dependencies:
         - name: profiles_integrity
+      dylib: ~
+    - name: example
+      hash: ~
+      bundled: "../target/wasm32-unknown-unknown/release/example.wasm"
+      dependencies:
+        - name: example_integrity
+      dylib: ~
