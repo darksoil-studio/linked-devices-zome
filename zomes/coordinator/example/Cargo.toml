@@ -11,4 +11,4 @@ name = "example"
 hdk = { workspace = true }
 serde = { workspace = true }
 
-example_integrity = { workspace = true } 
+example_integrity = { path = "../../integrity/example" } 

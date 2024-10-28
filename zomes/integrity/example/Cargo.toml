@@ -10,3 +10,4 @@ name = "example_integrity"
 [dependencies]
 hdi = { workspace = true }
 serde = { workspace = true }
+linked_devices_types = { path = "../../../crates/linked_devices_types" }
