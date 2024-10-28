@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "@holochain-open-dev/linked-devices"
+  name: "@darksoil-studio/linked-devices"
   text: "Linked Devices zome for holochain apps"
   tagline: Plug-and-play linked devices management for your hApps
   actions:

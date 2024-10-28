@@ -1,14 +1,9 @@
 { inputs, ... }:
 
 {
-  perSystem =
-    { inputs'
-    , self'
-    , lib
-    , system
-    , ...
-    }: {
-  	  packages.linked-devices_test_dna = inputs.hc-infra.outputs.builders.${system}.dna {
+  perSystem = { inputs', self', lib, system, ... }: {
+    packages.linked_devices_test_dna =
+      inputs.hc-infra.outputs.builders.${system}.dna {
         dnaManifest = ./dna.yaml;
         zomes = {
           # Include here the zome packages for this DNA, e.g.:
@@ -19,6 +14,6 @@
           linked_devices = self'.packages.linked_devices;
         };
       };
-  	};
+  };
 }
 

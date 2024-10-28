@@ -3,7 +3,7 @@
 The `LinkedDevicesStore` is a typescript class that contains [async signals](https://www.npmjs.com/package/async-signals), which you can watch to get reactive updates in your elements.
 
 ```js
-import { LinkedDevicesStore, LinkedDevicesClient } from "@holochain-open-dev/linked-devices";
+import { LinkedDevicesStore, LinkedDevicesClient } from "@darksoil-studio/linked-devices";
 const store = new LinkedDevicesStore(new LinkedDevicesClient(appClient, 'my-role-name'));
 ```
 

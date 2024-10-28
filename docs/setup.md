@@ -31,18 +31,18 @@ async function setupLinkedDevicesStore() {
 }
 ```
 
-3. Import the `<linked-devices-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@holochain-open-dev/linked-devices`:
+3. Import the `<linked-devices-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@darksoil-studio/linked-devices`:
 
 ```js
 // This can be placed in the index.js, at the top level of your web-app.
-import "@holochain-open-dev/linked-devices/elements/linked-devices-context.js";
+import "@darksoil-studio/linked-devices/dist/elements/linked-devices-context.js";
 ```
 
 And then add the `<linked-devices-context>` element in your html:
 
 ```html
 <linked-devices-context>
-  <!-- Add here other elements from @holochain-open-dev/linked-devices -->
+  <!-- Add here other elements from @darksoil-studio/linked-devices -->
 </linked-devices-context>
 ```
 
@@ -90,7 +90,7 @@ contextElement.store = store;
 5. [Choose which elements you need](?path=/docs/frontend-elements) and import them like this:
 
 ```js
-import "@holochain-open-dev/linked-devices/dist/elements/linked-devices-context.js";
+import "@darksoil-studio/linked-devices/dist/elements/linked-devices-context.js";
 ```
 
 And then they are ready be used inside the `<linked-devices-context>` just like any other HTML tag.

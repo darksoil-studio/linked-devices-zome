@@ -47,7 +47,7 @@ importers:
       '@api-viewer/docs':
         specifier: 1.0.0-pre.10
         version: 1.0.0-pre.10
-      '@holochain-open-dev/linked-devices':
+      '@darksoil-studio/linked-devices':
         specifier: workspace:*
         version: link:../ui
       '@holochain-open-dev/profiles':

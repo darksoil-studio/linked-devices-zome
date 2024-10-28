@@ -3,7 +3,7 @@ manifest_version: "1"
 name: linked-devices_test
 description: ~
 roles:   
-  - name: linked-devices_test
+  - name: linked_devices_test
     provisioning:
       strategy: create
       deferred: false
