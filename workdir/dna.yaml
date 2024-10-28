@@ -1,0 +1,28 @@
+---
+manifest_version: "1"
+name: linked_devices_test
+integrity:
+  network_seed: ~
+  properties: ~
+  origin_time: 1676140846503210
+  zomes:
+    - name: linked_devices_integrity
+      hash: ~
+      bundled: "../target/wasm32-unknown-unknown/release/linked_devices_integrity.wasm"
+      dependencies: ~    
+    - name: profiles_integrity
+      hash: ~
+      bundled: <NIX PACKAGE>
+      dependencies: ~
+coordinator:
+  zomes:
+    - name: linked_devices
+      hash: ~
+      bundled: "../target/wasm32-unknown-unknown/release/linked_devices.wasm"
+      dependencies:
+        - name: linked_devices_integrity    
+    - name: profiles
+      hash: ~
+      bundled: <NIX PACKAGE>
+      dependencies:
+        - name: profiles_integrity

@@ -1,0 +1,7 @@
+---
+manifest_version: "1"
+name: linked-devices
+ui:
+  bundled: "../ui/dist.zip"
+happ_manifest:
+  bundled: "./linked-devices.happ"
