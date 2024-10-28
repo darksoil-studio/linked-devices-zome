@@ -1,7 +1,7 @@
 import { ZomeClient } from '@holochain-open-dev/utils';
 import { AgentPubKey, AppClient, Link } from '@holochain/client';
 
-import { LinkedDevicesSignal } from './types.js';
+import { LinkedDevicesProof, LinkedDevicesSignal } from './types.js';
 
 export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 	constructor(
@@ -18,13 +18,35 @@ export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 		return this.callZome('get_linked_devices_for_agent', agent);
 	}
 
-	addLinkedDeviceForAgent(
-		agent: AgentPubKey,
+	addLinkedDevice(
 		linkedDevice: AgentPubKey,
+		proof: LinkedDevicesProof,
 	): Promise<void> {
-		return this.callZome('add_linked_device_for_agent', {
-			base_agent: agent,
-			target_linked_device: linkedDevice,
+		return this.callZome('add_linked_device', {
+			linked_device: linkedDevice,
+			proof,
+		});
+	}
+
+	async prepareLinkDevices(passcode: number[]) {
+		await this.callZome('prepare_link_devices', passcode);
+	}
+	async getLinkingAgents(): Promise<Array<Link>> {
+		return this.callZome('get_linking_agents', null);
+	}
+	async clearLinkDevices() {
+		await this.callZome('clear_link_devices', null);
+	}
+
+	async requestLinkDevices(
+		recipient: AgentPubKey,
+		recipient_passcode: number[],
+		requestor_passcode: number[],
+	) {
+		await this.callZome('request_link_devices', {
+			recipient,
+			recipient_passcode,
+			requestor_passcode,
 		});
 	}
 }

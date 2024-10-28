@@ -3804,6 +3804,15 @@ name = "linked_devices_integrity"
 version = "0.0.1"
 dependencies = [
  "hdi",
+ "linked_devices_types",
+ "serde",
+]
+
+[[package]]
+name = "linked_devices_types"
+version = "0.1.0"
+dependencies = [
+ "hdi",
  "serde",
 ]
 
