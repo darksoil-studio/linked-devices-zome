@@ -38,14 +38,19 @@ export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 		await this.callZome('clear_link_devices', null);
 	}
 
+	async initLinkDevices(recipient: AgentPubKey, recipient_passcode: number[]) {
+		await this.callZome('init_link_devices', {
+			recipient,
+			recipient_passcode,
+		});
+	}
+
 	async requestLinkDevices(
-		recipient: AgentPubKey,
-		recipient_passcode: number[],
+		requestor: AgentPubKey,
 		requestor_passcode: number[],
 	) {
 		await this.callZome('request_link_devices', {
-			recipient,
-			recipient_passcode,
+			requestor,
 			requestor_passcode,
 		});
 	}

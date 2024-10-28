@@ -1,23 +1,35 @@
 use hdi::prelude::*;
-use linked_devices_types::{
-    validate_linked_devices_proof, AgentToLinkedDevicesLinkTag, LinkedDevicesProof,
-};
+use linked_devices_types::{are_agents_linked, AgentToLinkedDevicesLinkTag, LinkedDevicesProof};
 
-fn validate_agents_are_linked(
-    agent_1: AgentPubKey,
-    agent_2: AgentPubKey,
-    proofs: Vec<LinkedDevicesProof>,
+fn validate_linked_devices_proof(
+    linked_device_proof: &LinkedDevicesProof,
 ) -> ExternResult<ValidateCallbackResult> {
-    for proof in proofs {
-        if proof.linked_devices.agents.contains(&agent_1)
-            && proof.linked_devices.agents.contains(&agent_2)
-        {
-            return Ok(ValidateCallbackResult::Valid);
+    if linked_device_proof
+        .linked_devices
+        .agents
+        .len()
+        .ne(&linked_device_proof.signatures.len())
+    {
+        return Ok(ValidateCallbackResult::Invalid(format!(
+            "Invalid LinkedDevicesProof: Number of signatures does not equal the number of linked devices"
+        )));
+    }
+
+    for i in 0..linked_device_proof.linked_devices.agents.len() {
+        let agent = linked_device_proof.linked_devices.agents[i].clone();
+        let signature = linked_device_proof.signatures[i].clone();
+        let valid = verify_signature(
+            agent.clone(),
+            signature,
+            linked_device_proof.linked_devices.clone(),
+        )?;
+        if !valid {
+            return Ok(ValidateCallbackResult::Invalid(format!(
+                "Invalid LinkedDevicesProof: signature for agent {agent} is not valid"
+            )));
         }
     }
-    Ok(ValidateCallbackResult::Invalid(format!(
-        "Given agents are not proven to be linked with the given LinkedDevicesProofs"
-    )))
+    return Ok(ValidateCallbackResult::Valid);
 }
 
 pub fn validate_create_link_agent_to_linked_devices(
@@ -52,11 +64,12 @@ pub fn validate_create_link_agent_to_linked_devices(
             return Ok(result);
         };
     }
-    let result = validate_agents_are_linked(base_agent, target_agent, tag.0)?;
 
-    let ValidateCallbackResult::Valid = result else {
-        return Ok(result);
-    };
+    if !are_agents_linked(&base_agent, &target_agent, &tag.0) {
+        return Ok(ValidateCallbackResult::Invalid(String::from(
+            "Agents are not proven to be linked with the given LinkDevicesProofs",
+        )));
+    }
 
     Ok(ValidateCallbackResult::Valid)
 }
