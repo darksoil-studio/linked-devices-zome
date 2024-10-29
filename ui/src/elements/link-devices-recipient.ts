@@ -111,7 +111,7 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 			notify(msg('Device linked successfully'));
 		} catch (e) {
 			console.error(e);
-			notifyError(msg(`Error`));
+			notifyError(msg(`Incorrect passcode`));
 		}
 		(
 			this.shadowRoot!.querySelector('passcode-input') as PasscodeInput

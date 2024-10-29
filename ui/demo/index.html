@@ -92,20 +92,24 @@
 						`;
 					}
 					return html`
-						<sl-button
-							@click=${() => {
-								this.linkingDeviceRequestor = true;
-								this.requestUpdate();
-							}}
-							>Link Device as requestor</sl-button
-						>
-						<sl-button
-							@click=${() => {
-								this.linkingDeviceRecipient = true;
-								this.requestUpdate();
-							}}
-							>Link Device as recipient</sl-button
-						>
+						<div>
+							<sl-button
+								@click=${() => {
+									this.linkingDeviceRequestor = true;
+									this.requestUpdate();
+								}}
+								>Link Device as requestor</sl-button
+							>
+						</div>
+						<div>
+							<sl-button
+								@click=${() => {
+									this.linkingDeviceRecipient = true;
+									this.requestUpdate();
+								}}
+								>Link Device as recipient</sl-button
+							>
+						</div>
 					`;
 				}
 

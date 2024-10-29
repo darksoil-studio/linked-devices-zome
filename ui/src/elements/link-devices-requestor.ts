@@ -48,19 +48,6 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 	interval: any;
 
 	async firstUpdated() {
-		this.requestorpasscode = randomPasscode(
-			this.store.config.linkDevicePasscodeLength,
-		);
-		await this.store.client.prepareLinkDevices(this.requestorpasscode);
-
-		this.interval = setInterval(async () => {
-			this.requestorpasscode = randomPasscode(
-				this.store.config.linkDevicePasscodeLength,
-			);
-			await this.store.client.clearLinkDevices();
-			await this.store.client.prepareLinkDevices(this.requestorpasscode);
-		}, TTL_CAP_GRANT);
-
 		setTimeout(() => {
 			this.shadowRoot!.getElementById('input-0')?.focus();
 		});
@@ -108,7 +95,19 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 			// 	this.attemptedRecipients.set(linkingAgent, 'requesting');
 			try {
 				await this.store.client.initLinkDevices(linkingAgent, passcode);
-				// this.attemptedRecipients.set(linkingAgent, 'success');
+
+				this.requestorpasscode = randomPasscode(
+					this.store.config.linkDevicePasscodeLength,
+				);
+				await this.store.client.prepareLinkDevices(this.requestorpasscode);
+
+				this.interval = setInterval(async () => {
+					this.requestorpasscode = randomPasscode(
+						this.store.config.linkDevicePasscodeLength,
+					);
+					await this.store.client.clearLinkDevices();
+					await this.store.client.prepareLinkDevices(this.requestorpasscode);
+				}, TTL_CAP_GRANT);
 				this.successfulRecipient = linkingAgent;
 			} catch (e: any) {
 				console.error(e);
