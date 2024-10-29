@@ -6,7 +6,7 @@
 1. Run this to scaffold this zome in your hApp:
 
 ```bash
-nix run github:holochain-open-dev/linked-devices#scaffold
+nix run github:darksoil-studio/linked-devices#scaffold
 ```
 
 This will do the following:

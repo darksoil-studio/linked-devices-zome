@@ -26,6 +26,9 @@ import { randomPasscode } from './link-devices-recipient.js';
 import './passcode-input.js';
 import { PasscodeInput } from './passcode-input.js';
 
+/**
+ * @fires device-linked - Fired when the user successfully links another device. Detail will have this shape: { agentPubKey: AgentPubKey }
+ */
 @customElement('link-devices-requestor')
 export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 	/**
@@ -40,11 +43,20 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 	// 	'requesting' | 'unauthorized' | 'error' | 'success'
 	// >();
 
+	/**
+	 * @internal
+	 */
 	requestorpasscode!: number[];
 
+	/**
+	 * @internal
+	 */
 	@state()
 	successfulRecipient: AgentPubKey | undefined;
 
+	/**
+	 * @internal
+	 */
 	interval: any;
 
 	async firstUpdated() {
@@ -83,7 +95,7 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 		this.store.client.clearLinkDevices();
 	}
 
-	async maybeRequestLink(passcode: number[]) {
+	private async maybeRequestLink(passcode: number[]) {
 		const linkingAgentsLinks = await this.store.client.getLinkingAgents();
 
 		const linkingAgents = linkingAgentsLinks.map(l =>
@@ -133,7 +145,7 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 		}
 	}
 
-	renderNumber() {
+	private renderNumber() {
 		return html`<div
 			class="column"
 			style="gap: 12px; align-items: center; justify-content: center; flex: 1"

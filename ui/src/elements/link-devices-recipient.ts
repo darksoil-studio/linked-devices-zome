@@ -41,12 +41,21 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 	@property()
 	store!: LinkedDevicesStore;
 
+	/**
+	 * @internal
+	 */
 	@state()
 	recipientPasscode: number[] = [];
 
+	/**
+	 * @internal
+	 */
 	@state()
 	initializedLinkDevicesByRequestor: AgentPubKey | undefined;
 
+	/**
+	 * @internal
+	 */
 	interval: any;
 
 	async firstUpdated() {
@@ -78,7 +87,7 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 		this.store.client.clearLinkDevices();
 	}
 
-	async attemptLinkAgent(
+	private async attemptLinkAgent(
 		requestor: AgentPubKey,
 		inputtedRequestorPasscode: Array<number>,
 	) {
@@ -118,7 +127,9 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 		).clearPasscode();
 	}
 
-	renderRequestLinkAgent(initializedLinkDevicesByRequestor: AgentPubKey) {
+	private renderRequestLinkAgent(
+		initializedLinkDevicesByRequestor: AgentPubKey,
+	) {
 		return html`
 			<div
 				class="column"
