@@ -73,11 +73,14 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 
 		this.store.client.onSignal(signal => {
 			if (
-				!('type' in signal && (signal as any).type === 'LinkDevicesInitialized')
+				!(
+					'type' in signal &&
+					(signal as LinkDevicesSignal).type === 'LinkDevicesInitialized'
+				)
 			)
 				return;
 			this.initializedLinkDevicesByRequestor = (
-				signal as any as LinkDevicesSignal
+				signal as LinkDevicesSignal
 			).requestor;
 		});
 	}

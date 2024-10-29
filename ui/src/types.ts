@@ -1,7 +1,9 @@
 import { ActionCommittedSignal } from '@holochain-open-dev/utils';
 import { AgentPubKey, Signature, Timestamp } from '@holochain/client';
 
-export type LinkedDevicesSignal = ActionCommittedSignal<EntryTypes, LinkTypes>;
+export type LinkedDevicesSignal =
+	| ActionCommittedSignal<EntryTypes, LinkTypes>
+	| LinkDevicesSignal;
 
 export type EntryTypes = never;
 
