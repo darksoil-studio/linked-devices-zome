@@ -4,17 +4,18 @@ import {
 	sharedStyles,
 } from '@holochain-open-dev/elements';
 import { SignalWatcher } from '@holochain-open-dev/signals';
-import { encodeHashToBase64 } from '@holochain/client';
+import { AgentPubKey, encodeHashToBase64 } from '@holochain/client';
 import { consume } from '@lit/context';
 import { msg } from '@lit/localize';
 import { SlInput } from '@shoelace-style/shoelace';
+import '@shoelace-style/shoelace/dist/components/alert/alert.js';
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { TTL_CAP_GRANT } from '../config.js';
-import { linkedDevicesStoreContext, profilesStoreContext } from '../context.js';
+import { linkedDevicesStoreContext } from '../context.js';
 import { LinkedDevicesStore } from '../linked-devices-store.js';
-import { RequestLinkAgentSignal } from '../types.js';
+import { LinkDevicesSignal, LinkedDevicesSignal } from '../types.js';
 import './passcode-input.js';
 import { PasscodeInput } from './passcode-input.js';
 
@@ -31,10 +32,10 @@ export function randomPasscode(length: number) {
 	return passcode;
 }
 
-@customElement('link-device-recipient')
-export class LinkDeviceRecipient extends SignalWatcher(LitElement) {
+@customElement('link-devices-recipient')
+export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 	/**
-	 * Profiles store for this element, not required if you embed this element inside a <profiles-context>
+	 * LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>
 	 */
 	@consume({ context: linkedDevicesStoreContext, subscribe: true })
 	@property()
@@ -44,7 +45,7 @@ export class LinkDeviceRecipient extends SignalWatcher(LitElement) {
 	recipientPasscode: number[] = [];
 
 	@state()
-	requestLinkAgentSignal: RequestLinkAgentSignal | undefined;
+	initializedLinkDevicesByRequestor: AgentPubKey | undefined;
 
 	interval: any;
 
@@ -56,48 +57,54 @@ export class LinkDeviceRecipient extends SignalWatcher(LitElement) {
 			this.recipientPasscode = randomPasscode(
 				this.store.config.linkDevicePasscodeLength,
 			);
-			await this.store.client.clearLinkAgent();
-			await this.store.client.prepareLinkAgent(this.recipientPasscode);
+			await this.store.client.clearLinkDevices();
+			await this.store.client.prepareLinkDevices(this.recipientPasscode);
 		}, TTL_CAP_GRANT);
-		await this.store.client.prepareLinkAgent(this.recipientPasscode);
+		await this.store.client.prepareLinkDevices(this.recipientPasscode);
 
 		this.store.client.onSignal(signal => {
-			if ('type' in signal) return;
-			this.requestLinkAgentSignal = signal as RequestLinkAgentSignal;
+			if (
+				!('type' in signal && (signal as any).type === 'LinkDevicesInitialized')
+			)
+				return;
+			this.initializedLinkDevicesByRequestor = (
+				signal as any as LinkDevicesSignal
+			).requestor;
 		});
 	}
 	disconnectedCallback(): void {
 		super.disconnectedCallback();
 		clearInterval(this.interval);
-		this.store.client.clearLinkAgent();
+		this.store.client.clearLinkDevices();
 	}
 
 	async attemptLinkAgent(
-		requestLinkAgentSignal: RequestLinkAgentSignal,
+		requestor: AgentPubKey,
 		inputtedRequestorPasscode: Array<number>,
 	) {
-		if (
-			!areEqual(
-				requestLinkAgentSignal.requestor_passcode,
-				inputtedRequestorPasscode,
-			)
-		) {
-			notifyError(msg('Incorrect pass code'));
-			(
-				this.shadowRoot!.querySelector('passcode-input') as PasscodeInput
-			).clearPasscode();
-			return;
-		}
+		// if (
+		// 	!areEqual(
+		// 		requestLinkAgentSignal.requestor_passcode,
+		// 		inputtedRequestorPasscode,
+		// 	)
+		// ) {
+		// 	notifyError(msg('Incorrect pass code'));
+		// 	(
+		// 		this.shadowRoot!.querySelector('passcode-input') as PasscodeInput
+		// 	).clearPasscode();
+		// 	return;
+		// }
 		try {
-			await this.store.client.linkAgentWithMyProfile(
-				requestLinkAgentSignal.from,
+			await this.store.client.requestLinkDevices(
+				requestor,
+				inputtedRequestorPasscode,
 			);
 			this.dispatchEvent(
-				new CustomEvent('agent-linked', {
+				new CustomEvent('device-linked', {
 					bubbles: true,
 					composed: true,
 					detail: {
-						agentPubKey: requestLinkAgentSignal.from,
+						agentPubKey: requestor,
 					},
 				}),
 			);
@@ -111,7 +118,7 @@ export class LinkDeviceRecipient extends SignalWatcher(LitElement) {
 		).clearPasscode();
 	}
 
-	renderRequestLinkAgent(requestLinkAgentSignal: RequestLinkAgentSignal) {
+	renderRequestLinkAgent(initializedLinkDevicesByRequestor: AgentPubKey) {
 		return html`
 			<div
 				class="column"
@@ -122,7 +129,10 @@ export class LinkDeviceRecipient extends SignalWatcher(LitElement) {
 				<passcode-input
 					.passcodeLength=${this.store.config.linkDevicePasscodeLength}
 					@passcode-change=${(e: CustomEvent) =>
-						this.attemptLinkAgent(requestLinkAgentSignal, e.detail.passcode)}
+						this.attemptLinkAgent(
+							initializedLinkDevicesByRequestor,
+							e.detail.passcode,
+						)}
 				>
 				</passcode-input>
 			</div>
@@ -130,8 +140,10 @@ export class LinkDeviceRecipient extends SignalWatcher(LitElement) {
 	}
 
 	render() {
-		if (this.requestLinkAgentSignal)
-			return this.renderRequestLinkAgent(this.requestLinkAgentSignal);
+		if (this.initializedLinkDevicesByRequestor)
+			return this.renderRequestLinkAgent(
+				this.initializedLinkDevicesByRequestor,
+			);
 
 		return html`<div
 			class="column"

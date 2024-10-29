@@ -16,3 +16,8 @@ export interface LinkedDevices {
 	agents: Array<AgentPubKey>;
 	timestamp: Timestamp;
 }
+
+export type LinkDevicesSignal = {
+	type: 'LinkDevicesInitialized';
+	requestor: AgentPubKey;
+};

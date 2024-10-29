@@ -36,10 +36,13 @@
 			import { SignalWatcher } from '@holochain-open-dev/signals';
 			import { AppWebsocket } from '@holochain/client';
 			import { ContextProvider } from '@lit/context';
+			import '@shoelace-style/shoelace/dist/components/button/button.js';
 			import '@shoelace-style/shoelace/dist/components/spinner/spinner.js';
 			import '@shoelace-style/shoelace/dist/themes/light.css';
 			import { LitElement, css, html } from 'lit';
 
+			import '../src/elements/link-devices-recipient.ts';
+			import '../src/elements/link-devices-requestor.ts';
 			import '../src/elements/linked-devices-context.ts';
 			import { LinkedDevicesClient, LinkedDevicesStore } from '../src/index.ts';
 
@@ -47,7 +50,7 @@
 				constructor() {
 					super();
 					this._loading = true;
-					this._view = { view: 'main' };
+					this._view = 'main';
 				}
 
 				async firstUpdated() {
@@ -63,20 +66,46 @@
 					this._linkedDevicesStore = new LinkedDevicesStore(
 						new LinkedDevicesClient(appClient, 'linked_devices_test'),
 					);
-					this._exampleStore = new ContextProvider(
-						this,
-						exampleStoreContext,
-						new ExampleStore(
-							new ExampleClient(appClient, 'linked_devices_test'),
-						),
-					);
 				}
 
 				renderContent() {
+					if (this.linkingDeviceRecipient) {
+						return html`
+							<link-devices-recipient
+								@device-linked=${() => {
+									this.linkingDeviceRecipient = false;
+									this.requestUpdate();
+								}}
+							>
+							</link-devices-recipient>
+						`;
+					}
+					if (this.linkingDeviceRequestor) {
+						return html`
+							<link-devices-requestor
+								@device-linked=${() => {
+									this.linkingDeviceRequestor = false;
+									this.requestUpdate();
+								}}
+							>
+							</link-devices-requestor>
+						`;
+					}
 					return html`
-						<linked-devices-context .store=${this._linkedDevicesStore}>
-							<!-- TODO: add here the content of your application -->
-						</linked-devices-context>
+						<sl-button
+							@click=${() => {
+								this.linkingDeviceRequestor = true;
+								this.requestUpdate();
+							}}
+							>Link Device as requestor</sl-button
+						>
+						<sl-button
+							@click=${() => {
+								this.linkingDeviceRecipient = true;
+								this.requestUpdate();
+							}}
+							>Link Device as recipient</sl-button
+						>
 					`;
 				}
 
@@ -91,7 +120,9 @@
 
 					return html`
 						<div class="fill row" style="width: 100vw; height: 100%;">
-							${this.renderContent()}
+							<linked-devices-context .store=${this._linkedDevicesStore}>
+								${this.renderContent()}
+							</linked-devices-context>
 						</div>
 					`;
 				}
