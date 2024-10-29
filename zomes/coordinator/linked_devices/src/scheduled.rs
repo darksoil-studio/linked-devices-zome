@@ -4,7 +4,7 @@ use linked_devices_integrity::*;
 use crate::{
     agent_to_linked_devices::{query_my_linked_devices, query_my_linked_devices_agents},
     link_devices::create_link_devices_link,
-    utils::retry_until,
+    utils::{retry_until, sleep},
 };
 
 #[hdk_extern(infallible)]

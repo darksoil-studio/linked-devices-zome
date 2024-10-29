@@ -62,13 +62,6 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                             "Unreachable: AgentToLinkedDevices does not target an AgentPubKey"
                         ))));
                     };
-                    call_remote(
-                        agent_info()?.agent_latest_pubkey,
-                        zome_info()?.name,
-                        "link_transitive_devices_for_device".into(),
-                        None,
-                        linked_device.clone(),
-                    )?;
 
                     let my_linked_devices = query_my_linked_devices_agents()?;
 
@@ -78,8 +71,16 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                         .collect();
 
                     send_remote_signal(
-                        LinkedDevicesRemoteSignal::NewDeviceLinked(linked_device),
+                        LinkedDevicesRemoteSignal::NewDeviceLinked(linked_device.clone()),
                         filtered_devices,
+                    )?;
+
+                    call_remote(
+                        agent_info()?.agent_latest_pubkey,
+                        zome_info()?.name,
+                        "link_transitive_devices_for_device".into(),
+                        None,
+                        linked_device.clone(),
                     )?;
                 }
             }
