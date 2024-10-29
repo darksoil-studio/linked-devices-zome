@@ -7,10 +7,14 @@ import {
 import { HashType, LazyHoloHashMap, retype } from '@holochain-open-dev/utils';
 import { AgentPubKey } from '@holochain/client';
 
+import { LinkedDevicesConfig, defaultLinkedDevicesConfig } from './config.js';
 import { LinkedDevicesClient } from './linked-devices-client.js';
 
 export class LinkedDevicesStore {
-	constructor(public client: LinkedDevicesClient) {
+	constructor(
+		public client: LinkedDevicesClient,
+		public config: LinkedDevicesConfig = defaultLinkedDevicesConfig,
+	) {
 		// At startup, clear all the cap grants that might have been left over from an unfinished link agent process
 		this.client.clearLinkDevices();
 	}

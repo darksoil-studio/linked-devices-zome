@@ -29,6 +29,19 @@ pub fn validate_agent_joining(
 ) -> ExternResult<ValidateCallbackResult> {
     Ok(ValidateCallbackResult::Valid)
 }
+
+pub fn action_hash(op: &Op) -> &ActionHash {
+    match op {
+        Op::StoreRecord(StoreRecord { record }) => record.action_address(),
+        Op::StoreEntry(StoreEntry { action, .. }) => &action.hashed.hash,
+        Op::RegisterUpdate(RegisterUpdate { update, .. }) => &update.hashed.hash,
+        Op::RegisterDelete(RegisterDelete { delete, .. }) => &delete.hashed.hash,
+        Op::RegisterAgentActivity(RegisterAgentActivity { action, .. }) => &action.hashed.hash,
+        Op::RegisterCreateLink(RegisterCreateLink { create_link }) => &create_link.hashed.hash,
+        Op::RegisterDeleteLink(RegisterDeleteLink { delete_link, .. }) => &delete_link.hashed.hash,
+    }
+}
+
 // This is the unified validation callback for all entries and link types in this integrity zome
 // Below is a match template for all of the variants of `DHT Ops` and entry and link types
 //
@@ -54,18 +67,16 @@ pub fn validate_agent_joining(
 pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
     match op.flattened::<(), LinkTypes>()? {
         FlatOp::StoreEntry(store_entry) => match store_entry {
-            OpEntry::CreateEntry { app_entry, action } => Ok(ValidateCallbackResult::Invalid(
+            OpEntry::CreateEntry { .. } => Ok(ValidateCallbackResult::Invalid(
                 "There are no entry types in this integrity zome".to_string(),
             )),
-            OpEntry::UpdateEntry {
-                app_entry, action, ..
-            } => Ok(ValidateCallbackResult::Invalid(
+            OpEntry::UpdateEntry { .. } => Ok(ValidateCallbackResult::Invalid(
                 "There are no entry types in this integrity zome".to_string(),
             )),
             _ => Ok(ValidateCallbackResult::Valid),
         },
         FlatOp::RegisterUpdate(update_entry) => match update_entry {
-            OpUpdate::Entry { app_entry, action } => Ok(ValidateCallbackResult::Invalid(
+            OpUpdate::Entry { .. } => Ok(ValidateCallbackResult::Invalid(
                 "There are no entry types in this integrity zome".to_string(),
             )),
             _ => Ok(ValidateCallbackResult::Valid),
@@ -92,6 +103,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             action,
         } => match link_type {
             LinkTypes::AgentToLinkedDevices => validate_create_link_agent_to_linked_devices(
+                action_hash(&op).clone(),
                 action,
                 base_address,
                 target_address,
@@ -129,7 +141,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 // Complementary validation to the `StoreEntry` Op, in which the record itself is validated
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `StoreEntry`
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the `StoreEntry` validation failed
-                OpRecord::CreateEntry { app_entry, action } => {
+                OpRecord::CreateEntry { action, .. } => {
                     if let EntryType::CapGrant = action.entry_type {
                         return Ok(ValidateCallbackResult::Valid);
                     }
@@ -140,12 +152,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 // Complementary validation to the `RegisterUpdate` Op, in which the record itself is validated
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `StoreEntry` and in `RegisterUpdate`
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the other validations failed
-                OpRecord::UpdateEntry {
-                    original_action_hash,
-                    app_entry,
-                    action,
-                    ..
-                } => Ok(ValidateCallbackResult::Invalid(
+                OpRecord::UpdateEntry { .. } => Ok(ValidateCallbackResult::Invalid(
                     "There are no entry types in this integrity zome".to_string(),
                 )),
                 // Complementary validation to the `RegisterDelete` Op, in which the record itself is validated
@@ -153,7 +160,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the `RegisterDelete` validation failed
                 OpRecord::DeleteEntry {
                     original_action_hash,
-                    action,
                     ..
                 } => {
                     let record = must_get_valid_record(original_action_hash)?;
@@ -181,6 +187,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 } => match link_type {
                     LinkTypes::AgentToLinkedDevices => {
                         validate_create_link_agent_to_linked_devices(
+                            action_hash(&op).clone(),
                             action,
                             base_address,
                             target_address,

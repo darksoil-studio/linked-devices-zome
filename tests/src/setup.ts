@@ -29,7 +29,8 @@ export async function setup(scenario: Scenario) {
 
 	// Add 2 players with the test hApp to the Scenario. The returned players
 	// can be destructured.
-	const [alice, bob, carol] = await scenario.addPlayersWithApps([
+	const [alice, bob, carol, dave] = await scenario.addPlayersWithApps([
+		{ appBundleSource: { path: testHappUrl } },
 		{ appBundleSource: { path: testHappUrl } },
 		{ appBundleSource: { path: testHappUrl } },
 		{ appBundleSource: { path: testHappUrl } },
@@ -46,6 +47,10 @@ export async function setup(scenario: Scenario) {
 	await carol.conductor
 		.adminWs()
 		.authorizeSigningCredentials(carol.cells[0].cell_id);
+
+	await dave.conductor
+		.adminWs()
+		.authorizeSigningCredentials(dave.cells[0].cell_id);
 
 	// Shortcut peer discovery through gossip and register all agents in every
 	// conductor of the scenario.
@@ -75,6 +80,14 @@ export async function setup(scenario: Scenario) {
 		),
 	);
 
+	const daveStore = new LinkedDevicesStore(
+		new LinkedDevicesClient(
+			dave.appWs as any,
+			'linked_devices_test',
+			'linked_devices',
+		),
+	);
+
 	// Shortcut peer discovery through gossip and register all agents in every
 	// conductor of the scenario.
 	await scenario.shareAllAgents();
@@ -83,6 +96,7 @@ export async function setup(scenario: Scenario) {
 	await aliceStore.client.getLinkingAgents();
 	await bobStore.client.getLinkingAgents();
 	await carolStore.client.getLinkingAgents();
+	await daveStore.client.getLinkingAgents();
 
 	return {
 		alice: {
@@ -96,6 +110,24 @@ export async function setup(scenario: Scenario) {
 		carol: {
 			player: carol,
 			store: carolStore,
+		},
+		dave: {
+			player: dave,
+			store: daveStore,
+			startUp: async () => {
+				await dave.conductor.startUp();
+				const port = await dave.conductor.attachAppInterface();
+				const issued = await dave.conductor
+					.adminWs()
+					.issueAppAuthenticationToken({
+						installed_app_id: dave.appId,
+					});
+				const appWs = await dave.conductor.connectAppWs(issued.token, port);
+				daveStore.client = new LinkedDevicesClient(
+					appWs,
+					'linked_devices_test',
+				);
+			},
 		},
 	};
 }

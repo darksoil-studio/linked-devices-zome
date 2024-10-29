@@ -36,3 +36,26 @@ pub fn delete_link_relaxed(address: ActionHash) -> ExternResult<()> {
 
     Ok(())
 }
+
+pub fn retry_until<F>(task: F, max_retries: u64) -> ExternResult<()>
+where
+    F: Fn() -> bool,
+{
+    let mut retry_count = 0;
+    while retry_count < max_retries {
+        let result = task();
+        if result {
+            return Ok(());
+        }
+        retry_count += 1;
+        sleep(1_000)?;
+    }
+    Ok(())
+}
+
+// Forgive me CPU, let's hope holochain implements `sleep()` soon
+pub fn sleep(ms: u64) -> ExternResult<()> {
+    let start = sys_time()?;
+    while sys_time()?.as_millis() - start.as_millis() < ms as i64 {}
+    Ok(())
+}

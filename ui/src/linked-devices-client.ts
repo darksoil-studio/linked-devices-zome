@@ -23,16 +23,6 @@ export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 		return this.callZome('get_linked_devices_for_agent', agent);
 	}
 
-	// addLinkedDevice(
-	// 	linkedDevice: AgentPubKey,
-	// 	proof: LinkedDevicesProof,
-	// ): Promise<void> {
-	// 	return this.callZome('add_linked_device', {
-	// 		linked_device: linkedDevice,
-	// 		proof,
-	// 	});
-	// }
-
 	async prepareLinkDevices(myPasscode: number[]) {
 		await this.callZome('prepare_link_devices', myPasscode);
 	}

@@ -1,5 +1,7 @@
+use agent_to_linked_devices::query_my_linked_devices_agents;
 use hdk::prelude::*;
 use linked_devices_integrity::*;
+use scheduled::LinkedDevicesRemoteSignal;
 
 pub mod agent_to_linked_devices;
 pub mod link_devices;
@@ -8,6 +10,18 @@ pub mod utils;
 
 #[hdk_extern]
 pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
+    schedule("link_transitive_devices")?;
+
+    let mut fns: BTreeSet<GrantedFunction> = BTreeSet::new();
+    fns.insert((zome_info()?.name, FunctionName::from("recv_remote_signal")));
+    let functions = GrantedFunctions::Listed(fns);
+    let cap_grant = ZomeCallCapGrant {
+        tag: String::from("linked-devices-remote-signal"),
+        access: CapAccess::Unrestricted,
+        functions,
+    };
+    create_cap_grant(cap_grant)?;
+
     Ok(InitCallbackResult::Pass)
 }
 
@@ -53,7 +67,19 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                         zome_info()?.name,
                         "link_transitive_devices_for_device".into(),
                         None,
-                        linked_device,
+                        linked_device.clone(),
+                    )?;
+
+                    let my_linked_devices = query_my_linked_devices_agents()?;
+
+                    let filtered_devices: Vec<AgentPubKey> = my_linked_devices
+                        .into_iter()
+                        .filter(|agent| agent.ne(&linked_device))
+                        .collect();
+
+                    send_remote_signal(
+                        LinkedDevicesRemoteSignal::NewDeviceLinked(linked_device),
+                        filtered_devices,
                     )?;
                 }
             }

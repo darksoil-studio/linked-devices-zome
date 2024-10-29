@@ -1,31 +1,24 @@
 use hdk::prelude::*;
 use linked_devices_integrity::*;
 
-// #[derive(Serialize, Deserialize, Debug)]
-// pub struct AddLinkedDeviceInput {
-//     pub linked_device: AgentPubKey,
-//     pub proof: LinkedDevicesProof,
-// }
-
-// #[hdk_extern]
-// pub fn add_linked_device(input: AddLinkedDeviceInput) -> ExternResult<()> {
-//     let my_agent = agent_info()?.agent_latest_pubkey;
-
-//     let tag = AgentToLinkedDevicesLinkTag(vec![input.proof]);
-//     let tag_bytes = SerializedBytes::try_from(tag).map_err(|err| wasm_error!(err))?;
-
-//     create_link(
-//         my_agent.clone(),
-//         input.linked_device.clone(),
-//         LinkTypes::AgentToLinkedDevices,
-//         tag_bytes.bytes().to_vec(),
-//     )?;
-//     Ok(())
-// }
-
 #[hdk_extern]
 pub fn get_linked_devices_for_agent(agent: AgentPubKey) -> ExternResult<Vec<Link>> {
     get_links(GetLinksInputBuilder::try_new(agent, LinkTypes::AgentToLinkedDevices)?.build())
+}
+
+pub fn query_my_linked_devices_agents() -> ExternResult<Vec<AgentPubKey>> {
+    let my_linked_devices_links = query_my_linked_devices(())?;
+
+    let my_linked_devices = my_linked_devices_links
+        .iter()
+        .map(|link| match link.target.clone().into_agent_pub_key() {
+            Some(pubkey) => Ok(pubkey),
+            None => Err(wasm_error!(WasmErrorInner::Guest(format!(
+                "Unreachable: an AgentToLinkedDevices link did not point to an AgentPubKey"
+            )))),
+        })
+        .collect::<ExternResult<Vec<AgentPubKey>>>()?;
+    Ok(my_linked_devices)
 }
 
 #[hdk_extern]
@@ -46,7 +39,17 @@ pub fn query_my_linked_devices() -> ExternResult<Vec<Link>> {
         })
         .collect::<ExternResult<Vec<Link>>>()?;
 
-    Ok(links)
+    let linked_devices_links: Vec<Link> = links
+        .into_iter()
+        .filter(
+            |link| match LinkTypes::from_type(link.zome_index, link.link_type) {
+                Ok(Some(LinkTypes::AgentToLinkedDevices)) => true,
+                _ => false,
+            },
+        )
+        .collect();
+
+    Ok(linked_devices_links)
 }
 
 fn create_link_to_link(action_hash: ActionHash, create_link: CreateLink) -> Link {

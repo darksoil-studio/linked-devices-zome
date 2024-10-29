@@ -74,7 +74,7 @@ pub fn get_linking_agents() -> ExternResult<Vec<Link>> {
     )
 }
 
-fn query_link_agents_cap_grants() -> ExternResult<Vec<Record>> {
+fn query_link_devices_cap_grants() -> ExternResult<Vec<Record>> {
     let filter = ChainQueryFilter::new()
         .entry_type(EntryType::CapGrant)
         .include_entries(true)
@@ -100,7 +100,7 @@ fn query_link_agents_cap_grants() -> ExternResult<Vec<Record>> {
 
 #[hdk_extern]
 pub fn clear_link_devices() -> ExternResult<()> {
-    let link_agent_cap_grants = query_link_agents_cap_grants()?;
+    let link_agent_cap_grants = query_link_devices_cap_grants()?;
 
     for record in link_agent_cap_grants {
         delete(DeleteInput {
@@ -185,6 +185,7 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
     )?;
 
     let ZomeCallResponse::Ok(result) = response else {
+        clear_link_devices(())?;
         return Err(wasm_error!(WasmErrorInner::Guest(format!("{response:?}"))));
     };
 
@@ -197,14 +198,7 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
 
     let tag = AgentToLinkedDevicesLinkTag(vec![proof]);
 
-    let tag_bytes = SerializedBytes::try_from(tag).map_err(|err| wasm_error!(err))?;
-
-    create_link_relaxed(
-        my_pub_key.clone(),
-        input.requestor.clone(),
-        LinkTypes::AgentToLinkedDevices,
-        tag_bytes.bytes().clone(),
-    )?;
+    create_link_devices_link(input.requestor, tag)?;
 
     clear_link_devices(())?;
 
@@ -213,13 +207,16 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
 
 pub const LINKED_DEVICES_PROOF_TTL_US: u64 = 5_000_000; // 5 seconds
 
+const TTL_LIVE_AGENTS_CAP_GRANTS: i64 = 1000 * 1000 * 60; // 1 minute
+
 #[hdk_extern]
 pub fn receive_request_link_devices(
     incomplete_proof: LinkedDevicesProof,
 ) -> ExternResult<Signature> {
     let linked_devices = incomplete_proof.linked_devices;
     let my_pub_key = agent_info()?.agent_latest_pubkey;
-    let caller = call_info()?.provenance;
+    let call_info = call_info()?;
+    let caller = call_info.provenance;
 
     if !linked_devices.agents.contains(&caller) {
         return Err(wasm_error!(WasmErrorInner::Guest(format!(
@@ -236,6 +233,20 @@ pub fn receive_request_link_devices(
         ))));
     }
 
+    let link_agents_cap_grants = query_link_devices_cap_grants()?;
+    let now = sys_time()?;
+
+    let recent_enough_cap_grant = link_agents_cap_grants.iter().find(|r| {
+        now.as_micros() - r.action().timestamp().as_micros() < TTL_LIVE_AGENTS_CAP_GRANTS
+    });
+
+    let Some(_) = recent_enough_cap_grant else {
+        clear_link_devices(())?;
+        return Err(wasm_error!(WasmErrorInner::Guest(format!(
+            "Timed out cap grant"
+        ))));
+    };
+
     let my_signature = sign(my_pub_key.clone(), linked_devices.clone())?;
 
     let proof = LinkedDevicesProof {
@@ -245,16 +256,27 @@ pub fn receive_request_link_devices(
 
     let tag = AgentToLinkedDevicesLinkTag(vec![proof]);
 
-    let tag_bytes = SerializedBytes::try_from(tag).map_err(|err| wasm_error!(err))?;
-
-    create_link_relaxed(
-        my_pub_key,
-        caller,
-        LinkTypes::AgentToLinkedDevices,
-        tag_bytes.bytes().clone(),
-    )?;
+    create_link_devices_link(caller, tag)?;
 
     clear_link_devices(())?;
 
     Ok(my_signature)
+}
+
+pub fn create_link_devices_link(
+    target_linked_device: AgentPubKey,
+    tag: AgentToLinkedDevicesLinkTag,
+) -> ExternResult<()> {
+    let my_pub_key = agent_info()?.agent_latest_pubkey;
+
+    let tag_bytes = SerializedBytes::try_from(tag).map_err(|err| wasm_error!(err))?;
+
+    create_link_relaxed(
+        my_pub_key,
+        target_linked_device.clone(),
+        LinkTypes::AgentToLinkedDevices,
+        tag_bytes.bytes().clone(),
+    )?;
+
+    Ok(())
 }

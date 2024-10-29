@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-hdi = { workspace = true, features = [ "test_utils"] }
+hdi = { workspace = true }
 serde = "1"
 
 [dev-dependencies]
 fixt = "0.3"
-# holo_hash= { version = "0.3", features = [ "test_utils"] }
+hdi = { workspace = true, features = [ "test_utils"] }
