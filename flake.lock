@@ -2421,11 +2421,11 @@
         "scaffolding": "scaffolding_2"
       },
       "locked": {
-        "lastModified": 1730114128,
-        "narHash": "sha256-AR2ag9FzLb4RekR/BcmT0lHQuDJ+RIFW1FQ6dOe9KfQ=",
+        "lastModified": 1730212063,
+        "narHash": "sha256-wTLf1veHKd0tYKJkl3hWeOsrOlqkCaw2mOddO9yICLY=",
         "owner": "holochain-open-dev",
         "repo": "templates",
-        "rev": "c78115b46107e327c25799dae313e4b947b46c35",
+        "rev": "f3fcfaef32c227546a3b2f635f6d21e61d760791",
         "type": "github"
       },
       "original": {
