@@ -3,6 +3,7 @@ use linked_devices_integrity::*;
 
 pub mod agent_to_linked_devices;
 pub mod link_devices;
+pub mod scheduled;
 pub mod utils;
 
 #[hdk_extern]
@@ -40,6 +41,21 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                 LinkTypes::from_type(create_link.zome_index, create_link.link_type)
             {
                 emit_signal(Signal::LinkCreated { action, link_type })?;
+                if let LinkTypes::AgentToLinkedDevices = link_type {
+                    let Some(linked_device) = create_link.target_address.into_agent_pub_key()
+                    else {
+                        return Err(wasm_error!(WasmErrorInner::Guest(format!(
+                            "Unreachable: AgentToLinkedDevices does not target an AgentPubKey"
+                        ))));
+                    };
+                    call_remote(
+                        agent_info()?.agent_latest_pubkey,
+                        zome_info()?.name,
+                        "link_transitive_devices_for_device".into(),
+                        None,
+                        linked_device,
+                    )?;
+                }
             }
             Ok(())
         }

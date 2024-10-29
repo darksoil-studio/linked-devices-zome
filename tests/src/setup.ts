@@ -29,7 +29,8 @@ export async function setup(scenario: Scenario) {
 
 	// Add 2 players with the test hApp to the Scenario. The returned players
 	// can be destructured.
-	const [alice, bob] = await scenario.addPlayersWithApps([
+	const [alice, bob, carol] = await scenario.addPlayersWithApps([
+		{ appBundleSource: { path: testHappUrl } },
 		{ appBundleSource: { path: testHappUrl } },
 		{ appBundleSource: { path: testHappUrl } },
 	]);
@@ -41,6 +42,10 @@ export async function setup(scenario: Scenario) {
 	await bob.conductor
 		.adminWs()
 		.authorizeSigningCredentials(bob.cells[0].cell_id);
+
+	await carol.conductor
+		.adminWs()
+		.authorizeSigningCredentials(carol.cells[0].cell_id);
 
 	// Shortcut peer discovery through gossip and register all agents in every
 	// conductor of the scenario.
@@ -62,6 +67,14 @@ export async function setup(scenario: Scenario) {
 		),
 	);
 
+	const carolStore = new LinkedDevicesStore(
+		new LinkedDevicesClient(
+			carol.appWs as any,
+			'linked_devices_test',
+			'linked_devices',
+		),
+	);
+
 	// Shortcut peer discovery through gossip and register all agents in every
 	// conductor of the scenario.
 	await scenario.shareAllAgents();
@@ -69,6 +82,7 @@ export async function setup(scenario: Scenario) {
 	// Prevent race condition when two zome calls are made instantly at the beginning of the lifecycle that cause a ChainHeadMoved error because they trigger 2 parallel init workflows
 	await aliceStore.client.getLinkingAgents();
 	await bobStore.client.getLinkingAgents();
+	await carolStore.client.getLinkingAgents();
 
 	return {
 		alice: {
@@ -78,6 +92,10 @@ export async function setup(scenario: Scenario) {
 		bob: {
 			player: bob,
 			store: bobStore,
+		},
+		carol: {
+			player: carol,
+			store: carolStore,
 		},
 	};
 }

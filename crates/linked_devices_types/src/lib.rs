@@ -1,9 +1,12 @@
 use hdi::prelude::*;
 
+mod are_agents_linked;
+pub use are_agents_linked::are_agents_linked;
+
 #[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub struct AgentToLinkedDevicesLinkTag(pub Vec<LinkedDevicesProof>);
 
-#[derive(Serialize, Deserialize, Debug, SerializedBytes)]
+#[derive(Serialize, Deserialize, Debug, SerializedBytes, Clone)]
 pub struct LinkedDevicesProof {
     pub linked_devices: LinkedDevices,
     pub signatures: Vec<Signature>,
@@ -108,19 +111,4 @@ fn has_linked_device(
         .find(|tag| are_agents_linked(&agent, &linked_device, &tag.0));
 
     Ok(agent_to_linked_device.is_some())
-}
-
-pub fn are_agents_linked(
-    agent_1: &AgentPubKey,
-    agent_2: &AgentPubKey,
-    proofs: &Vec<LinkedDevicesProof>,
-) -> bool {
-    for proof in proofs {
-        if proof.linked_devices.agents.contains(agent_1)
-            && proof.linked_devices.agents.contains(agent_2)
-        {
-            return true;
-        }
-    }
-    false
 }
