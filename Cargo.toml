@@ -9,6 +9,6 @@ members = ["crates/*", "zomes/coordinator/*", "zomes/integrity/*"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = "=0.4.2"
-hdk = "=0.3.2"
+hdi = "0.4"
+hdk = "0.3"
 serde = "1.0"
