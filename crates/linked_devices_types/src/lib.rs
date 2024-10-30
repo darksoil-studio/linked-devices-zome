@@ -80,6 +80,52 @@ pub fn validate_agents_have_linked_devices_with_zome_index(
     )))
 }
 
+pub fn validate_agent_has_linked_device(
+    agent: &AgentPubKey,
+    chain_top: &ActionHash,
+    linked_device: &AgentPubKey,
+    linked_devices_integrity_zome_name: ZomeName,
+) -> ExternResult<ValidateCallbackResult> {
+    let dna_info = dna_info()?;
+
+    let Some(linked_devices_integrity_zome_index) = dna_info
+        .zome_names
+        .into_iter()
+        .position(|z| z.eq(&linked_devices_integrity_zome_name))
+    else {
+        return Ok(ValidateCallbackResult::Invalid(String::from(
+            "Unreachable: there is no 'linked_devices' integrity zome in this DNA",
+        )));
+    };
+
+    validate_agent_has_linked_device_with_zome_index(
+        agent,
+        chain_top,
+        linked_device,
+        ZomeIndex::new(linked_devices_integrity_zome_index as u8),
+    )
+}
+
+pub fn validate_agent_has_linked_device_with_zome_index(
+    agent: &AgentPubKey,
+    chain_top: &ActionHash,
+    linked_device: &AgentPubKey,
+    linked_devices_integrity_zome_index: ZomeIndex,
+) -> ExternResult<ValidateCallbackResult> {
+    let linked = has_linked_device(
+        agent.clone(),
+        chain_top.clone(),
+        linked_device.clone(),
+        linked_devices_integrity_zome_index,
+    )?;
+    match linked {
+        true => Ok(ValidateCallbackResult::Valid),
+        false => Ok(ValidateCallbackResult::Invalid(format!(
+            "Agent has not linked the given device at the given chain top"
+        ))),
+    }
+}
+
 fn has_linked_device(
     agent: AgentPubKey,
     chain_top: ActionHash,
