@@ -23,10 +23,13 @@ pub fn validate_update_post(
     _original_post: Post,
 ) -> ExternResult<ValidateCallbackResult> {
     validate_agents_have_linked_devices(
-        &action.author,
-        &action_hash,
-        original_action.author(),
-        &action.original_action_address,
+        &vec![
+            (action.author, action_hash),
+            (
+                original_action.author().clone(),
+                action.original_action_address,
+            ),
+        ],
         "linked_devices_integrity".into(),
     )
 }
@@ -38,10 +41,10 @@ pub fn validate_delete_post(
     _original_post: Post,
 ) -> ExternResult<ValidateCallbackResult> {
     validate_agents_have_linked_devices(
-        &action.author,
-        &action_hash,
-        original_action.author(),
-        &action.deletes_address,
+        &vec![
+            (action.author, action_hash),
+            (original_action.author().clone(), action.deletes_address),
+        ],
         "linked_devices_integrity".into(),
     )
 }
@@ -80,10 +83,10 @@ pub fn validate_delete_link_all_posts(
     _tag: LinkTag,
 ) -> ExternResult<ValidateCallbackResult> {
     validate_agents_have_linked_devices(
-        &action.author,
-        &action_hash,
-        &original_action.author,
-        &action.link_add_address,
+        &vec![
+            (action.author, action_hash),
+            (original_action.author.clone(), action.link_add_address),
+        ],
         "linked_devices_integrity".into(),
     )
 }

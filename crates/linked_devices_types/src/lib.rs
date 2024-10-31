@@ -21,10 +21,7 @@ pub struct LinkedDevices {
 pub const AGENT_TO_LINKED_DEVICES_LINK_INDEX: u8 = 0;
 
 pub fn validate_agents_have_linked_devices(
-    agent_a: &AgentPubKey,
-    agent_a_chain_top: &ActionHash,
-    agent_b: &AgentPubKey,
-    agent_b_chain_top: &ActionHash,
+    agents_with_chain_tops: &Vec<(AgentPubKey, ActionHash)>,
     linked_devices_integrity_zome_name: ZomeName,
 ) -> ExternResult<ValidateCallbackResult> {
     let dna_info = dna_info()?;
@@ -40,44 +37,38 @@ pub fn validate_agents_have_linked_devices(
     };
 
     validate_agents_have_linked_devices_with_zome_index(
-        agent_a,
-        agent_a_chain_top,
-        agent_b,
-        agent_b_chain_top,
+        agents_with_chain_tops,
         ZomeIndex::new(linked_devices_integrity_zome_index as u8),
     )
 }
 
 pub fn validate_agents_have_linked_devices_with_zome_index(
-    agent_a: &AgentPubKey,
-    agent_a_chain_top: &ActionHash,
-    agent_b: &AgentPubKey,
-    agent_b_chain_top: &ActionHash,
+    agents_with_chain_tops: &Vec<(AgentPubKey, ActionHash)>,
     linked_devices_integrity_zome_index: ZomeIndex,
 ) -> ExternResult<ValidateCallbackResult> {
-    let agent_a_has_linked_agent_b = has_linked_device(
-        agent_a.clone(),
-        agent_a_chain_top.clone(),
-        agent_b.clone(),
-        linked_devices_integrity_zome_index,
-    )?;
-    if agent_a_has_linked_agent_b {
-        return Ok(ValidateCallbackResult::Valid);
-    }
-    let agent_b_has_linked_agent_a = has_linked_device(
-        agent_b.clone(),
-        agent_b_chain_top.clone(),
-        agent_a.clone(),
-        linked_devices_integrity_zome_index,
-    )?;
+    for (agent_a, chain_top) in agents_with_chain_tops {
+        let activity =
+            must_get_agent_activity(agent_a.clone(), ChainFilter::new(chain_top.clone()))?;
+        for (agent_b, _) in agents_with_chain_tops {
+            if agent_a.eq(&agent_b) {
+                continue;
+            };
 
-    if agent_b_has_linked_agent_a {
-        return Ok(ValidateCallbackResult::Valid);
+            let linked_device = has_linked_device(
+                &agent_a,
+                &activity,
+                agent_b.clone(),
+                linked_devices_integrity_zome_index,
+            )?;
+            if !linked_device {
+                return Ok(ValidateCallbackResult::Invalid(format!(
+                    "Agents are haven't linked devices: {agent_a} {agent_b}"
+                )));
+            }
+        }
     }
 
-    Ok(ValidateCallbackResult::Invalid(format!(
-        "Agents have not linked devices at this chain top"
-    )))
+    Ok(ValidateCallbackResult::Valid)
 }
 
 pub fn validate_agent_has_linked_device(
@@ -112,9 +103,10 @@ pub fn validate_agent_has_linked_device_with_zome_index(
     linked_device: &AgentPubKey,
     linked_devices_integrity_zome_index: ZomeIndex,
 ) -> ExternResult<ValidateCallbackResult> {
+    let activity = must_get_agent_activity(agent.clone(), ChainFilter::new(chain_top.clone()))?;
     let linked = has_linked_device(
-        agent.clone(),
-        chain_top.clone(),
+        agent,
+        &activity,
         linked_device.clone(),
         linked_devices_integrity_zome_index,
     )?;
@@ -127,12 +119,11 @@ pub fn validate_agent_has_linked_device_with_zome_index(
 }
 
 fn has_linked_device(
-    agent: AgentPubKey,
-    chain_top: ActionHash,
+    agent: &AgentPubKey,
+    activity: &Vec<RegisterAgentActivity>,
     linked_device: AgentPubKey,
     linked_devices_integrity_zome_index: ZomeIndex,
 ) -> ExternResult<bool> {
-    let activity = must_get_agent_activity(agent.clone(), ChainFilter::new(chain_top))?;
     let agent_to_linked_devices_tags: Vec<AgentToLinkedDevicesLinkTag> = activity
         .iter()
         .filter_map(|activity| match &activity.action.hashed.content {
