@@ -6,13 +6,13 @@ pub use are_agents_linked::are_agents_linked;
 #[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub struct AgentToLinkedDevicesLinkTag(pub Vec<LinkedDevicesProof>);
 
-#[derive(Serialize, Deserialize, Debug, SerializedBytes, Clone)]
+#[derive(Serialize, Deserialize, Debug, SerializedBytes, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct LinkedDevicesProof {
     pub linked_devices: LinkedDevices,
     pub signatures: Vec<Signature>,
 }
 
-#[derive(Serialize, Deserialize, Debug, SerializedBytes, Clone)]
+#[derive(Serialize, Deserialize, Debug, SerializedBytes, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct LinkedDevices {
     pub agents: Vec<AgentPubKey>,
     pub timestamp: Timestamp,
@@ -46,21 +46,19 @@ pub fn validate_agents_have_linked_devices_with_zome_index(
     agents_with_chain_tops: &Vec<(AgentPubKey, ActionHash)>,
     linked_devices_integrity_zome_index: ZomeIndex,
 ) -> ExternResult<ValidateCallbackResult> {
-    for (agent_a, chain_top) in agents_with_chain_tops {
-        let activity =
-            must_get_agent_activity(agent_a.clone(), ChainFilter::new(chain_top.clone()))?;
+    let proofs: Vec<LinkedDevicesProof> =
+        get_all_linked_devices_proofs(agents_with_chain_tops, linked_devices_integrity_zome_index)?
+            .into_iter()
+            .collect();
+
+    for (agent_a, _chain_top) in agents_with_chain_tops {
         for (agent_b, _) in agents_with_chain_tops {
             if agent_a.eq(&agent_b) {
                 continue;
             };
 
-            let linked_device = has_linked_device(
-                &agent_a,
-                &activity,
-                agent_b.clone(),
-                linked_devices_integrity_zome_index,
-            )?;
-            if !linked_device {
+            let devices_are_linked = are_agents_linked(&agent_a, &agent_b, &proofs);
+            if !devices_are_linked {
                 return Ok(ValidateCallbackResult::Invalid(format!(
                     "Agents are haven't linked devices: {agent_a} {agent_b}"
                 )));
@@ -69,6 +67,27 @@ pub fn validate_agents_have_linked_devices_with_zome_index(
     }
 
     Ok(ValidateCallbackResult::Valid)
+}
+
+fn get_all_linked_devices_proofs(
+    agents_with_chain_tops: &Vec<(AgentPubKey, ActionHash)>,
+    linked_devices_integrity_zome_index: ZomeIndex,
+) -> ExternResult<BTreeSet<LinkedDevicesProof>> {
+    let mut result = BTreeSet::new();
+    for (agent, chain_top) in agents_with_chain_tops {
+        let activity = must_get_agent_activity(agent.clone(), ChainFilter::new(chain_top.clone()))?;
+        let tags = filter_agent_to_linked_devices_tags(
+            &activity,
+            linked_devices_integrity_zome_index.clone(),
+        )?;
+
+        for tag in tags {
+            for proof in tag.0 {
+                result.insert(proof);
+            }
+        }
+    }
+    Ok(result)
 }
 
 pub fn validate_agent_has_linked_device(
@@ -118,12 +137,11 @@ pub fn validate_agent_has_linked_device_with_zome_index(
     }
 }
 
-fn has_linked_device(
-    agent: &AgentPubKey,
+/** Utility functions */
+fn filter_agent_to_linked_devices_tags(
     activity: &Vec<RegisterAgentActivity>,
-    linked_device: AgentPubKey,
     linked_devices_integrity_zome_index: ZomeIndex,
-) -> ExternResult<bool> {
+) -> ExternResult<Vec<AgentToLinkedDevicesLinkTag>> {
     let agent_to_linked_devices_tags: Vec<AgentToLinkedDevicesLinkTag> = activity
         .iter()
         .filter_map(|activity| match &activity.action.hashed.content {
@@ -142,6 +160,17 @@ fn has_linked_device(
             Ok(tag)
         })
         .collect::<ExternResult<Vec<AgentToLinkedDevicesLinkTag>>>()?;
+    Ok(agent_to_linked_devices_tags)
+}
+
+fn has_linked_device(
+    agent: &AgentPubKey,
+    activity: &Vec<RegisterAgentActivity>,
+    linked_device: AgentPubKey,
+    linked_devices_integrity_zome_index: ZomeIndex,
+) -> ExternResult<bool> {
+    let agent_to_linked_devices_tags: Vec<AgentToLinkedDevicesLinkTag> =
+        filter_agent_to_linked_devices_tags(activity, linked_devices_integrity_zome_index)?;
 
     let agent_to_linked_device = agent_to_linked_devices_tags
         .into_iter()
