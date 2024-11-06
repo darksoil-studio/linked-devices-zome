@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Signal"],"fn":["init","post_commit"],"mod":["agent_to_linked_devices","link_devices","scheduled","utils"]};

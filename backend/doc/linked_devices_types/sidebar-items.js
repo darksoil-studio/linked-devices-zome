@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["AGENT_TO_LINKED_DEVICES_LINK_INDEX"],"fn":["are_agents_linked","validate_agent_has_linked_device","validate_agent_has_linked_device_with_zome_index","validate_agents_have_linked_devices","validate_agents_have_linked_devices_with_zome_index"],"struct":["AgentToLinkedDevicesLinkTag","LinkedDevices","LinkedDevicesProof"]};

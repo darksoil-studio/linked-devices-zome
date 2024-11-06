@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["create_post","delete_post","get_all_deletes_for_post","get_all_revisions_for_post","get_latest_post","get_oldest_delete_for_post","get_original_post","update_post"],"struct":["UpdatePostInput"]};

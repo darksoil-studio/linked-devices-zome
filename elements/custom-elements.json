@@ -1,0 +1,715 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "locales/locales.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sourceLocale",
+          "default": "`en`",
+          "description": "The locale code that templates in this source code are written in."
+        },
+        {
+          "kind": "variable",
+          "name": "targetLocales",
+          "type": {
+            "text": "array"
+          },
+          "default": "[\n  ,\n]",
+          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
+        },
+        {
+          "kind": "variable",
+          "name": "allLocales",
+          "type": {
+            "text": "array"
+          },
+          "default": "[\n  `en`,\n]",
+          "description": "All valid project locale codes. Sorted lexicographically."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sourceLocale",
+          "declaration": {
+            "name": "sourceLocale",
+            "module": "locales/locales.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "targetLocales",
+          "declaration": {
+            "name": "targetLocales",
+            "module": "locales/locales.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "allLocales",
+          "declaration": {
+            "name": "allLocales",
+            "module": "locales/locales.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/config.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "defaultLinkedDevicesConfig",
+          "type": {
+            "text": "LinkedDevicesConfig"
+          },
+          "default": "{\n\tlinkDevicePasscodeLength: 4,\n}"
+        },
+        {
+          "kind": "variable",
+          "name": "TTL_CAP_GRANT"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "defaultLinkedDevicesConfig",
+          "declaration": {
+            "name": "defaultLinkedDevicesConfig",
+            "module": "src/config.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TTL_CAP_GRANT",
+          "declaration": {
+            "name": "TTL_CAP_GRANT",
+            "module": "src/config.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/context.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "linkedDevicesStoreContext"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "linkedDevicesStoreContext",
+          "declaration": {
+            "name": "linkedDevicesStoreContext",
+            "module": "src/context.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./context.js\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./linked-devices-client.js\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./linked-devices-store.js\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./types.js\""
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/linked-devices-client.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LinkedDevicesClient",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getLinkedDevicesForAgent",
+              "return": {
+                "type": {
+                  "text": "Promise<Array<Link>>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agent",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ],
+              "description": "Linked Devices for Agent"
+            },
+            {
+              "kind": "method",
+              "name": "prepareLinkDevices",
+              "parameters": [
+                {
+                  "name": "myPasscode",
+                  "type": {
+                    "text": "number[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getLinkingAgents",
+              "return": {
+                "type": {
+                  "text": "Promise<Array<Link>>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "clearLinkDevices"
+            },
+            {
+              "kind": "method",
+              "name": "initLinkDevices",
+              "parameters": [
+                {
+                  "name": "recipient",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                },
+                {
+                  "name": "recipient_passcode",
+                  "type": {
+                    "text": "number[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "requestLinkDevices",
+              "parameters": [
+                {
+                  "name": "requestor",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                },
+                {
+                  "name": "requestor_passcode",
+                  "type": {
+                    "text": "number[]"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "ZomeClient",
+            "package": "@tnesh-stack/utils"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LinkedDevicesClient",
+          "declaration": {
+            "name": "LinkedDevicesClient",
+            "module": "src/linked-devices-client.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/linked-devices-store.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LinkedDevicesStore",
+          "members": [
+            {
+              "kind": "field",
+              "name": "linkedDevicesForAgent",
+              "default": "new MemoHoloHashMap((agent: AgentPubKey) =>\n\t\tpipe(\n\t\t\tliveLinksSignal(\n\t\t\t\tthis.client,\n\t\t\t\tagent,\n\t\t\t\t() => this.client.getLinkedDevicesForAgent(agent),\n\t\t\t\t'AgentToLinkedDevices',\n\t\t\t),\n\t\t\tlinks => uniquify(links.map(l => retype(l.target, HashType.AGENT))),\n\t\t),\n\t)",
+              "description": "Linked Devices for Agent"
+            },
+            {
+              "kind": "field",
+              "name": "linkingAgents",
+              "description": "Link agents"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LinkedDevicesStore",
+          "declaration": {
+            "name": "LinkedDevicesStore",
+            "module": "src/linked-devices-store.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/mocks.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LinkedDevicesZomeMock",
+          "members": [
+            {
+              "kind": "field",
+              "name": "agentToLinkedDevice",
+              "default": "new HoloHashMap<AgentPubKey, Link[]>()",
+              "description": "Linked Devices for Agent"
+            },
+            {
+              "kind": "method",
+              "name": "get_linked_devices_for_agent",
+              "return": {
+                "type": {
+                  "text": "Promise<Array<Link>>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agent",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "add_linked_device_for_agent",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "input",
+                  "type": {
+                    "text": "{\n\t\tagent: AgentPubKey;\n\t\tlinked_device: AgentPubKey;\n\t}"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "ZomeMock",
+            "package": "@tnesh-stack/utils"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LinkedDevicesZomeMock",
+          "declaration": {
+            "name": "LinkedDevicesZomeMock",
+            "module": "src/mocks.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/link-devices-recipient.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "randomPasscode",
+          "parameters": [
+            {
+              "name": "length",
+              "type": {
+                "text": "number"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LinkDevicesRecipient",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "attemptLinkAgent",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "requestor",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                },
+                {
+                  "name": "inputtedRequestorPasscode",
+                  "type": {
+                    "text": "Array<number>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderRequestLinkAgent",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "initializedLinkDevicesByRequestor",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "device-linked",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
+              "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@tnesh-stack/signals"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "link-devices-recipient",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "randomPasscode",
+          "declaration": {
+            "name": "randomPasscode",
+            "module": "src/elements/link-devices-recipient.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "LinkDevicesRecipient",
+          "declaration": {
+            "name": "LinkDevicesRecipient",
+            "module": "src/elements/link-devices-recipient.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "link-devices-recipient",
+          "declaration": {
+            "name": "LinkDevicesRecipient",
+            "module": "src/elements/link-devices-recipient.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/link-devices-requestor.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LinkDevicesRequestor",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "maybeRequestLink",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "passcode",
+                  "type": {
+                    "text": "number[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderNumber",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "name": "device-linked",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when the user successfully links another device. Detail will have this shape: { agentPubKey: AgentPubKey }"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
+              "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@tnesh-stack/signals"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "link-devices-requestor",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LinkDevicesRequestor",
+          "declaration": {
+            "name": "LinkDevicesRequestor",
+            "module": "src/elements/link-devices-requestor.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "link-devices-requestor",
+          "declaration": {
+            "name": "LinkDevicesRequestor",
+            "module": "src/elements/link-devices-requestor.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/linked-devices-context.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LinkedDevicesContext",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "attribute": "store"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "linked-devices-context",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LinkedDevicesContext",
+          "declaration": {
+            "name": "LinkedDevicesContext",
+            "module": "src/elements/linked-devices-context.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "linked-devices-context",
+          "declaration": {
+            "name": "LinkedDevicesContext",
+            "module": "src/elements/linked-devices-context.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/passcode-input.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PasscodeInput",
+          "members": [
+            {
+              "kind": "field",
+              "name": "passcodeLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "4",
+              "attribute": "passcodeLength"
+            },
+            {
+              "kind": "field",
+              "name": "passcode",
+              "type": {
+                "text": "Array<number> | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "clearPasscode"
+            },
+            {
+              "kind": "method",
+              "name": "maybeDispatchEvent"
+            }
+          ],
+          "events": [
+            {
+              "name": "passcode-change",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "passcodeLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "4",
+              "fieldName": "passcodeLength"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "passcode-input",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PasscodeInput",
+          "declaration": {
+            "name": "PasscodeInput",
+            "module": "src/elements/passcode-input.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "passcode-input",
+          "declaration": {
+            "name": "PasscodeInput",
+            "module": "src/elements/passcode-input.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

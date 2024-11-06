@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["validate_create_link_all_posts","validate_create_post","validate_delete_link_all_posts","validate_delete_post","validate_update_post"],"struct":["Post"]};

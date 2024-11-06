@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["get_linked_devices_for_agent","query_my_linked_devices","query_my_linked_devices_agents"]};
