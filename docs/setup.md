@@ -1,7 +1,7 @@
 # Setup
 
 > [!WARNING]
-> This guide assumes that you have scaffolded a hApp with the [holochain-open-dev template](https://github.com/holochain-open-dev/templates).
+> This guide assumes that you have scaffolded a hApp with the [tnesh-stack template](https://darksoil.studio/tnesh-stack/scaffolding-a-happ).
 
 1. Run this to scaffold this zome in your hApp:
 
@@ -19,7 +19,7 @@ Now you only need to integrate the zome's frontend in your web-app.
 2. Connect to Holochain with the `AppClient`, and create the `LinkedDevicesStore` with it:
 
 ```js
-import { LinkedDevicesStore, LinkedDevicesClient } from "@holochain-open-dev/profiles";
+import { LinkedDevicesStore, LinkedDevicesClient } from "@darksoil-studio/linked-devices-zome";
 import { AppWebsocket } from "@holochain/client";
 
 async function setupLinkedDevicesStore() {
@@ -31,24 +31,24 @@ async function setupLinkedDevicesStore() {
 }
 ```
 
-3. Import the `<linked-devices-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@darksoil-studio/linked-devices`:
+3. Import the `<linked-devices-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@darksoil-studio/linked-devices-zome`:
 
 ```js
 // This can be placed in the index.js, at the top level of your web-app.
-import "@darksoil-studio/linked-devices/dist/elements/linked-devices-context.js";
+import "@darksoil-studio/linked-devices-zome/dist/elements/linked-devices-context.js";
 ```
 
 And then add the `<linked-devices-context>` element in your html:
 
 ```html
 <linked-devices-context>
-  <!-- Add here other elements from @darksoil-studio/linked-devices -->
+  <!-- Add here other elements from @darksoil-studio/linked-devices-zome -->
 </linked-devices-context>
 ```
 
 4. Attach the `linkedDevicesStore` to the `<linked-devices-context>` element:
 
-- Go to [this page](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/), select the framework you are using, and follow its example.
+- Go to [this page](https://darksoil.studio/tnesh-stack/integrating-with-frameworks/), select the framework you are using, and follow its example.
 
 You need to set the `store` property of it to your already instantiated `LinkedDevicesStore` object:
 
@@ -85,12 +85,12 @@ const contextElement = document.querySelector("linked-devices-context");
 contextElement.store = store;
 ```
 
-> You can read more about the context pattern [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#context).
+> You can read more about the context pattern [here](https://darksoil.studio/tnesh-stack/guides/custom-elements#Context).
 
-5. [Choose which elements you need](?path=/docs/frontend-elements) and import them like this:
+5. [Choose which elements you need](/elements) and import them like this:
 
 ```js
-import "@darksoil-studio/linked-devices/dist/elements/linked-devices-context.js";
+import "@darksoil-studio/linked-devices-zome/dist/elements/linked-devices-context.js";
 ```
 
 And then they are ready be used inside the `<linked-devices-context>` just like any other HTML tag.
@@ -113,5 +113,5 @@ That's it! You have now integrated both the backend and the frontend for the pro
 
 # Example
 
-You can see a full working example of the UI working in [here](https://github.com/holochain-open-dev/linked-devices/blob/main/ui/demo/index.html).
+You can see a full working example of the UI working in [here](https://github.com/darksoil-studio/linked-devices/blob/main/ui/demo/index.html).
 

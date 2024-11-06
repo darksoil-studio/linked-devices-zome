@@ -16,7 +16,7 @@
     "@api-viewer/demo": "1.0.0-pre.10",
     "@api-viewer/docs": "1.0.0-pre.10",
     "@holochain/client": "^0.17.1",
-    "@darksoil-studio/linked-devices": "workspace:*",
+    "@darksoil-studio/linked-devices-zome": "workspace:*",
     "@shoelace-style/shoelace": "^2.11.0",
     "api-viewer-element": "^1.0.0-pre.10",
     "lit": "^3.0.0",

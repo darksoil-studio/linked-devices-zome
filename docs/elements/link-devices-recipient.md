@@ -7,7 +7,7 @@
 1. Import the `<link-devices-recipient>` element somewhere in the javascript side of your web-app like this:
 
 ```js
-import '@darksoil-studio/linked-devices/dist/elements/link-devices-recipient.js'
+import '@darksoil-studio/linked-devices-zome/dist/elements/link-devices-recipient.js'
 ```
 
 2. Use it in the html side of your web-app like this:

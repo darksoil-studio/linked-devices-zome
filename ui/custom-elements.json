@@ -4,6 +4,62 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "locales/locales.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sourceLocale",
+          "default": "`en`",
+          "description": "The locale code that templates in this source code are written in."
+        },
+        {
+          "kind": "variable",
+          "name": "targetLocales",
+          "type": {
+            "text": "array"
+          },
+          "default": "[\n  ,\n]",
+          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
+        },
+        {
+          "kind": "variable",
+          "name": "allLocales",
+          "type": {
+            "text": "array"
+          },
+          "default": "[\n  `en`,\n]",
+          "description": "All valid project locale codes. Sorted lexicographically."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sourceLocale",
+          "declaration": {
+            "name": "sourceLocale",
+            "module": "locales/locales.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "targetLocales",
+          "declaration": {
+            "name": "targetLocales",
+            "module": "locales/locales.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "allLocales",
+          "declaration": {
+            "name": "allLocales",
+            "module": "locales/locales.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/config.ts",
       "declarations": [
         {
@@ -188,7 +244,7 @@
           ],
           "superclass": {
             "name": "ZomeClient",
-            "package": "@holochain-open-dev/utils"
+            "package": "@tnesh-stack/utils"
           }
         }
       ],
@@ -215,7 +271,7 @@
             {
               "kind": "field",
               "name": "linkedDevicesForAgent",
-              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n\t\tpipe(\n\t\t\tliveLinksSignal(\n\t\t\t\tthis.client,\n\t\t\t\tagent,\n\t\t\t\t() => this.client.getLinkedDevicesForAgent(agent),\n\t\t\t\t'AgentToLinkedDevices',\n\t\t\t),\n\t\t\tlinks => uniquify(links.map(l => retype(l.target, HashType.AGENT))),\n\t\t),\n\t)",
+              "default": "new MemoHoloHashMap((agent: AgentPubKey) =>\n\t\tpipe(\n\t\t\tliveLinksSignal(\n\t\t\t\tthis.client,\n\t\t\t\tagent,\n\t\t\t\t() => this.client.getLinkedDevicesForAgent(agent),\n\t\t\t\t'AgentToLinkedDevices',\n\t\t\t),\n\t\t\tlinks => uniquify(links.map(l => retype(l.target, HashType.AGENT))),\n\t\t),\n\t)",
               "description": "Linked Devices for Agent"
             },
             {
@@ -289,7 +345,7 @@
           ],
           "superclass": {
             "name": "ZomeMock",
-            "package": "@holochain-open-dev/utils"
+            "package": "@tnesh-stack/utils"
           }
         }
       ],
@@ -309,62 +365,6 @@
       "path": "src/types.ts",
       "declarations": [],
       "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "locales/locales.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sourceLocale",
-          "default": "`en`",
-          "description": "The locale code that templates in this source code are written in."
-        },
-        {
-          "kind": "variable",
-          "name": "targetLocales",
-          "type": {
-            "text": "array"
-          },
-          "default": "[\n  ,\n]",
-          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
-        },
-        {
-          "kind": "variable",
-          "name": "allLocales",
-          "type": {
-            "text": "array"
-          },
-          "default": "[\n  `en`,\n]",
-          "description": "All valid project locale codes. Sorted lexicographically."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sourceLocale",
-          "declaration": {
-            "name": "sourceLocale",
-            "module": "locales/locales.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "targetLocales",
-          "declaration": {
-            "name": "targetLocales",
-            "module": "locales/locales.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "allLocales",
-          "declaration": {
-            "name": "allLocales",
-            "module": "locales/locales.js"
-          }
-        }
-      ]
     },
     {
       "kind": "javascript-module",
@@ -450,7 +450,7 @@
           "mixins": [
             {
               "name": "SignalWatcher",
-              "package": "@holochain-open-dev/signals"
+              "package": "@tnesh-stack/signals"
             }
           ],
           "superclass": {
@@ -547,7 +547,7 @@
           "mixins": [
             {
               "name": "SignalWatcher",
-              "package": "@holochain-open-dev/signals"
+              "package": "@tnesh-stack/signals"
             }
           ],
           "superclass": {

@@ -1,20 +1,4 @@
 import {
-	AgentPubKeyMap,
-	HashType,
-	HoloHashMap,
-	RecordBag,
-	ZomeMock,
-	decodeEntry,
-	entryState,
-	fakeCreateAction,
-	fakeDeleteEntry,
-	fakeEntry,
-	fakeRecord,
-	fakeUpdateEntry,
-	hash,
-	pickBy,
-} from '@holochain-open-dev/utils';
-import {
 	ActionHash,
 	AgentPubKey,
 	AppClient,
@@ -30,6 +14,22 @@ import {
 	fakeDnaHash,
 	fakeEntryHash,
 } from '@holochain/client';
+import {
+	AgentPubKeyMap,
+	HashType,
+	HoloHashMap,
+	RecordBag,
+	ZomeMock,
+	decodeEntry,
+	entryState,
+	fakeCreateAction,
+	fakeDeleteEntry,
+	fakeEntry,
+	fakeRecord,
+	fakeUpdateEntry,
+	hash,
+	pickBy,
+} from '@tnesh-stack/utils';
 
 import { LinkedDevicesClient } from './linked-devices-client.js';
 

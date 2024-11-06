@@ -1,14 +1,10 @@
-import {
-	notify,
-	notifyError,
-	sharedStyles,
-} from '@holochain-open-dev/elements';
-import { SignalWatcher } from '@holochain-open-dev/signals';
 import { AgentPubKey, encodeHashToBase64 } from '@holochain/client';
 import { consume } from '@lit/context';
 import { msg } from '@lit/localize';
 import { SlInput } from '@shoelace-style/shoelace';
 import '@shoelace-style/shoelace/dist/components/alert/alert.js';
+import { notify, notifyError, sharedStyles } from '@tnesh-stack/elements';
+import { SignalWatcher } from '@tnesh-stack/signals';
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 

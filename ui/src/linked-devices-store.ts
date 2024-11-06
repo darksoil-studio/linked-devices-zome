@@ -1,11 +1,11 @@
+import { AgentPubKey } from '@holochain/client';
 import {
 	collectionSignal,
 	liveLinksSignal,
 	pipe,
 	uniquify,
-} from '@holochain-open-dev/signals';
-import { HashType, LazyHoloHashMap, retype } from '@holochain-open-dev/utils';
-import { AgentPubKey } from '@holochain/client';
+} from '@tnesh-stack/signals';
+import { HashType, MemoHoloHashMap, retype } from '@tnesh-stack/utils';
 
 import { LinkedDevicesConfig, defaultLinkedDevicesConfig } from './config.js';
 import { LinkedDevicesClient } from './linked-devices-client.js';
@@ -21,7 +21,7 @@ export class LinkedDevicesStore {
 
 	/** Linked Devices for Agent */
 
-	linkedDevicesForAgent = new LazyHoloHashMap((agent: AgentPubKey) =>
+	linkedDevicesForAgent = new MemoHoloHashMap((agent: AgentPubKey) =>
 		pipe(
 			liveLinksSignal(
 				this.client,

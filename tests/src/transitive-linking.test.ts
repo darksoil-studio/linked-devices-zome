@@ -1,8 +1,7 @@
-import { toPromise } from '@holochain-open-dev/signals';
-import { EntryRecord } from '@holochain-open-dev/utils';
 import { ActionHash, Record, encodeHashToBase64 } from '@holochain/client';
 import { dhtSync, pause, runScenario } from '@holochain/tryorama';
 import { decode } from '@msgpack/msgpack';
+import { toPromise } from '@tnesh-stack/signals';
 import { assert, test } from 'vitest';
 
 import { setup } from './setup.js';

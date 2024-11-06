@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "@darksoil-studio/linked-devices"
+  name: "@darksoil-studio/linked-devices-zome"
   text: "Linked Devices zome for holochain apps"
   tagline: Plug-and-play linked devices management for your hApps
   actions:
@@ -23,7 +23,10 @@ hero:
       link: "/linked-devices-store.md"
 
 features:
-  - title: UI+Backend Module
-    details: Following the holochain-open-dev guidelines
-    link: https://holochain-open-dev.github.io
+  - title: Integrity and Coordinator Zomes
+    details: Autonomous backend components.
+  - title: UI state management
+    details: Store and client exports handle the logic of communicating with the zomes from the UI out of the box.
+  - title: Reusable UI components
+    details: Include these components to let them handle the whole process for you.
 ---

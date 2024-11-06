@@ -1,10 +1,10 @@
-import { ZomeClient } from '@holochain-open-dev/utils';
 import {
 	AgentPubKey,
 	AppCallZomeRequest,
 	AppClient,
 	Link,
 } from '@holochain/client';
+import { ZomeClient } from '@tnesh-stack/utils';
 
 import { LinkedDevicesProof, LinkedDevicesSignal } from './types.js';
 

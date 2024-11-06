@@ -20,7 +20,7 @@ export default defineConfig({
 		},
 	},
 	base: '/linked-devices',
-	title: '@darksoil-studio/linked-devices',
+	title: '@darksoil-studio/linked-devices-zome',
 	description: 'Linked Devices zome for holochain apps',
 	themeConfig: {
 		// https://vitepress.dev/reference/default-theme-config
@@ -69,7 +69,7 @@ export default defineConfig({
 		socialLinks: [
 			{
 				icon: 'github',
-				link: 'https://github.com/holochain-open-dev/linked-devices',
+				link: 'https://github.com/darksoil-studio/linked-devices',
 			},
 		],
 		search: {

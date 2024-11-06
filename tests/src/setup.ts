@@ -1,4 +1,3 @@
-import { EntryRecord } from '@holochain-open-dev/utils';
 import {
 	ActionHash,
 	AgentPubKey,

@@ -3,7 +3,7 @@
 {
   perSystem = { inputs', self', lib, system, ... }: {
     packages.linked_devices_test_dna =
-      inputs.hc-infra.outputs.builders.${system}.dna {
+      inputs.tnesh-stack.outputs.builders.${system}.dna {
         dnaManifest = ./dna.yaml;
         zomes = {
           # This overrides all the "bundled" properties for the DNA manifest
