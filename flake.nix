@@ -8,8 +8,8 @@
     flake-parts.follows = "holonix/flake-parts";
 
     tnesh-stack.url = "github:darksoil-studio/tnesh-stack/main-0.3";
-    p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard";
-    playground.url = "github:darksoil-studio/holochain-playground";
+    p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard/main-0.3";
+    playground.url = "github:darksoil-studio/holochain-playground/main-0.3";
   };
 
   nixConfig = {
