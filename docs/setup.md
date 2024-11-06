@@ -1,7 +1,7 @@
 # Setup
 
 > [!WARNING]
-> This guide assumes that you have scaffolded a hApp with the [tnesh-stack template](https://darksoil.studio/tnesh-stack/scaffolding-a-happ).
+> This guide assumes that you have scaffolded a hApp with the [TNESH stack template](https://darksoil.studio/tnesh-stack/scaffolding-a-happ).
 
 1. Run this to scaffold this zome in your hApp:
 
@@ -85,9 +85,13 @@ const contextElement = document.querySelector("linked-devices-context");
 contextElement.store = store;
 ```
 
-> You can read more about the context pattern [here](https://darksoil.studio/tnesh-stack/guides/custom-elements#Context).
+> [!NOTE]
+> You can read more about the context pattern [here](https://darksoil.studio/tnesh-stack/guides/custom-elements#context).
 
-5. [Choose which elements you need](/elements) and import them like this:
+> [!NOTE]
+> Go to [this page](https://darksoil.studio/tnesh-stack/integrating-with-frameworks/), to see examples on integrating this module in each javascript framework.
+
+5. [Choose which elements you need](/elements/link-devices-recipient.md) and import them like this:
 
 ```js
 import "@darksoil-studio/linked-devices-zome/dist/elements/linked-devices-context.js";
