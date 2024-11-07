@@ -53,6 +53,7 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 	/**
 	 * @internal
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	interval: any;
 
 	async firstUpdated() {
@@ -117,6 +118,7 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 					await this.store.client.prepareLinkDevices(this.requestorpasscode);
 				}, TTL_CAP_GRANT);
 				this.successfulRecipient = linkingAgent;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (e: any) {
 				console.error(e);
 				if (e.toString().includes('Unauthorized')) {
