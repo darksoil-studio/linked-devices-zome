@@ -88,9 +88,6 @@ contextElement.store = store;
 > [!NOTE]
 > You can read more about the context pattern [here](https://darksoil.studio/tnesh-stack/guides/custom-elements#context).
 
-> [!NOTE]
-> Go to [this page](https://darksoil.studio/tnesh-stack/integrating-with-frameworks/), to see examples on integrating this module in each javascript framework.
-
 5. [Choose which elements you need](/elements/link-devices-recipient.md) and import them like this:
 
 ```js

@@ -1029,11 +1029,11 @@
         "rust-overlay": "rust-overlay_8"
       },
       "locked": {
-        "lastModified": 1729697912,
-        "narHash": "sha256-DIEmBX9TWKtingP8BdSnL/9gJf5EcPFKP59/gQqGqYQ=",
+        "lastModified": 1730894017,
+        "narHash": "sha256-IMxJzvpk8m487maynFuyU2z4YVJzrY1msbsCtEBdpTw=",
         "owner": "holochain",
         "repo": "holonix",
-        "rev": "6e98faeef5d1569545ac816d623e338b48b1eac1",
+        "rev": "79f9f81e42d87debbd5395a89482dbc9558ef6c1",
         "type": "github"
       },
       "original": {
@@ -1925,11 +1925,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1730916105,
-        "narHash": "sha256-XJdYDkO37DshEqaeRW14ezWJMr3ys8Jqz2WZv8zdVi0=",
+        "lastModified": 1730987419,
+        "narHash": "sha256-7z67NT2ldH+Mha05FNlEHeh/UFFsIyfeqz2nguIqK1s=",
         "owner": "darksoil-studio",
         "repo": "tnesh-stack",
-        "rev": "7d4146c9824db090c986a684d5831bddd4cf59ac",
+        "rev": "7b76451d15aa06fba0c496d13a8a39464ac6d006",
         "type": "github"
       },
       "original": {
