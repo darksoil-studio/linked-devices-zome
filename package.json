@@ -6,7 +6,7 @@
     "network": "pnpm build:happ && UI_PORT=8888 concurrently -k \"pnpm -F @darksoil-studio/linked-devices-zome start\" \"pnpm launch\" \"pnpm launch\" \"hc playground\"",
     "launch": "RUST_LOG=warn hc pilot workdir/linked-devices_test.happ --ui-port $UI_PORT",
     "test": "pnpm build:happ && pnpm -F tests test",
-    "build:happ": "nix build -L .#linked_devices_test_happ -o workdir/linked-devices_test.happ"
+    "build:happ": "nix build -L .#linked_devices_test_happ.meta.debug -o workdir/linked-devices_test.happ"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
