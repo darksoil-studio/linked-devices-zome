@@ -60,7 +60,7 @@
                 --integrity-zome-name linked_devices_integrity \
                 --coordinator-zome-name linked_devices \
                 --remote-zome-git-url github:darksoil-studio/linked-devices \
-                --remote-npm-package-name linked-devices-zome \
+                --remote-npm-package-name @darksoil-studio/linked-devices-zome \
                 --remote-npm-package-path ui \
                 --remote-zome-git-branch main-0.3" 
           '';
