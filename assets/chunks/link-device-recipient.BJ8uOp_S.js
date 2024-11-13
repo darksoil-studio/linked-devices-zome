@@ -1010,4 +1010,4 @@ var Mt=Object.defineProperty;var Ot=(t,e,i)=>e in t?Mt(t,e,{enumerable:!0,config
 				letter-spacing: 0.2rem;
 				font-size: 3em;
 			}
-		`];H([Ht({context:Bt,subscribe:!0}),a()],x.prototype,"store",2);H([E()],x.prototype,"recipientPasscode",2);H([E()],x.prototype,"initializedLinkDevicesByRequestor",2);x=H([bt("link-devices-recipient")],x);const Ne=Object.freeze(Object.defineProperty({__proto__:null,get LinkDevicesRecipient(){return x},randomPasscode:X},Symbol.toStringTag,{value:"Module"}));export{qt as S,Ie as a,E as b,Ht as c,Ne as l,I as m,Vt as n,X as r,Tt as s};
+		`];H([Ht({context:Bt,subscribe:!0}),a()],x.prototype,"store",2);H([E()],x.prototype,"recipientPasscode",2);H([E()],x.prototype,"initializedLinkDevicesByRequestor",2);x=H([bt("link-device-recipient")],x);const Ne=Object.freeze(Object.defineProperty({__proto__:null,get LinkDevicesRecipient(){return x},randomPasscode:X},Symbol.toStringTag,{value:"Module"}));export{qt as S,Ie as a,E as b,Ht as c,Ne as l,I as m,Vt as n,X as r,Tt as s};
