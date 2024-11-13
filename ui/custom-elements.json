@@ -368,7 +368,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/elements/link-devices-recipient.ts",
+      "path": "src/elements/link-device-recipient.ts",
       "declarations": [
         {
           "kind": "function",
@@ -457,7 +457,7 @@
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "link-devices-recipient",
+          "tagName": "link-device-recipient",
           "customElement": true
         }
       ],
@@ -467,7 +467,7 @@
           "name": "randomPasscode",
           "declaration": {
             "name": "randomPasscode",
-            "module": "src/elements/link-devices-recipient.ts"
+            "module": "src/elements/link-device-recipient.ts"
           }
         },
         {
@@ -475,22 +475,22 @@
           "name": "LinkDevicesRecipient",
           "declaration": {
             "name": "LinkDevicesRecipient",
-            "module": "src/elements/link-devices-recipient.ts"
+            "module": "src/elements/link-device-recipient.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "link-devices-recipient",
+          "name": "link-device-recipient",
           "declaration": {
             "name": "LinkDevicesRecipient",
-            "module": "src/elements/link-devices-recipient.ts"
+            "module": "src/elements/link-device-recipient.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/elements/link-devices-requestor.ts",
+      "path": "src/elements/link-device-requestor.ts",
       "declarations": [
         {
           "kind": "class",
@@ -554,7 +554,7 @@
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "link-devices-requestor",
+          "tagName": "link-device-requestor",
           "customElement": true
         }
       ],
@@ -564,15 +564,15 @@
           "name": "LinkDevicesRequestor",
           "declaration": {
             "name": "LinkDevicesRequestor",
-            "module": "src/elements/link-devices-requestor.ts"
+            "module": "src/elements/link-device-requestor.ts"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "link-devices-requestor",
+          "name": "link-device-requestor",
           "declaration": {
             "name": "LinkDevicesRequestor",
-            "module": "src/elements/link-devices-requestor.ts"
+            "module": "src/elements/link-device-requestor.ts"
           }
         }
       ]

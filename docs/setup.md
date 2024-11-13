@@ -88,7 +88,7 @@ contextElement.store = store;
 > [!NOTE]
 > You can read more about the context pattern [here](https://darksoil.studio/tnesh-stack/guides/custom-elements#context).
 
-5. [Choose which elements you need](/elements/link-devices-recipient.md) and import them like this:
+5. [Choose which elements you need](/elements/link-device-recipient.md) and import them like this:
 
 ```js
 import "@darksoil-studio/linked-devices-zome/dist/elements/linked-devices-context.js";

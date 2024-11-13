@@ -1,46 +1,46 @@
-# `<link-devices-requestor>`
+# `<link-device-recipient>`
 
 ## Usage
 
 0. If you haven't already, [go through the setup for the module](/setup).
 
-1. Import the `<link-devices-requestor>` element somewhere in the javascript side of your web-app like this:
+1. Import the `<link-device-recipient>` element somewhere in the javascript side of your web-app like this:
 
 ```js
-import '@darksoil-studio/linked-devices/dist/elements/link-devices-requestor.js'
+import '@darksoil-studio/linked-devices-zome/dist/elements/link-device-recipient.js'
 ```
 
 2. Use it in the html side of your web-app like this:
 
 ::: code-group
 ```html [Lit]
-<link-devices-requestor>
-</link-devices-requestor>
+<link-device-recipient>
+</link-device-recipient>
 ```
 
 ```html [React]
-<link-devices-requestor>
-</link-devices-requestor>
+<link-device-recipient>
+</link-device-recipient>
 ```
 
 ```html [Angular]
-<link-devices-requestor>
-</link-devices-requestor>
+<link-device-recipient>
+</link-device-recipient>
 ```
 
 ```html [Vue]
-<link-devices-requestor>
-</link-devices-requestor>
+<link-device-recipient>
+</link-device-recipient>
 ```
 
 ```html [Svelte]
-<link-devices-requestor>
-</link-devices-requestor>
+<link-device-recipient>
+</link-device-recipient>
 ```
 :::
 
 > [!WARNING]
-> Like all the elements in this module, `<link-devices-requestor>` needs to be placed inside an initialized `<linked-devices-context>`.
+> Like all the elements in this module, `<link-device-recipient>` needs to be placed inside an initialized `<linked-devices-context>`.
 
 ## Demo
 
@@ -65,7 +65,7 @@ onMounted(async () => {
   await import('@api-viewer/docs/lib/api-docs.js');
   await import('@api-viewer/demo/lib/api-demo.js');
   if (!customElements.get('linked-devices-context')) await import('../../ui/src/elements/linked-devices-context.ts');
-  if (!customElements.get('link-devices-requestor')) await import('../../ui/src/elements/link-devices-requestor.ts');
+  if (!customElements.get('link-device-recipient')) await import('../../ui/src/elements/link-device-recipient.ts');
 
   const mock = new LinkedDevicesZomeMock();
   const client = new LinkedDevicesClient(mock, "linked_devices_test");
@@ -74,9 +74,9 @@ onMounted(async () => {
 
   render(html`
     <linked-devices-context .store=${store}>
-      <api-demo src="custom-elements.json" only="link-devices-requestor" exclude-knobs="store">
-        <template data-element="link-devices-requestor" data-target="host">
-          <link-devices-requestor></link-devices-requestor>
+      <api-demo src="custom-elements.json" only="link-device-recipient" exclude-knobs="store">
+        <template data-element="link-device-recipient" data-target="host">
+          <link-device-recipient></link-device-recipient>
         </template>
       </api-demo>
     </linked-devices-context>
@@ -86,7 +86,7 @@ onMounted(async () => {
 
 ## API Reference
 
-`<link-devices-requestor>` is a [custom element](https://web.dev/articles/custom-elements-v1), which means that it can be used in any web app or website. Here is the reference for its API:
+`<link-device-recipient>` is a [custom element](https://web.dev/articles/custom-elements-v1), which means that it can be used in any web app or website. Here is the reference for its API:
 
-<api-docs src="custom-elements.json" only="link-devices-requestor">
+<api-docs src="custom-elements.json" only="link-device-recipient">
 </api-docs>

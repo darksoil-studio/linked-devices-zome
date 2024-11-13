@@ -18,14 +18,14 @@ import { customElement, property, query, state } from 'lit/decorators.js';
 import { TTL_CAP_GRANT } from '../config.js';
 import { linkedDevicesStoreContext } from '../context.js';
 import { LinkedDevicesStore } from '../linked-devices-store.js';
-import { randomPasscode } from './link-devices-recipient.js';
+import { randomPasscode } from './link-device-recipient.js';
 import './passcode-input.js';
 import { PasscodeInput } from './passcode-input.js';
 
 /**
  * @fires device-linked - Fired when the user successfully links another device. Detail will have this shape: { agentPubKey: AgentPubKey }
  */
-@customElement('link-devices-requestor')
+@customElement('link-device-requestor')
 export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 	/**
 	 * LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>

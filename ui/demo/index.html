@@ -41,8 +41,8 @@
 			import { SignalWatcher } from '@tnesh-stack/signals';
 			import { LitElement, css, html } from 'lit';
 
-			import '../src/elements/link-devices-recipient.ts';
-			import '../src/elements/link-devices-requestor.ts';
+			import '../src/elements/link-device-recipient.ts';
+			import '../src/elements/link-device-requestor.ts';
 			import '../src/elements/linked-devices-context.ts';
 			import { LinkedDevicesClient, LinkedDevicesStore } from '../src/index.ts';
 
@@ -71,24 +71,24 @@
 				renderContent() {
 					if (this.linkingDeviceRecipient) {
 						return html`
-							<link-devices-recipient
+							<link-device-recipient
 								@device-linked=${() => {
 									this.linkingDeviceRecipient = false;
 									this.requestUpdate();
 								}}
 							>
-							</link-devices-recipient>
+							</link-device-recipient>
 						`;
 					}
 					if (this.linkingDeviceRequestor) {
 						return html`
-							<link-devices-requestor
+							<link-device-requestor
 								@device-linked=${() => {
 									this.linkingDeviceRequestor = false;
 									this.requestUpdate();
 								}}
 							>
-							</link-devices-requestor>
+							</link-device-requestor>
 						`;
 					}
 					return html`

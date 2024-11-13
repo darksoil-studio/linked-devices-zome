@@ -28,7 +28,7 @@ export function randomPasscode(length: number) {
 	return passcode;
 }
 
-@customElement('link-devices-recipient')
+@customElement('link-device-recipient')
 export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 	/**
 	 * LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>
