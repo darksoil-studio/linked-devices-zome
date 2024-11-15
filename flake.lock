@@ -1588,11 +1588,11 @@
     },
     "pnpmnixpkgs_4": {
       "locked": {
-        "lastModified": 1731239293,
-        "narHash": "sha256-q2yjIWFFcTzp5REWQUOU9L6kHdCDmFDpqeix86SOvDc=",
+        "lastModified": 1731386116,
+        "narHash": "sha256-lKA770aUmjPHdTaJWnP3yQ9OI1TigenUqVC3wweqZuI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9256f7c71a195ebe7a218043d9f93390d49e6884",
+        "rev": "689fed12a013f56d4c4d3f612489634267d86529",
         "type": "github"
       },
       "original": {
@@ -1925,11 +1925,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1731411582,
-        "narHash": "sha256-YB+ecCPB6m3Fr1FF5X3REUnCUaVy/oCEZUEe/nH5gpg=",
+        "lastModified": 1731603177,
+        "narHash": "sha256-FKAGixB/Aftx03dQdZ/AV33VHAZK42LwmiHj+xzlkpk=",
         "owner": "darksoil-studio",
         "repo": "tnesh-stack",
-        "rev": "83758746c077dc586704c5daab4810b632aea1f4",
+        "rev": "79719cb8bd9da8e29cb80f50905f9fcc2f257ca3",
         "type": "github"
       },
       "original": {
