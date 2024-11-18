@@ -111,8 +111,8 @@ importers:
         specifier: ^2.11.0
         version: 2.18.0(@types/react@18.3.12)
       '@tnesh-stack/elements':
-        specifier: ^0.300.0
-        version: 0.300.1(@types/react@18.3.12)
+        specifier: ^0.300.5
+        version: 0.300.5(@types/react@18.3.12)
       '@tnesh-stack/signals':
         specifier: ^0.300.0
         version: 0.300.1
@@ -887,8 +887,8 @@ packages:
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  '@tnesh-stack/elements@0.300.1':
-    resolution: {integrity: sha512-fdiN7zW/as84egpQTNHy64va4+Lcey9W3NZPRMpo1fRNNHmXl4HvgMk9Y8DuymSIowlvWK7yZEyB3Y+4gRRD1A==}
+  '@tnesh-stack/elements@0.300.5':
+    resolution: {integrity: sha512-3KgGq4kTosHjmwu2EqW8weTtO1m6cth8R/Plqs+U6c5wilUYer4sCGypX98WDyYGF6Fz/4gVURmlusqEiSvixw==}
 
   '@tnesh-stack/signals@0.300.1':
     resolution: {integrity: sha512-Z97y1wF6DeRRjJ06O8Kwutt/mY1nbyFJMdTRnSfndyZmDkyDmv5UzZXSbCBl2+RlTzVomyy2rUBeTVLKdJqy7g==}
@@ -3503,11 +3503,12 @@ snapshots:
 
   '@sinclair/typebox@0.27.8': {}
 
-  '@tnesh-stack/elements@0.300.1(@types/react@18.3.12)':
+  '@tnesh-stack/elements@0.300.5(@types/react@18.3.12)':
     dependencies:
       '@holo-host/identicon': 0.1.0
       '@holochain/client': 0.17.1
       '@lit-labs/router': 0.1.3
+      '@lit/context': 1.1.3
       '@lit/localize': 0.12.2
       '@mdi/js': 7.4.47
       '@shoelace-style/shoelace': 2.18.0(@types/react@18.3.12)

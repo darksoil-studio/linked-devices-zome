@@ -124,7 +124,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./context.js\""
+            "package": "./context.js"
           }
         },
         {
@@ -132,7 +132,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./linked-devices-client.js\""
+            "package": "./linked-devices-client.js"
           }
         },
         {
@@ -140,7 +140,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./linked-devices-store.js\""
+            "package": "./linked-devices-store.js"
           }
         },
         {
@@ -148,7 +148,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./types.js\""
+            "package": "./types.js"
           }
         }
       ]
