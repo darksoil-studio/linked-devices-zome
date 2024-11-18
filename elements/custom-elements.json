@@ -588,11 +588,35 @@
           "members": [
             {
               "kind": "field",
+              "name": "client",
+              "type": {
+                "text": "AppClient"
+              }
+            },
+            {
+              "kind": "field",
               "name": "store",
               "type": {
                 "text": "LinkedDevicesStore"
               },
               "attribute": "store"
+            },
+            {
+              "kind": "field",
+              "name": "role",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "role"
+            },
+            {
+              "kind": "field",
+              "name": "zome",
+              "type": {
+                "text": "string"
+              },
+              "default": "'linked_devices'",
+              "attribute": "zome"
             }
           ],
           "attributes": [
@@ -602,6 +626,21 @@
                 "text": "LinkedDevicesStore"
               },
               "fieldName": "store"
+            },
+            {
+              "name": "role",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "role"
+            },
+            {
+              "name": "zome",
+              "type": {
+                "text": "string"
+              },
+              "default": "'linked_devices'",
+              "fieldName": "zome"
             }
           ],
           "superclass": {
