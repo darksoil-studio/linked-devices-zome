@@ -19,4 +19,4 @@ import{s as x,n as b,c as f,a as p,l as g,t as C}from"./context.CziiVT4C.js";imp
 		:host {
 			display: contents;
 		}
-	`;h([f({context:E})],a.prototype,"client",2);h([D({context:g}),p({type:Object})],a.prototype,"store",2);h([p()],a.prototype,"role",2);h([p()],a.prototype,"zome",2);a=h([C("linked-devices-context")],a);export{a as LinkedDevicesContext};
+	`;h([f({context:E,subscribe:!0})],a.prototype,"client",2);h([D({context:g}),p({type:Object})],a.prototype,"store",2);h([p()],a.prototype,"role",2);h([p()],a.prototype,"zome",2);a=h([C("linked-devices-context")],a);export{a as LinkedDevicesContext};

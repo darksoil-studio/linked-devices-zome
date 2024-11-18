@@ -5,7 +5,7 @@
 // - src/prelude_lower.isle
 // - src/isa/s390x/inst.isle
 // - src/isa/s390x/lower.isle
-// - /home/runner/work/linked-devices/linked-devices/docs/public/backend/release/build/cranelift-codegen-b1eedc6a670f227e/out/clif_lower.isle
+// - /home/runner/work/linked-devices-zome/linked-devices-zome/docs/public/backend/release/build/cranelift-codegen-b1eedc6a670f227e/out/clif_lower.isle
 
 use super::*; // Pulls in all external types.
 use std::marker::PhantomData;
