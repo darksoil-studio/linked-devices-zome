@@ -3,114 +3,33 @@
 > [!WARNING]
 > This guide assumes that you have scaffolded a hApp with the [TNESH stack template](https://darksoil.studio/tnesh-stack/scaffolding-a-happ).
 
-1. Run this to scaffold this zome in your hApp:
+Run this to scaffold this zome in your hApp:
 
 ```bash
-nix run github:darksoil-studio/linked-devices#scaffold
+nix run github:darksoil-studio/linked-devices-zome#scaffold
 ```
 
 This will do the following:
   - Add the flake input for that repository in your `flake.nix`.
   - Add the appropriate zome packages to the `dna.nix` that you select.
-  - Add the UI package for that zome in the local NPM package that you select.
-
-Now you only need to integrate the zome's frontend in your web-app.
-
-2. Connect to Holochain with the `AppClient`, and create the `LinkedDevicesStore` with it:
-
-```js
-import { LinkedDevicesStore, LinkedDevicesClient } from "@darksoil-studio/linked-devices-zome";
-import { AppWebsocket } from "@holochain/client";
-
-async function setupLinkedDevicesStore() {
-  // TODO: change "MY_APP_NAME" for the roleId that you can find in your "happ.yaml"
-  const client = await AppWebsocket.connect();
-
-  // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
-  return new LinkedDevicesStore(new LinkedDevicesClient(client, '<MY_CELL_ROLE>'));
-}
-```
-
-3. Import the `<linked-devices-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@darksoil-studio/linked-devices-zome`:
-
-```js
-// This can be placed in the index.js, at the top level of your web-app.
-import "@darksoil-studio/linked-devices-zome/dist/elements/linked-devices-context.js";
-```
-
-And then add the `<linked-devices-context>` element in your html:
-
-```html
-<linked-devices-context>
-  <!-- Add here other elements from @darksoil-studio/linked-devices-zome -->
-</linked-devices-context>
-```
-
-4. Attach the `linkedDevicesStore` to the `<linked-devices-context>` element:
-
-- Go to [this page](https://darksoil.studio/tnesh-stack/integrating-with-frameworks/), select the framework you are using, and follow its example.
-
-You need to set the `store` property of it to your already instantiated `LinkedDevicesStore` object:
-
-- If you **are using some JS framework**:
-
-::: code-group
-```html [React]
-<linked-devices-context store={ linkedDevicesStore}><!-- ... --></linked-devices-context>
-```
-
-```html [Angular]
-<linked-devices-context [store]="linkedDevicesStore"><!-- ... --></linked-devices-context>
-```
-
-```html [Vue]
-<linked-devices-context :store="linkedDevicesStore"><!-- ... --></linked-devices-context>
-```
-
-```html [Svelte]
-<linked-devices-context store={ linkedDevicesStore}><!-- ... --></linked-devices-context>
-```
-
-```html [Lit]
-<linked-devices-context .store=${ linkedDevicesStore}><!-- ... --></linked-devices-context>
-```
-:::
-
-OR
-
-- If you **are not using any framework**:
-
-```js
-const contextElement = document.querySelector("linked-devices-context");
-contextElement.store = store;
-```
+  - Add the UI package for @darksoil-studio/linkes-devices-zome as a dependency of your UI package.
+  - Add the `<linked-devices-context>` element at the top level of your application.
 
 > [!NOTE]
 > You can read more about the context pattern [here](https://darksoil.studio/tnesh-stack/guides/custom-elements#context).
 
-5. [Choose which elements you need](/elements/link-device-recipient.md) and import them like this:
+That's it! You have now integrated the `linked-devices` coordinator and integrity zomes and their UI into your app!
+
+Now, [choose which elements you need](/elements/link-device-recipient.md) and import them like this:
 
 ```js
-import "@darksoil-studio/linked-devices-zome/dist/elements/linked-devices-context.js";
+import "@darksoil-studio/linked-devices-zome/dist/elements/linked-devices-recipient.js";
 ```
 
-And then they are ready be used inside the `<linked-devices-context>` just like any other HTML tag.
+And then they are ready be used inside the `<linked-devices-context>` just like any other HTML tag. 
 
-This will define all the elements from this module in the global `CustomElementsRegistry`. You can read more about Custom Elements [here](https://developers.google.com/web/fundamentals/web-components/customelements).
-
-6. Add your preferred shoelace theme in your `<head>` tag:
-
-```html
-  <head>
-    <link rel="stylesheet" href="path/to/shoelace/dist/themes/light.css" />
-  </head>
-```
-
-You can read more about how to initialize the shoelace theme [here](https://shoelace.style/getting-started/themes?id=activating-themes).
-
----
-
-That's it! You have now integrated both the backend and the frontend for the profiles module.
+> [!NOTE]
+> Importing the elements from the UI package will define them in the global `CustomElementsRegistry`, which makes them available to be used like any normal HTML tag. You can read more about custom elements [here](https://darksoil.studio/tnesh-stack/guides/custom-elements).
 
 # Example
 
