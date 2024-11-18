@@ -33,5 +33,5 @@ And then they are ready be used inside the `<linked-devices-context>` just like 
 
 # Example
 
-You can see a full working example of the UI working in [here](https://github.com/darksoil-studio/linked-devices/blob/main/ui/demo/index.html).
+You can see a full working example of the UI working in [here](https://github.com/darksoil-studio/linked-devices-zome/blob/main/ui/demo/index.html).
 
