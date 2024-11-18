@@ -10,7 +10,7 @@ import { LinkedDevicesStore } from '../linked-devices-store.js';
 
 @customElement('linked-devices-context')
 export class LinkedDevicesContext extends LitElement {
-	@consume({ context: appClientContext })
+	@consume({ context: appClientContext, subscribe: true })
 	client!: AppClient;
 
 	@provide({ context: linkedDevicesStoreContext })
