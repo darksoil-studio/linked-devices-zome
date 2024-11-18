@@ -56,7 +56,7 @@
           buildInputs = [ pkgs.makeWrapper ];
           postBuild = ''
             wrapProgram $out/bin/scaffold-remote-zome \
-              --add-flags "linked-devices \
+              --add-flags "linked-devices-zome \
                 --integrity-zome-name linked_devices_integrity \
                 --coordinator-zome-name linked_devices \
                 --remote-zome-git-url github:darksoil-studio/linked-devices-zome \
