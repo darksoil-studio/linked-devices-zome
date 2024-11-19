@@ -10,20 +10,17 @@ nix run github:darksoil-studio/linked-devices-zome#scaffold
 ```
 
 This will do the following:
-  - Add the flake input for that repository in your `flake.nix`.
-  - Add the appropriate zome packages to the `dna.nix` that you select.
-  - Add the UI package for @darksoil-studio/linkes-devices-zome as a dependency of your UI package.
+  - Add the `github:darksoil-studio/linked-devices-zome` flake input in your `flake.nix`.
+  - Add the `linked_devices` coordinator and integrity zome packages to the `dna.nix` that you select.
+  - Add the UI package for `@darksoil-studio/linkes-devices-zome` as a dependency of your UI package.
   - Add the `<linked-devices-context>` element at the top level of your application.
-
-> [!NOTE]
-> You can read more about the context pattern [here](https://darksoil.studio/tnesh-stack/guides/custom-elements#context).
 
 That's it! You have now integrated the `linked-devices` coordinator and integrity zomes and their UI into your app!
 
 Now, [choose which elements you need](/elements/link-device-recipient.md) and import them like this:
 
 ```js
-import "@darksoil-studio/linked-devices-zome/dist/elements/linked-devices-recipient.js";
+import "@darksoil-studio/linked-devices-zome/dist/elements/link-device-recipient.js";
 ```
 
 And then they are ready be used inside the `<linked-devices-context>` just like any other HTML tag. 
