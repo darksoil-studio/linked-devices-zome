@@ -19,8 +19,8 @@ export default defineConfig({
 			include: ['mermaid'],
 		},
 	},
-	base: '/linked-devices',
-	title: '@darksoil-studio/linked-devices-zome',
+	base: '/linked-devices-zome',
+	title: 'Linked Devices Zome',
 	description: 'Linked Devices zome for holochain apps',
 	themeConfig: {
 		// https://vitepress.dev/reference/default-theme-config
