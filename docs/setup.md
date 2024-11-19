@@ -10,7 +10,7 @@ nix run github:darksoil-studio/linked-devices-zome#scaffold
 ```
 
 This will do the following:
-  - Add the `github:darksoil-studio/linked-devices-zome` flake input in your `flake.nix`.
+  - Add the `github:darksoil-studio/linked-devices-zome` flake input to your `flake.nix`.
   - Add the `linked_devices` coordinator and integrity zome packages to the `dna.nix` that you select.
   - Add the UI package for `@darksoil-studio/linkes-devices-zome` as a dependency of your UI package.
   - Add the `<linked-devices-context>` element at the top level of your application.
