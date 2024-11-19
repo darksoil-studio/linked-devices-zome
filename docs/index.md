@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "Linked Devices Zome"
-  text: "Linked Devices zome for holochain apps"
-  tagline: Plug-and-play linked devices management for your hApps
+  text: ""
+  tagline: Plug-and-play multi-devices management for your hApps
   actions:
     - theme: brand
       text: Setup
@@ -23,10 +23,13 @@ hero:
       link: "/linked-devices-store.md"
 
 features:
-  - title: Integrity and Coordinator Zomes
-    details: Autonomous backend components.
-  - title: UI state management
-    details: Store and client exports handle the logic of communicating with the zomes from the UI out of the box.
-  - title: Reusable UI components
-    details: Include these components to let them handle the whole process for you.
+  - title: UI + Integrity + Coordinator Zomes
+    details: Following the TNESH stack guidelines
+    link: https://darksoil.studio/tnesh-stack
+  - title: Enable each user to have multiple devices
+    details: Link a computer and a phone together so that they share the same user experience.
+  - title: Plug and play UI elements
+    details: Include `<link-device-requestor>` and `<link-device-recipient>`, they will handle all the process for you.
+  - title: Portable across DNAs
+    details: Compatible with migration of DNAs and loss of devices.
 ---
