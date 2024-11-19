@@ -29,7 +29,7 @@ features:
   - title: Enable each user to have multiple devices
     details: Link a computer and a phone together so that they share the same user experience.
   - title: Plug and play UI elements
-    details: Include "<link-device-requestor>" and "<link-device-recipient>", they will handle all the process for you.
+    details: Include &lt;link-device-requestor&gt; and &lt;link-device-recipient&gt;, they will handle all the process for you.
   - title: Portable across DNAs
     details: Compatible with migration of DNAs and loss of devices.
 ---
