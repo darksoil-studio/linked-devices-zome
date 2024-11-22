@@ -104,7 +104,7 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 		// 	return;
 		// }
 		try {
-			await this.store.client.requestLinkDevices(
+			await this.store.client.acceptLinkDevices(
 				requestor,
 				inputtedRequestorPasscode,
 			);

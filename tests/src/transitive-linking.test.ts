@@ -22,11 +22,11 @@ test('link devices transitively', async () => {
 		await alice.store.client.prepareLinkDevices(alicePasscode);
 		await bob.store.client.prepareLinkDevices(bobPasscode);
 
-		await alice.store.client.initLinkDevices(
+		await alice.store.client.requestLinkDevices(
 			bob.player.agentPubKey,
 			bobPasscode,
 		);
-		await bob.store.client.requestLinkDevices(
+		await bob.store.client.acceptLinkDevices(
 			alice.player.agentPubKey,
 			alicePasscode,
 		);
@@ -63,11 +63,11 @@ test('link devices transitively', async () => {
 		await carol.store.client.prepareLinkDevices(carolPasscode);
 		await dave.store.client.prepareLinkDevices(davePasscode);
 
-		await carol.store.client.initLinkDevices(
+		await carol.store.client.requestLinkDevices(
 			dave.player.agentPubKey,
 			davePasscode,
 		);
-		await dave.store.client.requestLinkDevices(
+		await dave.store.client.acceptLinkDevices(
 			carol.player.agentPubKey,
 			carolPasscode,
 		);
@@ -85,11 +85,11 @@ test('link devices transitively', async () => {
 		await bob.store.client.prepareLinkDevices(bobPasscode);
 		await carol.store.client.prepareLinkDevices(carolPasscode);
 
-		await bob.store.client.initLinkDevices(
+		await bob.store.client.requestLinkDevices(
 			carol.player.agentPubKey,
 			carolPasscode,
 		);
-		await carol.store.client.requestLinkDevices(
+		await carol.store.client.acceptLinkDevices(
 			bob.player.agentPubKey,
 			bobPasscode,
 		);

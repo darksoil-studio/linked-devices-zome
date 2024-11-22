@@ -33,11 +33,14 @@ export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 		await this.callZome('clear_link_devices', null);
 	}
 
-	async initLinkDevices(recipient: AgentPubKey, recipient_passcode: number[]) {
+	async requestLinkDevices(
+		recipient: AgentPubKey,
+		recipient_passcode: number[],
+	) {
 		const req: AppCallZomeRequest = {
 			role_name: this.roleName,
 			zome_name: this.zomeName,
-			fn_name: 'init_link_devices',
+			fn_name: 'request_link_devices',
 			payload: {
 				recipient,
 				recipient_passcode,
@@ -46,11 +49,11 @@ export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 		await this.client.callZome(req, 2_000);
 	}
 
-	async requestLinkDevices(
+	async acceptLinkDevices(
 		requestor: AgentPubKey,
 		requestor_passcode: number[],
 	) {
-		await this.callZome('request_link_devices', {
+		await this.callZome('accept_link_devices', {
 			requestor,
 			requestor_passcode,
 		});

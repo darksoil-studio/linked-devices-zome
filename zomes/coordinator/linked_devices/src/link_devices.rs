@@ -28,11 +28,11 @@ pub fn prepare_link_devices(my_passcode: Vec<u8>) -> ExternResult<()> {
     let mut functions = BTreeSet::new();
     functions.insert((
         zome_info()?.name,
-        FunctionName("receive_init_link_devices".into()),
+        FunctionName("receive_request_link_devices".into()),
     ));
     functions.insert((
         zome_info()?.name,
-        FunctionName("receive_request_link_devices".into()),
+        FunctionName("receive_accept_link_devices".into()),
     ));
     let access = CapAccess::Transferable {
         secret: secret_from_passcode(my_passcode),
@@ -121,16 +121,16 @@ pub fn clear_link_devices() -> ExternResult<()> {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct InitLinkDevicesInput {
+pub struct RequestLinkDevicesInput {
     pub recipient: AgentPubKey,
     pub recipient_passcode: Vec<u8>,
 }
 #[hdk_extern]
-pub fn init_link_devices(input: InitLinkDevicesInput) -> ExternResult<()> {
+pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> {
     let response = call_remote(
         input.recipient,
         zome_info()?.name,
-        "receive_init_link_devices".into(),
+        "receive_request_link_devices".into(),
         Some(secret_from_passcode(input.recipient_passcode)),
         (),
     )?;
@@ -148,7 +148,7 @@ pub enum LinkDevicesSignal {
 }
 
 #[hdk_extern]
-pub fn receive_init_link_devices() -> ExternResult<()> {
+pub fn receive_request_link_devices() -> ExternResult<()> {
     let requestor = call_info()?.provenance;
 
     emit_signal(LinkDevicesSignal::LinkDevicesInitialized { requestor })?;
@@ -156,13 +156,13 @@ pub fn receive_init_link_devices() -> ExternResult<()> {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct RequestLinkDevicesInput {
+pub struct AcceptLinkDevicesInput {
     pub requestor: AgentPubKey,
     pub requestor_passcode: Vec<u8>,
 }
 // Called by the recipient
 #[hdk_extern]
-pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> {
+pub fn accept_link_devices(input: AcceptLinkDevicesInput) -> ExternResult<()> {
     let my_pub_key = agent_info()?.agent_latest_pubkey;
 
     let linked_devices = LinkedDevices {
@@ -179,7 +179,7 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
     let response = call_remote(
         input.requestor.clone(),
         zome_info()?.name,
-        "receive_request_link_devices".into(),
+        "receive_accept_link_devices".into(),
         Some(secret_from_passcode(input.requestor_passcode)),
         incomplete_proof,
     )?;
@@ -210,7 +210,7 @@ pub const LINKED_DEVICES_PROOF_TTL_US: u64 = 5_000_000; // 5 seconds
 const TTL_LIVE_AGENTS_CAP_GRANTS: i64 = 1000 * 1000 * 60; // 1 minute
 
 #[hdk_extern]
-pub fn receive_request_link_devices(
+pub fn receive_accept_link_devices(
     incomplete_proof: LinkedDevicesProof,
 ) -> ExternResult<Signature> {
     let linked_devices = incomplete_proof.linked_devices;

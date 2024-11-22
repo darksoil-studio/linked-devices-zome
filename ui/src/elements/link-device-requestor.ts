@@ -103,7 +103,7 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 			// if (!this.attemptedRecipients.has(linkingAgent)) {
 			// 	this.attemptedRecipients.set(linkingAgent, 'requesting');
 			try {
-				await this.store.client.initLinkDevices(linkingAgent, passcode);
+				await this.store.client.requestLinkDevices(linkingAgent, passcode);
 
 				this.requestorpasscode = randomPasscode(
 					this.store.config.linkDevicePasscodeLength,

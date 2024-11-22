@@ -20,7 +20,7 @@ DHT-->>Requestor: linking_agents
 Requestor-->>Requestor: enter recipient passcode
 
 loop for agent in linking_agents
-  Requestor->>Recipient: initiate_link_devices
+  Requestor->>Recipient: request_link_devices
   Recipient-->>Requestor: ack
   Requestor-->>Requestor: show requestor passcode 
 
@@ -28,7 +28,7 @@ loop for agent in linking_agents
   Recipient->>Recipient: enter requestor passcode
 
   Recipient-->>Recipient: generate LinkedDevicesProof
-  Recipient->>Requestor: request_sign_linked_devices_proof(proof)
+  Recipient->>Requestor: accept_link_devices(proof)
   Requestor-->>Requestor: sign LinkedDevicesProof and create AgentToLinkedDevices link
   Requestor-->>Recipient: signature
   Recipient-->>Recipient: create AgentToLinkedDevices link

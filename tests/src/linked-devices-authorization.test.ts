@@ -40,11 +40,11 @@ test('link devices can edit posts for the starting agent', async () => {
 		await alice.store.client.prepareLinkDevices(alicePasscode);
 		await bob.store.client.prepareLinkDevices(bobPasscode);
 
-		await alice.store.client.initLinkDevices(
+		await alice.store.client.requestLinkDevices(
 			bob.player.agentPubKey,
 			bobPasscode,
 		);
-		await bob.store.client.requestLinkDevices(
+		await bob.store.client.acceptLinkDevices(
 			alice.player.agentPubKey,
 			alicePasscode,
 		);
