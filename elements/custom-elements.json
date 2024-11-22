@@ -207,7 +207,7 @@
             },
             {
               "kind": "method",
-              "name": "initLinkDevices",
+              "name": "requestLinkDevices",
               "parameters": [
                 {
                   "name": "recipient",
@@ -225,7 +225,7 @@
             },
             {
               "kind": "method",
-              "name": "requestLinkDevices",
+              "name": "acceptLinkDevices",
               "parameters": [
                 {
                   "name": "requestor",

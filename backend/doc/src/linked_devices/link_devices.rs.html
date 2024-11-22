@@ -312,11 +312,11 @@
     <span class="kw">let </span><span class="kw-2">mut </span>functions = BTreeSet::new();
     functions.insert((
         zome_info()<span class="question-mark">?</span>.name,
-        FunctionName(<span class="string">"receive_init_link_devices"</span>.into()),
+        FunctionName(<span class="string">"receive_request_link_devices"</span>.into()),
     ));
     functions.insert((
         zome_info()<span class="question-mark">?</span>.name,
-        FunctionName(<span class="string">"receive_request_link_devices"</span>.into()),
+        FunctionName(<span class="string">"receive_accept_link_devices"</span>.into()),
     ));
     <span class="kw">let </span>access = CapAccess::Transferable {
         secret: secret_from_passcode(my_passcode),
@@ -405,16 +405,16 @@
 }
 
 <span class="attr">#[derive(Serialize, Deserialize, Debug)]
-</span><span class="kw">pub struct </span>InitLinkDevicesInput {
+</span><span class="kw">pub struct </span>RequestLinkDevicesInput {
     <span class="kw">pub </span>recipient: AgentPubKey,
     <span class="kw">pub </span>recipient_passcode: Vec&lt;u8&gt;,
 }
 <span class="attr">#[hdk_extern]
-</span><span class="kw">pub fn </span>init_link_devices(input: InitLinkDevicesInput) -&gt; ExternResult&lt;()&gt; {
+</span><span class="kw">pub fn </span>request_link_devices(input: RequestLinkDevicesInput) -&gt; ExternResult&lt;()&gt; {
     <span class="kw">let </span>response = call_remote(
         input.recipient,
         zome_info()<span class="question-mark">?</span>.name,
-        <span class="string">"receive_init_link_devices"</span>.into(),
+        <span class="string">"receive_request_link_devices"</span>.into(),
         <span class="prelude-val">Some</span>(secret_from_passcode(input.recipient_passcode)),
         (),
     )<span class="question-mark">?</span>;
@@ -432,7 +432,7 @@
 }
 
 <span class="attr">#[hdk_extern]
-</span><span class="kw">pub fn </span>receive_init_link_devices() -&gt; ExternResult&lt;()&gt; {
+</span><span class="kw">pub fn </span>receive_request_link_devices() -&gt; ExternResult&lt;()&gt; {
     <span class="kw">let </span>requestor = call_info()<span class="question-mark">?</span>.provenance;
 
     emit_signal(LinkDevicesSignal::LinkDevicesInitialized { requestor })<span class="question-mark">?</span>;
@@ -440,13 +440,13 @@
 }
 
 <span class="attr">#[derive(Serialize, Deserialize, Debug)]
-</span><span class="kw">pub struct </span>RequestLinkDevicesInput {
+</span><span class="kw">pub struct </span>AcceptLinkDevicesInput {
     <span class="kw">pub </span>requestor: AgentPubKey,
     <span class="kw">pub </span>requestor_passcode: Vec&lt;u8&gt;,
 }
 <span class="comment">// Called by the recipient
 </span><span class="attr">#[hdk_extern]
-</span><span class="kw">pub fn </span>request_link_devices(input: RequestLinkDevicesInput) -&gt; ExternResult&lt;()&gt; {
+</span><span class="kw">pub fn </span>accept_link_devices(input: AcceptLinkDevicesInput) -&gt; ExternResult&lt;()&gt; {
     <span class="kw">let </span>my_pub_key = agent_info()<span class="question-mark">?</span>.agent_latest_pubkey;
 
     <span class="kw">let </span>linked_devices = LinkedDevices {
@@ -463,7 +463,7 @@
     <span class="kw">let </span>response = call_remote(
         input.requestor.clone(),
         zome_info()<span class="question-mark">?</span>.name,
-        <span class="string">"receive_request_link_devices"</span>.into(),
+        <span class="string">"receive_accept_link_devices"</span>.into(),
         <span class="prelude-val">Some</span>(secret_from_passcode(input.requestor_passcode)),
         incomplete_proof,
     )<span class="question-mark">?</span>;
@@ -494,7 +494,7 @@
 </span><span class="kw">const </span>TTL_LIVE_AGENTS_CAP_GRANTS: i64 = <span class="number">1000 </span>* <span class="number">1000 </span>* <span class="number">60</span>; <span class="comment">// 1 minute
 
 </span><span class="attr">#[hdk_extern]
-</span><span class="kw">pub fn </span>receive_request_link_devices(
+</span><span class="kw">pub fn </span>receive_accept_link_devices(
     incomplete_proof: LinkedDevicesProof,
 ) -&gt; ExternResult&lt;Signature&gt; {
     <span class="kw">let </span>linked_devices = incomplete_proof.linked_devices;
