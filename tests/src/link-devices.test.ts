@@ -53,5 +53,13 @@ test('link devices', async () => {
 			encodeHashToBase64(bob.player.agentPubKey),
 			encodeHashToBase64(linksOutput[0]),
 		);
+
+		// Alice gets the links again
+		linksOutput = await toPromise(alice.store.myLinkedDevices);
+		assert.equal(linksOutput.length, 1);
+		assert.deepEqual(
+			encodeHashToBase64(bob.player.agentPubKey),
+			encodeHashToBase64(linksOutput[0]),
+		);
 	});
 });
