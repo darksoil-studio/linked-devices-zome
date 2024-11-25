@@ -2,6 +2,7 @@ import { AgentPubKey } from '@holochain/client';
 import {
 	collectionSignal,
 	liveLinksSignal,
+	mapCompleted,
 	pipe,
 	uniquify,
 } from '@tnesh-stack/signals';
@@ -31,6 +32,16 @@ export class LinkedDevicesStore {
 			),
 			links => uniquify(links.map(l => retype(l.target, HashType.AGENT))),
 		),
+	);
+
+	myLinkedDevices = mapCompleted(
+		liveLinksSignal(
+			this.client,
+			this.client.client.myPubKey,
+			() => this.client.queryMyLinkedDevices(),
+			'AgentToLinkedDevices',
+		),
+		links => uniquify(links.map(l => retype(l.target, HashType.AGENT))),
 	);
 
 	/** Link agents */
