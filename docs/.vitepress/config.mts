@@ -24,47 +24,56 @@ export default defineConfig({
 	description: 'Linked Devices zome for holochain apps',
 	themeConfig: {
 		// https://vitepress.dev/reference/default-theme-config
-
-		sidebar: [
+		nav: [
 			{
-				text: 'Setup',
-				link: '/setup.md',
+			  text: "Documentation",
+			  link: "/documentation/setup.md",
 			},
-			{
-				text: 'API Reference',
-				items: [
-					{
-						text: 'Integrity Zome',
-						link: '/backend/doc/linked_devices_integrity/index.html',
-						target: '_blank',
-					},
-					{
-						text: 'Coordinator Zome',
-						link: '/backend/doc/linked_devices/index.html',
-						target: '_blank',
-					},
-					{
-						text: 'Frontend',
-						items: [
-							{
-								text: 'LinkedDevicesStore',
-								link: '/linked-devices-store.md',
-							},
-							{
-								text: 'Elements',
-								items: fs
-									.readdirSync('./elements')
-									.filter(file => file.endsWith('.md'))
-									.map(el => ({
-										text: el.split('.md')[0],
-										link: `/elements/${el}`,
-									})),
-							},
-						],
-					},
-				],
-			},
-		],
+			{ text: "Pricing", link: "/pricing/pricing.md" },
+		  ],
+		sidebar: {
+			"/documentation/": [
+				{
+					text: 'Setup',
+					link: '/documentation/setup.md',
+				},
+				{
+					text: 'API Reference',
+					items: [
+						{
+							text: 'Integrity Zome',
+							link: '/backend/doc/linked_devices_integrity/index.html',
+							target: '_blank',
+						},
+						{
+							text: 'Coordinator Zome',
+							link: '/backend/doc/linked_devices/index.html',
+							target: '_blank',
+						},
+						{
+							text: 'Frontend',
+							items: [
+								{
+									text: 'LinkedDevicesStore',
+									link: '/documentation/linked-devices-store.md',
+								},
+								{
+									text: 'Elements',
+									items: fs
+										.readdirSync('./elements')
+										.filter(file => file.endsWith('.md'))
+										.map(el => ({
+											text: el.split('.md')[0],
+											link: `/elements/${el}`,
+										})),
+								},
+							],
+						},
+					],
+				},
+			],
+			"/pricing/": [],
+		},
 
 		socialLinks: [
 			{
