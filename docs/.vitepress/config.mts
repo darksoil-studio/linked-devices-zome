@@ -60,11 +60,11 @@ export default defineConfig({
 								{
 									text: 'Elements',
 									items: fs
-										.readdirSync('./elements')
+										.readdirSync('./documentation/elements')
 										.filter(file => file.endsWith('.md'))
 										.map(el => ({
 											text: el.split('.md')[0],
-											link: `/elements/${el}`,
+											link: `/documentation/elements/${el}`,
 										})),
 								},
 							],
