@@ -2,7 +2,7 @@
 
 ## Usage
 
-0. If you haven't already, [go through the setup for the module](/documentation/setup).
+0. If you haven't already, [go through the setup for the module](/setup).
 
 1. Import the `<link-device-requestor>` element somewhere in the javascript side of your web-app like this:
 
@@ -55,17 +55,17 @@ import { decodeHashFromBase64, encodeHashToBase64, fakeActionHash, fakeAgentPubK
 import { render } from "lit";
 import { html, unsafeStatic } from "lit/static-html.js";
 
-import { LinkedDevicesZomeMock } from "../../../ui/src/mocks.ts";
-import { LinkedDevicesStore } from "../../../ui/src/linked-devices-store.ts";
-import { LinkedDevicesClient } from "../../../ui/src/linked-devices-client.ts";
+import { LinkedDevicesZomeMock } from "../../ui/src/mocks.ts";
+import { LinkedDevicesStore } from "../../ui/src/linked-devices-store.ts";
+import { LinkedDevicesClient } from "../../ui/src/linked-devices-client.ts";
 
 onMounted(async () => {
   // Elements need to be imported on the client side, not the SSR side
   // Reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
   await import('@api-viewer/docs/lib/api-docs.js');
   await import('@api-viewer/demo/lib/api-demo.js');
-  if (!customElements.get('linked-devices-context')) await import('../../../ui/src/elements/linked-devices-context.ts');
-  if (!customElements.get('link-device-requestor')) await import('../../../ui/src/elements/link-device-requestor.ts');
+  if (!customElements.get('linked-devices-context')) await import('../../ui/src/elements/linked-devices-context.ts');
+  if (!customElements.get('link-device-requestor')) await import('../../ui/src/elements/link-device-requestor.ts');
 
   const mock = new LinkedDevicesZomeMock();
   const client = new LinkedDevicesClient(mock, "linked_devices_test");

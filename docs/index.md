@@ -12,7 +12,7 @@ hero:
       link: /pricing/pricing.md
     - theme: alt
       text: Start building
-      link: /documentation/setup.md
+      link: /setup.md
     - theme: alt
       text: Integrity Zome API
       link: "/backend/doc/linked_devices_integrity/index.html"
@@ -23,7 +23,7 @@ hero:
       target: "_blank"
     - theme: alt
       text: Frontend API
-      link: "/documentation/linked-devices-store.md"
+      link: "/linked-devices-store.md"
 
 features:
   - title: UI + Integrity + Coordinator Zomes

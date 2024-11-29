@@ -182,15 +182,6 @@
             },
             {
               "kind": "method",
-              "name": "queryMyLinkedDevices",
-              "return": {
-                "type": {
-                  "text": "Promise<Array<Link>>"
-                }
-              }
-            },
-            {
-              "kind": "method",
               "name": "prepareLinkDevices",
               "parameters": [
                 {
@@ -199,8 +190,7 @@
                     "text": "number[]"
                   }
                 }
-              ],
-              "description": "Link Devices process"
+              ]
             },
             {
               "kind": "method",
@@ -217,7 +207,7 @@
             },
             {
               "kind": "method",
-              "name": "requestLinkDevices",
+              "name": "initLinkDevices",
               "parameters": [
                 {
                   "name": "recipient",
@@ -235,7 +225,7 @@
             },
             {
               "kind": "method",
-              "name": "acceptLinkDevices",
+              "name": "requestLinkDevices",
               "parameters": [
                 {
                   "name": "requestor",
@@ -283,10 +273,6 @@
               "name": "linkedDevicesForAgent",
               "default": "new MemoHoloHashMap((agent: AgentPubKey) =>\n\t\tpipe(\n\t\t\tliveLinksSignal(\n\t\t\t\tthis.client,\n\t\t\t\tagent,\n\t\t\t\t() => this.client.getLinkedDevicesForAgent(agent),\n\t\t\t\t'AgentToLinkedDevices',\n\t\t\t),\n\t\t\tlinks => uniquify(links.map(l => retype(l.target, HashType.AGENT))),\n\t\t),\n\t)",
               "description": "Linked Devices for Agent"
-            },
-            {
-              "kind": "field",
-              "name": "myLinkedDevices"
             },
             {
               "kind": "field",

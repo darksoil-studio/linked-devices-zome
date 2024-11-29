@@ -26,16 +26,16 @@ export default defineConfig({
 		// https://vitepress.dev/reference/default-theme-config
 		nav: [
 			{
-			  text: "Documentation",
-			  link: "/documentation/setup.md",
+				text: 'Documentation',
+				link: '/setup.md',
 			},
-			{ text: "Pricing", link: "/pricing/pricing.md" },
-		  ],
+			{ text: 'Pricing', link: '/pricing/pricing.md' },
+		],
 		sidebar: {
-			"/documentation/": [
+			'/': [
 				{
 					text: 'Setup',
-					link: '/documentation/setup.md',
+					link: '/setup.md',
 				},
 				{
 					text: 'API Reference',
@@ -55,16 +55,16 @@ export default defineConfig({
 							items: [
 								{
 									text: 'LinkedDevicesStore',
-									link: '/documentation/linked-devices-store.md',
+									link: '/linked-devices-store.md',
 								},
 								{
 									text: 'Elements',
 									items: fs
-										.readdirSync('./documentation/elements')
+										.readdirSync('./elements')
 										.filter(file => file.endsWith('.md'))
 										.map(el => ({
 											text: el.split('.md')[0],
-											link: `/documentation/elements/${el}`,
+											link: `/elements/${el}`,
 										})),
 								},
 							],
@@ -72,7 +72,7 @@ export default defineConfig({
 					],
 				},
 			],
-			"/pricing/": [],
+			'/pricing/': [],
 		},
 
 		socialLinks: [
