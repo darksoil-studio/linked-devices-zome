@@ -12,21 +12,9 @@ import { TTL_CAP_GRANT } from '../config.js';
 import { linkedDevicesStoreContext } from '../context.js';
 import { LinkedDevicesStore } from '../linked-devices-store.js';
 import { LinkDevicesSignal, LinkedDevicesSignal } from '../types.js';
+import { randomPasscode } from '../utils.js';
 import './passcode-input.js';
 import { PasscodeInput } from './passcode-input.js';
-
-function randomDigit(): number {
-	return Math.floor(Math.random() * 10);
-}
-
-export function randomPasscode(length: number) {
-	const passcode: number[] = [];
-
-	for (let i = 0; i < length; i++) {
-		passcode.push(randomDigit());
-	}
-	return passcode;
-}
 
 @customElement('link-device-recipient')
 export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
@@ -183,13 +171,4 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 			}
 		`,
 	];
-}
-
-function areEqual(passcode1: Array<number>, passcode2: Array<number>) {
-	if (passcode1.length !== passcode2.length) return false;
-	for (let i = 0; i < passcode1.length; i++) {
-		if (passcode1[i] !== passcode2[i]) return false;
-	}
-
-	return true;
 }

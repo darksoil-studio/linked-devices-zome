@@ -19,6 +19,8 @@ test('link devices can edit posts for the starting agent', async () => {
 			},
 		});
 
+		await dhtSync([alice.player, bob.player], alice.player.cells[0].cell_id[0]);
+
 		await expect(() =>
 			bob.player.appWs.callZome({
 				role_name: 'linked_devices_test',

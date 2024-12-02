@@ -18,7 +18,7 @@ import { customElement, property, query, state } from 'lit/decorators.js';
 import { TTL_CAP_GRANT } from '../config.js';
 import { linkedDevicesStoreContext } from '../context.js';
 import { LinkedDevicesStore } from '../linked-devices-store.js';
-import { randomPasscode } from './link-device-recipient.js';
+import { randomPasscode } from '../utils.js';
 import './passcode-input.js';
 import { PasscodeInput } from './passcode-input.js';
 

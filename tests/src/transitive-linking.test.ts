@@ -4,32 +4,17 @@ import { decode } from '@msgpack/msgpack';
 import { toPromise } from '@tnesh-stack/signals';
 import { assert, test } from 'vitest';
 
-import { setup } from './setup.js';
+import { linkDevices, setup, waitUntil } from './setup.js';
 
 test('link devices transitively', async () => {
 	await runScenario(async scenario => {
 		const { alice, bob, carol, dave } = await setup(scenario);
 
 		// Bob gets the links, should be empty
-		let linksOutput = await toPromise(
-			bob.store.linkedDevicesForAgent.get(bob.player.agentPubKey),
-		);
+		let linksOutput = await toPromise(bob.store.myLinkedDevices);
 		assert.equal(linksOutput.length, 0);
 
-		const alicePasscode = [1, 3, 7, 2];
-		let bobPasscode = [9, 3, 8, 4];
-
-		await alice.store.client.prepareLinkDevices(alicePasscode);
-		await bob.store.client.prepareLinkDevices(bobPasscode);
-
-		await alice.store.client.requestLinkDevices(
-			bob.player.agentPubKey,
-			bobPasscode,
-		);
-		await bob.store.client.acceptLinkDevices(
-			alice.player.agentPubKey,
-			alicePasscode,
-		);
+		await linkDevices(alice.store, bob.store);
 
 		// Wait for the created entry to be propagated to the other node.
 		await dhtSync(
@@ -38,9 +23,7 @@ test('link devices transitively', async () => {
 		);
 
 		// Bob gets the links again
-		linksOutput = await toPromise(
-			bob.store.linkedDevicesForAgent.get(bob.player.agentPubKey),
-		);
+		linksOutput = await toPromise(bob.store.myLinkedDevices);
 		assert.equal(linksOutput.length, 1);
 		assert.deepEqual(
 			encodeHashToBase64(alice.player.agentPubKey),
@@ -48,29 +31,14 @@ test('link devices transitively', async () => {
 		);
 
 		// Alice gets the links again
-		linksOutput = await toPromise(
-			alice.store.linkedDevicesForAgent.get(alice.player.agentPubKey),
-		);
+		linksOutput = await toPromise(alice.store.myLinkedDevices);
 		assert.equal(linksOutput.length, 1);
 		assert.deepEqual(
 			encodeHashToBase64(bob.player.agentPubKey),
 			encodeHashToBase64(linksOutput[0]),
 		);
 
-		let carolPasscode = [8, 9, 3, 1];
-		let davePasscode = [7, 6, 5, 1];
-
-		await carol.store.client.prepareLinkDevices(carolPasscode);
-		await dave.store.client.prepareLinkDevices(davePasscode);
-
-		await carol.store.client.requestLinkDevices(
-			dave.player.agentPubKey,
-			davePasscode,
-		);
-		await dave.store.client.acceptLinkDevices(
-			carol.player.agentPubKey,
-			carolPasscode,
-		);
+		await linkDevices(carol.store, dave.store);
 
 		// Wait for the created entry to be propagated to the other node.
 		await dhtSync(
@@ -79,20 +47,7 @@ test('link devices transitively', async () => {
 		);
 		await dave.player.conductor.shutDown();
 
-		bobPasscode = [7, 6, 5, 1];
-		carolPasscode = [8, 9, 3, 2];
-
-		await bob.store.client.prepareLinkDevices(bobPasscode);
-		await carol.store.client.prepareLinkDevices(carolPasscode);
-
-		await bob.store.client.requestLinkDevices(
-			carol.player.agentPubKey,
-			carolPasscode,
-		);
-		await carol.store.client.acceptLinkDevices(
-			bob.player.agentPubKey,
-			bobPasscode,
-		);
+		await linkDevices(bob.store, carol.store);
 
 		// Wait for the created entry to be propagated to the other node.
 		await dhtSync(
@@ -103,9 +58,7 @@ test('link devices transitively', async () => {
 		await pause(1_000); // Time for the post_commit hook to be run
 
 		// Bob is now linked with Alice, Dave and Carol
-		linksOutput = await toPromise(
-			bob.store.linkedDevicesForAgent.get(bob.player.agentPubKey),
-		);
+		linksOutput = await toPromise(bob.store.myLinkedDevices);
 		assert.equal(linksOutput.length, 3);
 		assert.ok(
 			linksOutput.find(
@@ -129,9 +82,7 @@ test('link devices transitively', async () => {
 		);
 
 		// Carol is now linked with Alice, Bob and Dave
-		linksOutput = await toPromise(
-			carol.store.linkedDevicesForAgent.get(carol.player.agentPubKey),
-		);
+		linksOutput = await toPromise(carol.store.myLinkedDevices);
 		assert.equal(linksOutput.length, 3);
 		assert.ok(
 			linksOutput.find(
@@ -160,9 +111,7 @@ test('link devices transitively', async () => {
 		);
 
 		// Alice is now linked with Bob, Carol and Dave
-		linksOutput = await toPromise(
-			alice.store.linkedDevicesForAgent.get(alice.player.agentPubKey),
-		);
+		linksOutput = await toPromise(alice.store.myLinkedDevices);
 		assert.equal(linksOutput.length, 3);
 		assert.ok(
 			linksOutput.find(
@@ -185,12 +134,14 @@ test('link devices transitively', async () => {
 		);
 
 		await dave.startUp();
-		await pause(80_000);
+
+		await waitUntil(
+			async () => (await toPromise(dave.store.myLinkedDevices)).length === 3,
+			80_000,
+		);
 
 		// Dave is now linked with Alice, Bob and Carol
-		linksOutput = await toPromise(
-			dave.store.linkedDevicesForAgent.get(dave.player.agentPubKey),
-		);
+		linksOutput = await toPromise(dave.store.myLinkedDevices);
 		assert.equal(linksOutput.length, 3);
 		assert.ok(
 			linksOutput.find(

@@ -13,13 +13,14 @@ import {
 	fakeDnaHash,
 	fakeEntryHash,
 } from '@holochain/client';
-import { Scenario } from '@holochain/tryorama';
+import { Scenario, pause } from '@holochain/tryorama';
 import { encode } from '@msgpack/msgpack';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import { LinkedDevicesClient } from '../../ui/src/linked-devices-client.js';
 import { LinkedDevicesStore } from '../../ui/src/linked-devices-store.js';
+import { randomPasscode } from '../../ui/src/utils.js';
 
 export async function setup(scenario: Scenario) {
 	const testHappUrl =
@@ -129,4 +130,36 @@ export async function setup(scenario: Scenario) {
 			},
 		},
 	};
+}
+
+export async function waitUntil(
+	condition: () => Promise<boolean>,
+	timeout: number,
+) {
+	const start = Date.now();
+	const isDone = await condition();
+	if (isDone) return;
+	if (timeout <= 0) throw new Error('timeout');
+	await pause(1000);
+	return waitUntil(condition, timeout - (Date.now() - start));
+}
+
+export async function linkDevices(
+	store1: LinkedDevicesStore,
+	store2: LinkedDevicesStore,
+) {
+	const store1Passcode = randomPasscode(4);
+	const store2Passcode = randomPasscode(4);
+
+	await store1.client.prepareLinkDevices(store1Passcode);
+	await store2.client.prepareLinkDevices(store2Passcode);
+
+	await store1.client.requestLinkDevices(
+		store2.client.client.myPubKey,
+		store2Passcode,
+	);
+	await store2.client.acceptLinkDevices(
+		store1.client.client.myPubKey,
+		store1Passcode,
+	);
 }
