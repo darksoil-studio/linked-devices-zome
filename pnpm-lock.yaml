@@ -69,20 +69,20 @@ importers:
   tests:
     dependencies:
       '@holochain/client':
-        specifier: ^0.17.1
-        version: 0.17.1
+        specifier: ^0.18.0-rc
+        version: 0.18.0-rc.1
       '@holochain/tryorama':
-        specifier: ^0.16.0
-        version: 0.16.0
+        specifier: ^0.17.0-dev
+        version: 0.17.0-dev.6
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
       '@tnesh-stack/signals':
-        specifier: ^0.300.0
-        version: 0.300.1
+        specifier: ^0.400.0-rc
+        version: 0.400.0-rc.0
       '@tnesh-stack/utils':
-        specifier: ^0.300.0
-        version: 0.300.0
+        specifier: ^0.400.0-rc
+        version: 0.400.0-rc.0
       typescript:
         specifier: ^5.4.5
         version: 5.6.3
@@ -111,14 +111,14 @@ importers:
         specifier: ^2.11.0
         version: 2.18.0(@types/react@18.3.12)
       '@tnesh-stack/elements':
-        specifier: ^0.300.5
-        version: 0.300.5(@types/react@18.3.12)
+        specifier: ^0.400.0-rc.1
+        version: 0.400.0-rc.1(@types/react@18.3.12)
       '@tnesh-stack/signals':
-        specifier: ^0.300.0
-        version: 0.300.1
+        specifier: ^0.400.0-rc
+        version: 0.400.0-rc.0
       '@tnesh-stack/utils':
-        specifier: ^0.300.0
-        version: 0.300.0
+        specifier: ^0.400.0-rc
+        version: 0.400.0-rc.0
       lit:
         specifier: ^3.0.0
         version: 3.2.1
@@ -660,11 +660,15 @@ packages:
     resolution: {integrity: sha512-Jvh6DN+OdktV3KQH+tioRzvPT+LWJFBp1klMFG9vaccphIVvJN1LepJfRB8OyxW5iGAZ/TFCTwF19XSJuM1fQQ==}
     engines: {node: '>=18.0.0 || >=20.0.0'}
 
+  '@holochain/client@0.18.0-rc.1':
+    resolution: {integrity: sha512-01Xh5cpN0lHdtV41V2RtCUfTFEA9K9GWK5vvMPtdqj52WcSNO6gcrfVERKgSG/su8xJ3VmULPYNQyrEMmBReww==}
+    engines: {node: '>=18.0.0 || >=20.0.0'}
+
   '@holochain/serialization@0.1.0-beta-rc.3':
     resolution: {integrity: sha512-DJx4V2KXHVLciyOGjOYKTM/JLBpBEZ3RsPIRCgf7qmwhQdxXvhi2p+oFFRD51yUT5uC1/MzIVeJCl/R60PwFbw==}
 
-  '@holochain/tryorama@0.16.0':
-    resolution: {integrity: sha512-5cp01iHqj/DL7cujXanZ85x4M9LZj27k333qGJUg1JfBJ5kfS89kdQLGIM6h97lvuBqqkhTL4pq7M2Mo6MLe8A==}
+  '@holochain/tryorama@0.17.0-dev.6':
+    resolution: {integrity: sha512-n2EmU4EmjJSx/RLk5aAvqVAkrXmSVb+q1lUzBmbW8nJIUhk68VW6P6cmg0HWF4ZRetMd1MksnmyqBHVSU8rIhA==}
     engines: {node: '>=18.0.0 || >=20.0.0'}
 
   '@humanwhocodes/config-array@0.13.0':
@@ -887,14 +891,14 @@ packages:
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  '@tnesh-stack/elements@0.300.5':
-    resolution: {integrity: sha512-3KgGq4kTosHjmwu2EqW8weTtO1m6cth8R/Plqs+U6c5wilUYer4sCGypX98WDyYGF6Fz/4gVURmlusqEiSvixw==}
+  '@tnesh-stack/elements@0.400.0-rc.1':
+    resolution: {integrity: sha512-Y9BgDIOP/M4WNyWP4fbaEL98Vd9sTmUm7g9RfV53PHiNn37dWeAUnYikzQnIkjNvu8MfK5+QK1D9k8/QnRpwug==}
 
-  '@tnesh-stack/signals@0.300.1':
-    resolution: {integrity: sha512-Z97y1wF6DeRRjJ06O8Kwutt/mY1nbyFJMdTRnSfndyZmDkyDmv5UzZXSbCBl2+RlTzVomyy2rUBeTVLKdJqy7g==}
+  '@tnesh-stack/signals@0.400.0-rc.0':
+    resolution: {integrity: sha512-YuC75wjWvy6U5skTtmULMHaqegFgopci/KdSSrmCjR9B94qZOAdFgHBEG9K98A0pIdwyollYeI3pkvyYkH4Vgg==}
 
-  '@tnesh-stack/utils@0.300.0':
-    resolution: {integrity: sha512-zw2svZLU3h0bjOMNqu/jHdYckCzS1Vv9indE1B2IwlybHzCimHB3xm5bHB0Wl+CXvNOa6lW0uoO6EeF1DkxIuQ==}
+  '@tnesh-stack/utils@0.400.0-rc.0':
+    resolution: {integrity: sha512-N69oS3YXDCTHz5Zl57SjoJtC9nikfzsjFjDy4nEnuMGpYSvMxwWjEwIp1Jx+doPoMMEfrSv2LDqLR6qKXCZ3xQ==}
 
   '@trivago/prettier-plugin-sort-imports@4.3.0':
     resolution: {integrity: sha512-r3n0onD3BTOVUNPhR4lhVK4/pABGpbA7bW3eumZnYdKaHkf1qEC+Mag6DPbGNuuh0eG8AaYj+YqmVHSiGslaTQ==}
@@ -3258,11 +3262,26 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  '@holochain/client@0.18.0-rc.1':
+    dependencies:
+      '@bitgo/blake2b': 3.2.4
+      '@holochain/serialization': 0.1.0-beta-rc.3
+      '@msgpack/msgpack': 2.8.0
+      emittery: 1.0.3
+      isomorphic-ws: 5.0.0(ws@8.18.0)
+      js-base64: 3.7.7
+      libsodium-wrappers: 0.7.15
+      lodash-es: 4.17.21
+      ws: 8.18.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   '@holochain/serialization@0.1.0-beta-rc.3': {}
 
-  '@holochain/tryorama@0.16.0':
+  '@holochain/tryorama@0.17.0-dev.6':
     dependencies:
-      '@holochain/client': 0.17.1
+      '@holochain/client': 0.18.0-rc.1
       get-port: 6.1.2
       lodash: 4.17.21
       uuid: 8.3.2
@@ -3503,10 +3522,10 @@ snapshots:
 
   '@sinclair/typebox@0.27.8': {}
 
-  '@tnesh-stack/elements@0.300.5(@types/react@18.3.12)':
+  '@tnesh-stack/elements@0.400.0-rc.1(@types/react@18.3.12)':
     dependencies:
       '@holo-host/identicon': 0.1.0
-      '@holochain/client': 0.17.1
+      '@holochain/client': 0.18.0-rc.1
       '@lit-labs/router': 0.1.3
       '@lit/context': 1.1.3
       '@lit/localize': 0.12.2
@@ -3518,11 +3537,11 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@tnesh-stack/signals@0.300.1':
+  '@tnesh-stack/signals@0.400.0-rc.0':
     dependencies:
-      '@holochain/client': 0.17.1
+      '@holochain/client': 0.18.0-rc.1
       '@msgpack/msgpack': 2.8.0
-      '@tnesh-stack/utils': 0.300.0
+      '@tnesh-stack/utils': 0.400.0-rc.0
       async-signals: 0.1.11
       lit-signal-watcher: 0.1.1
       lodash-es: 4.17.21
@@ -3531,9 +3550,9 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@tnesh-stack/utils@0.300.0':
+  '@tnesh-stack/utils@0.400.0-rc.0':
     dependencies:
-      '@holochain/client': 0.17.1
+      '@holochain/client': 0.18.0-rc.1
       '@msgpack/msgpack': 2.8.0
       blakejs: 1.2.1
       emittery: 1.0.3

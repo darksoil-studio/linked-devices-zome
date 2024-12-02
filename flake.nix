@@ -2,14 +2,14 @@
   description = "Template for Holochain app development";
 
   inputs = {
-    holonix.url = "github:holochain/holonix/main-0.3";
+    holonix.url = "github:holochain/holonix/main-0.4";
 
     nixpkgs.follows = "holonix/nixpkgs";
     flake-parts.follows = "holonix/flake-parts";
 
-    tnesh-stack.url = "github:darksoil-studio/tnesh-stack/main-0.3";
-    p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard/main-0.3";
-    playground.url = "github:darksoil-studio/holochain-playground/main-0.3";
+    tnesh-stack.url = "github:darksoil-studio/tnesh-stack/main-0.4";
+    p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard/main-0.4";
+    playground.url = "github:darksoil-studio/holochain-playground/main-0.4";
   };
 
   nixConfig = {
@@ -44,6 +44,9 @@
           ];
 
           packages = [
+            (inputs'.holonix.packages.holochain.override {
+              cargoExtraArgs = " --features unstable-functions";
+            })
             inputs'.tnesh-stack.packages.hc-scaffold-zome
             inputs'.p2p-shipyard.packages.hc-pilot
             inputs'.playground.packages.hc-playground
@@ -62,7 +65,7 @@
                 --remote-zome-git-url github:darksoil-studio/linked-devices-zome \
                 --remote-npm-package-name @darksoil-studio/linked-devices-zome \
                 --remote-npm-package-path ui \
-                --remote-zome-git-branch main-0.3 \
+                --remote-zome-git-branch main-0.4 \
                 --context-element linked-devices-context \
                 --context-element-import @darksoil-studio/linked-devices-zome/dist/elements/linked-devices-context.js " 
           '';
