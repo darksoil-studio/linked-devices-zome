@@ -23,6 +23,8 @@ import { LinkedDevicesStore } from '../../ui/src/linked-devices-store.js';
 import { randomPasscode } from '../../ui/src/utils.js';
 
 export async function setup(scenario: Scenario) {
+	scenario.dpkiNetworkSeed = undefined;
+
 	const testHappUrl =
 		dirname(fileURLToPath(import.meta.url)) +
 		'/../../workdir/linked-devices_test.happ';
