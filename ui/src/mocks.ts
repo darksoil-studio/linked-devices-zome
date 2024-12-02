@@ -35,7 +35,7 @@ import { LinkedDevicesClient } from './linked-devices-client.js';
 
 export class LinkedDevicesZomeMock extends ZomeMock implements AppClient {
 	constructor(myPubKey?: AgentPubKey) {
-		super('linked_devices_test', 'linked_devices', myPubKey);
+		super('linked_devices_test', 'linked_devices', 'testapp', myPubKey);
 	}
 
 	/** Linked Devices for Agent */
