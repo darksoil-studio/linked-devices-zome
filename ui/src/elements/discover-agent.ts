@@ -19,7 +19,7 @@ import {
 import { notifyError, sharedStyles } from '@tnesh-stack/elements';
 import { SignalWatcher } from '@tnesh-stack/signals';
 import { toUint8Array } from 'js-base64';
-import { LitElement, html } from 'lit';
+import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { linkedDevicesStoreContext } from '../context.js';
@@ -135,16 +135,27 @@ export class DiscoverAgent extends SignalWatcher(LitElement) {
 					</div>
 
 					<div class="column" style=" gap: 8px">
-						<span
-							>${msg(
-								'... and paste here the code you received from your other device.',
-							)}
+						<span style="word-break: break-word;"
+							>${msg('... and enter here the code from your other device.')}
 						</span>
 
 						<sl-input
 							@sl-input=${async (e: CustomEvent) => {
 								const input = e.target as SlInput;
+
+								if (
+									encodeHashToBase64(this.store.client.client.myPubKey) ===
+									input.value
+								) {
+									notifyError(
+										msg('Please enter the code from your other device.'),
+									);
+									input.value = '';
+									return;
+								}
+
 								const pubKey = decodeHashFromBase64(input.value);
+
 								try {
 									await this.attemptDiscoverAgent(pubKey);
 								} catch (e) {
@@ -159,5 +170,12 @@ export class DiscoverAgent extends SignalWatcher(LitElement) {
 		`;
 	}
 
-	static styles = sharedStyles;
+	static styles = [
+		...sharedStyles,
+		css`
+			sl-tag::part(base) {
+				font-size: 12px;
+			}
+		`,
+	];
 }
