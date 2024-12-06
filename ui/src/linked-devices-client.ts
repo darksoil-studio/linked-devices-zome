@@ -17,6 +17,10 @@ export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 		super(client, roleName, zomeName);
 	}
 
+	async linkTransitiveDevices(): Promise<void> {
+		return this.callZome('link_transitive_devices', undefined);
+	}
+
 	/** Linked Devices for Agent */
 
 	async getLinkedDevicesForAgent(agent: AgentPubKey): Promise<Array<Link>> {
@@ -29,30 +33,38 @@ export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 
 	/** Link Devices process */
 
-	async prepareLinkDevices(myPasscode: number[]) {
-		await this.callZome('prepare_link_devices', myPasscode);
+	async prepareDiscoverAgent(): Promise<void> {
+		return this.callZome('prepare_discover_agent', undefined);
 	}
-	async getLinkingAgents(): Promise<Array<Link>> {
-		return this.callZome('get_linking_agents', null);
+	async attemptDiscoverAgent(agent: AgentPubKey): Promise<void> {
+		return this.callZome('attempt_discover_agent', agent);
 	}
-	async clearLinkDevices() {
-		await this.callZome('clear_link_devices', null);
+	async prepareLinkDevicesRequestor(
+		recipient: AgentPubKey,
+		myPasscode: number[],
+	) {
+		await this.callZome('prepare_link_devices_requestor', {
+			my_passcode: myPasscode,
+			recipient,
+		});
 	}
-
+	async prepareLinkDevicesRecipient(
+		requestor: AgentPubKey,
+		myPasscode: number[],
+	) {
+		await this.callZome('prepare_link_devices_recipient', {
+			my_passcode: myPasscode,
+			requestor,
+		});
+	}
 	async requestLinkDevices(
 		recipient: AgentPubKey,
 		recipient_passcode: number[],
 	) {
-		const req: AppCallZomeRequest = {
-			role_name: this.roleName,
-			zome_name: this.zomeName,
-			fn_name: 'request_link_devices',
-			payload: {
-				recipient,
-				recipient_passcode,
-			},
-		};
-		await this.client.callZome(req, 2_000);
+		await this.callZome('request_link_devices', {
+			recipient,
+			recipient_passcode,
+		});
 	}
 
 	async acceptLinkDevices(
@@ -63,5 +75,9 @@ export class LinkedDevicesClient extends ZomeClient<LinkedDevicesSignal> {
 			requestor,
 			requestor_passcode,
 		});
+	}
+
+	async clearLinkDevicesCapGrants() {
+		await this.callZome('clear_link_devices_cap_grants', null);
 	}
 }

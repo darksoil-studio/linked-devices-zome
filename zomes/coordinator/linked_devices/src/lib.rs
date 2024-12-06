@@ -10,7 +10,7 @@ pub mod utils;
 
 #[hdk_extern]
 pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
-    schedule("link_transitive_devices")?;
+    schedule("scheduled_link_transitive_devices")?;
 
     let mut fns: BTreeSet<GrantedFunction> = BTreeSet::new();
     fns.insert((zome_info()?.name, FunctionName::from("recv_remote_signal")));
@@ -37,6 +37,12 @@ pub enum Signal {
         create_link_action: SignedActionHashed,
         link_type: LinkTypes,
     },
+    AgentDiscovered {
+        agent: AgentPubKey,
+    },
+    LinkDevicesInitialized {
+        requestor: AgentPubKey,
+    },
 }
 
 #[hdk_extern(infallible)]
@@ -55,34 +61,32 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                 LinkTypes::from_type(create_link.zome_index, create_link.link_type)
             {
                 emit_signal(Signal::LinkCreated { action, link_type })?;
-                if let LinkTypes::AgentToLinkedDevices = link_type {
-                    let Some(linked_device) = create_link.target_address.into_agent_pub_key()
-                    else {
-                        return Err(wasm_error!(WasmErrorInner::Guest(format!(
-                            "Unreachable: AgentToLinkedDevices does not target an AgentPubKey"
-                        ))));
-                    };
+                let LinkTypes::AgentToLinkedDevices = link_type;
+                let Some(linked_device) = create_link.target_address.into_agent_pub_key() else {
+                    return Err(wasm_error!(WasmErrorInner::Guest(format!(
+                        "Unreachable: AgentToLinkedDevices does not target an AgentPubKey"
+                    ))));
+                };
 
-                    let my_linked_devices = query_my_linked_devices_agents()?;
+                let my_linked_devices = query_my_linked_devices_agents()?;
 
-                    let filtered_devices: Vec<AgentPubKey> = my_linked_devices
-                        .into_iter()
-                        .filter(|agent| agent.ne(&linked_device))
-                        .collect();
+                let filtered_devices: Vec<AgentPubKey> = my_linked_devices
+                    .into_iter()
+                    .filter(|agent| agent.ne(&linked_device))
+                    .collect();
 
-                    send_remote_signal(
-                        LinkedDevicesRemoteSignal::NewDeviceLinked(linked_device.clone()),
-                        filtered_devices,
-                    )?;
+                send_remote_signal(
+                    LinkedDevicesRemoteSignal::NewDeviceLinked(linked_device.clone()),
+                    filtered_devices,
+                )?;
 
-                    call_remote(
-                        agent_info()?.agent_latest_pubkey,
-                        zome_info()?.name,
-                        "link_transitive_devices_for_device".into(),
-                        None,
-                        linked_device.clone(),
-                    )?;
-                }
+                call_remote(
+                    agent_info()?.agent_latest_pubkey,
+                    zome_info()?.name,
+                    "link_transitive_devices_for_device".into(),
+                    None,
+                    linked_device.clone(),
+                )?;
             }
             Ok(())
         }

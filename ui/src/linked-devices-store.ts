@@ -17,7 +17,9 @@ export class LinkedDevicesStore {
 		public config: LinkedDevicesConfig = defaultLinkedDevicesConfig,
 	) {
 		// At startup, clear all the cap grants that might have been left over from an unfinished link agent process
-		this.client.clearLinkDevices();
+		this.client.clearLinkDevicesCapGrants();
+		// At startup, link all the devices that other devices might have linked with
+		this.client.linkTransitiveDevices();
 	}
 
 	/** Linked Devices for Agent */
@@ -42,13 +44,5 @@ export class LinkedDevicesStore {
 			'AgentToLinkedDevices',
 		),
 		links => uniquify(links.map(l => retype(l.target, HashType.AGENT))),
-	);
-
-	/** Link agents */
-	linkingAgents = collectionSignal(
-		this.client,
-		() => this.client.getLinkingAgents(),
-		'LinkingAgents',
-		1000,
 	);
 }

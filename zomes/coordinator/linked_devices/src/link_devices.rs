@@ -3,11 +3,7 @@ use linked_devices_integrity::{
     AgentToLinkedDevicesLinkTag, LinkTypes, LinkedDevices, LinkedDevicesProof,
 };
 
-use crate::utils::{create_link_relaxed, delete_link_relaxed};
-
-fn linking_agents_path() -> Path {
-    Path::from("linking_agents")
-}
+use crate::{utils::create_link_relaxed, Signal};
 
 fn secret_from_passcode(passcode: Vec<u8>) -> CapSecret {
     let mut secret: CapSecretBytes = [0; CAP_SECRET_BYTES];
@@ -24,21 +20,73 @@ fn secret_from_passcode(passcode: Vec<u8>) -> CapSecret {
 }
 
 #[hdk_extern]
-pub fn prepare_link_devices(my_passcode: Vec<u8>) -> ExternResult<()> {
+pub fn prepare_discover_agent() -> ExternResult<()> {
     let mut functions = BTreeSet::new();
     functions.insert((
         zome_info()?.name,
-        FunctionName("receive_request_link_devices".into()),
+        FunctionName("receive_discover_agent".into()),
     ));
+    let access = CapAccess::Unrestricted;
+    let now = sys_time()?;
+    let cap_grant_entry: CapGrantEntry = CapGrantEntry::new(
+        format!("link-devices-{}", now), // A string by which to later query for saved grants.
+        access,
+        GrantedFunctions::Listed(functions),
+    );
+
+    create(CreateInput::new(
+        EntryDefLocation::CapGrant,
+        EntryVisibility::Private,
+        Entry::CapGrant(cap_grant_entry),
+        ChainTopOrdering::Relaxed,
+    ))?;
+    Ok(())
+}
+
+#[hdk_extern]
+pub fn attempt_discover_agent(agent: AgentPubKey) -> ExternResult<()> {
+    let response = call_remote(
+        agent,
+        zome_info()?.name,
+        "receive_discover_agent".into(),
+        None,
+        (),
+    )?;
+
+    match response {
+        ZomeCallResponse::Ok(_) => Ok(()),
+        _ => Err(wasm_error!(WasmErrorInner::Guest(format!("{response:?}")))),
+    }
+}
+
+#[hdk_extern]
+pub fn receive_discover_agent() -> ExternResult<()> {
+    let agent = call_info()?;
+    emit_signal(Signal::AgentDiscovered {
+        agent: agent.provenance,
+    })?;
+    Ok(())
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct PrepareLinkDevicesRequestorInput {
+    pub recipient: AgentPubKey,
+    pub my_passcode: Vec<u8>,
+}
+#[hdk_extern]
+pub fn prepare_link_devices_requestor(input: PrepareLinkDevicesRequestorInput) -> ExternResult<()> {
+    let mut functions = BTreeSet::new();
     functions.insert((
         zome_info()?.name,
         FunctionName("receive_accept_link_devices".into()),
     ));
-    let access = CapAccess::Transferable {
-        secret: secret_from_passcode(my_passcode),
+    let access = CapAccess::Assigned {
+        secret: secret_from_passcode(input.my_passcode),
+        assignees: vec![input.recipient].into_iter().collect(),
     };
+    let now = sys_time()?;
     let cap_grant_entry: CapGrantEntry = CapGrantEntry::new(
-        String::from("link-devices"), // A string by which to later query for saved grants.
+        format!("link-devices-{}", now), // A string by which to later query for saved grants.
         access,
         GrantedFunctions::Listed(functions),
     );
@@ -50,28 +98,40 @@ pub fn prepare_link_devices(my_passcode: Vec<u8>) -> ExternResult<()> {
         ChainTopOrdering::Relaxed,
     ))?;
 
-    let linking_agents_path = linking_agents_path();
-
-    create_link_relaxed(
-        linking_agents_path.path_entry_hash()?,
-        agent_info()?.agent_latest_pubkey,
-        LinkTypes::LinkingAgents,
-        (),
-    )?;
-
     Ok(())
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct PrepareLinkDevicesRecipientInput {
+    pub requestor: AgentPubKey,
+    pub my_passcode: Vec<u8>,
+}
 #[hdk_extern]
-pub fn get_linking_agents() -> ExternResult<Vec<Link>> {
-    let linking_agents_path = linking_agents_path();
-    get_links(
-        GetLinksInputBuilder::try_new(
-            linking_agents_path.path_entry_hash()?,
-            LinkTypes::LinkingAgents,
-        )?
-        .build(),
-    )
+pub fn prepare_link_devices_recipient(input: PrepareLinkDevicesRecipientInput) -> ExternResult<()> {
+    let mut functions = BTreeSet::new();
+    functions.insert((
+        zome_info()?.name,
+        FunctionName("receive_request_link_devices".into()),
+    ));
+    let access = CapAccess::Assigned {
+        secret: secret_from_passcode(input.my_passcode),
+        assignees: vec![input.requestor].into_iter().collect(),
+    };
+    let now = sys_time()?;
+    let cap_grant_entry: CapGrantEntry = CapGrantEntry::new(
+        format!("link-devices-{}", now), // A string by which to later query for saved grants.
+        access,
+        GrantedFunctions::Listed(functions),
+    );
+
+    create(CreateInput::new(
+        EntryDefLocation::CapGrant,
+        EntryVisibility::Private,
+        Entry::CapGrant(cap_grant_entry),
+        ChainTopOrdering::Relaxed,
+    ))?;
+
+    Ok(())
 }
 
 fn query_link_devices_cap_grants() -> ExternResult<Vec<Record>> {
@@ -90,7 +150,7 @@ fn query_link_devices_cap_grants() -> ExternResult<Vec<Record>> {
         let Entry::CapGrant(cap_grant) = entry else {
             continue;
         };
-        if cap_grant.tag.as_str() == "link-devices" {
+        if cap_grant.tag.as_str().starts_with("link-devices-") {
             link_agents_cap_grants.push(record)
         }
     }
@@ -99,7 +159,7 @@ fn query_link_devices_cap_grants() -> ExternResult<Vec<Record>> {
 }
 
 #[hdk_extern]
-pub fn clear_link_devices() -> ExternResult<()> {
+pub fn clear_link_devices_cap_grants() -> ExternResult<()> {
     let link_agent_cap_grants = query_link_devices_cap_grants()?;
 
     for record in link_agent_cap_grants {
@@ -107,14 +167,6 @@ pub fn clear_link_devices() -> ExternResult<()> {
             deletes_action_hash: record.action_address().clone(),
             chain_top_ordering: ChainTopOrdering::Relaxed,
         })?;
-    }
-    let my_pub_key = agent_info()?.agent_latest_pubkey;
-
-    let links = get_linking_agents(())?;
-    for link in links {
-        if link.author.eq(&my_pub_key) {
-            delete_link_relaxed(link.create_link_hash)?;
-        }
     }
 
     Ok(())
@@ -141,17 +193,11 @@ pub fn request_link_devices(input: RequestLinkDevicesInput) -> ExternResult<()> 
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(tag = "type")]
-pub enum LinkDevicesSignal {
-    LinkDevicesInitialized { requestor: AgentPubKey },
-}
-
 #[hdk_extern]
 pub fn receive_request_link_devices() -> ExternResult<()> {
     let requestor = call_info()?.provenance;
 
-    emit_signal(LinkDevicesSignal::LinkDevicesInitialized { requestor })?;
+    emit_signal(Signal::LinkDevicesInitialized { requestor })?;
     Ok(())
 }
 
@@ -185,7 +231,7 @@ pub fn accept_link_devices(input: AcceptLinkDevicesInput) -> ExternResult<()> {
     )?;
 
     let ZomeCallResponse::Ok(result) = response else {
-        clear_link_devices(())?;
+        clear_link_devices_cap_grants(())?;
         return Err(wasm_error!(WasmErrorInner::Guest(format!("{response:?}"))));
     };
 
@@ -200,7 +246,7 @@ pub fn accept_link_devices(input: AcceptLinkDevicesInput) -> ExternResult<()> {
 
     create_link_devices_link(input.requestor, tag)?;
 
-    clear_link_devices(())?;
+    clear_link_devices_cap_grants(())?;
 
     Ok(())
 }
@@ -241,7 +287,7 @@ pub fn receive_accept_link_devices(
     });
 
     let Some(_) = recent_enough_cap_grant else {
-        clear_link_devices(())?;
+        clear_link_devices_cap_grants(())?;
         return Err(wasm_error!(WasmErrorInner::Guest(format!(
             "Timed out cap grant"
         ))));
@@ -258,7 +304,7 @@ pub fn receive_accept_link_devices(
 
     create_link_devices_link(caller, tag)?;
 
-    clear_link_devices(())?;
+    clear_link_devices_cap_grants(())?;
 
     Ok(my_signature)
 }

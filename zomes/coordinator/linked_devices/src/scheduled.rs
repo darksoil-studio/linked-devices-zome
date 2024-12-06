@@ -5,18 +5,20 @@ use crate::{
     agent_to_linked_devices::{query_my_linked_devices, query_my_linked_devices_agents},
     link_devices::create_link_devices_link,
     utils::retry_until,
+    Signal,
 };
 
 #[hdk_extern(infallible)]
-pub fn link_transitive_devices(_schedule: Option<Schedule>) -> Option<Schedule> {
-    if let Err(err) = internal_link_transitive_devices() {
-        error!("Error calling internal_link_transitive_devices: {err:?}");
+pub fn scheduled_link_transitive_devices(_schedule: Option<Schedule>) -> Option<Schedule> {
+    if let Err(err) = link_transitive_devices(()) {
+        error!("Error calling link_transitive_devices: {err:?}");
     }
 
     Some(Schedule::Persisted("*/60 * * * * * *".into()))
 }
 
-fn internal_link_transitive_devices() -> ExternResult<()> {
+#[hdk_extern]
+pub fn link_transitive_devices() -> ExternResult<()> {
     let my_linked_devices = query_my_linked_devices_agents()?;
 
     for linked_device in my_linked_devices {

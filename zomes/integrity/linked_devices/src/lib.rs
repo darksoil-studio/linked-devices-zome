@@ -4,14 +4,11 @@ pub use linked_devices_types::*;
 
 pub mod agent_to_linked_devices;
 pub use agent_to_linked_devices::*;
-pub mod linking_agents;
-pub use linking_agents::*;
 
 #[derive(Serialize, Deserialize)]
 #[hdk_link_types]
 pub enum LinkTypes {
     AgentToLinkedDevices,
-    LinkingAgents,
 }
 // Validation you perform during the genesis process. Nobody else on the network performs it, only you.
 // There *is no* access to network calls in this callback
@@ -109,9 +106,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 target_address,
                 tag,
             ),
-            LinkTypes::LinkingAgents => {
-                validate_create_link_linking_agents(action, base_address, target_address, tag)
-            }
         },
         FlatOp::RegisterDeleteLink {
             link_type,
@@ -122,13 +116,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             action,
         } => match link_type {
             LinkTypes::AgentToLinkedDevices => validate_delete_link_agent_to_linked_devices(
-                action,
-                original_action,
-                base_address,
-                target_address,
-                tag,
-            ),
-            LinkTypes::LinkingAgents => validate_delete_link_linking_agents(
                 action,
                 original_action,
                 base_address,
@@ -194,12 +181,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                             tag,
                         )
                     }
-                    LinkTypes::LinkingAgents => validate_create_link_linking_agents(
-                        action,
-                        base_address,
-                        target_address,
-                        tag,
-                    ),
                 },
                 // Complementary validation to the `RegisterDeleteLink` Op, in which the record itself is validated
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `RegisterDeleteLink`
@@ -238,13 +219,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                                 create_link.tag,
                             )
                         }
-                        LinkTypes::LinkingAgents => validate_delete_link_linking_agents(
-                            action,
-                            create_link.clone(),
-                            base_address,
-                            create_link.target_address,
-                            create_link.tag,
-                        ),
                     }
                 }
                 OpRecord::CreatePrivateEntry { .. } => Ok(ValidateCallbackResult::Valid),

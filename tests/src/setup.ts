@@ -95,10 +95,10 @@ export async function setup(scenario: Scenario) {
 	await scenario.shareAllAgents();
 
 	// Prevent race condition when two zome calls are made instantly at the beginning of the lifecycle that cause a ChainHeadMoved error because they trigger 2 parallel init workflows
-	await aliceStore.client.getLinkingAgents();
-	await bobStore.client.getLinkingAgents();
-	await carolStore.client.getLinkingAgents();
-	await daveStore.client.getLinkingAgents();
+	await aliceStore.client.clearLinkDevicesCapGrants();
+	await bobStore.client.clearLinkDevicesCapGrants();
+	await carolStore.client.clearLinkDevicesCapGrants();
+	await daveStore.client.clearLinkDevicesCapGrants();
 
 	return {
 		alice: {
@@ -153,8 +153,14 @@ export async function linkDevices(
 	const store1Passcode = randomPasscode(4);
 	const store2Passcode = randomPasscode(4);
 
-	await store1.client.prepareLinkDevices(store1Passcode);
-	await store2.client.prepareLinkDevices(store2Passcode);
+	await store1.client.prepareLinkDevicesRequestor(
+		store2.client.client.myPubKey,
+		store1Passcode,
+	);
+	await store2.client.prepareLinkDevicesRecipient(
+		store1.client.client.myPubKey,
+		store2Passcode,
+	);
 
 	await store1.client.requestLinkDevices(
 		store2.client.client.myPubKey,

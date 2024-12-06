@@ -19,7 +19,12 @@ export interface LinkedDevices {
 	timestamp: Timestamp;
 }
 
-export type LinkDevicesSignal = {
-	type: 'LinkDevicesInitialized';
-	requestor: AgentPubKey;
-};
+export type LinkDevicesSignal =
+	| {
+			type: 'LinkDevicesInitialized';
+			requestor: AgentPubKey;
+	  }
+	| {
+			type: 'AgentDiscovered';
+			agent: AgentPubKey;
+	  };

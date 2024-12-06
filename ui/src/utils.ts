@@ -10,3 +10,11 @@ export function randomPasscode(length: number) {
 	}
 	return passcode;
 }
+export const MOBILE_WIDTH_PX = 600;
+
+export function isTauriEnv() {
+	// eslint-disable-next-line
+	return !!(window as any).__TAURI_INTERNALS__;
+}
+
+export const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);

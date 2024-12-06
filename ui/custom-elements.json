@@ -164,6 +164,15 @@
           "members": [
             {
               "kind": "method",
+              "name": "linkTransitiveDevices",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
               "name": "getLinkedDevicesForAgent",
               "return": {
                 "type": {
@@ -182,8 +191,50 @@
             },
             {
               "kind": "method",
-              "name": "prepareLinkDevices",
+              "name": "queryMyLinkedDevices",
+              "return": {
+                "type": {
+                  "text": "Promise<Array<Link>>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "prepareDiscoverAgent",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "description": "Link Devices process"
+            },
+            {
+              "kind": "method",
+              "name": "attemptDiscoverAgent",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
               "parameters": [
+                {
+                  "name": "agent",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "prepareLinkDevicesRequestor",
+              "parameters": [
+                {
+                  "name": "recipient",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                },
                 {
                   "name": "myPasscode",
                   "type": {
@@ -194,20 +245,29 @@
             },
             {
               "kind": "method",
-              "name": "getLinkingAgents",
-              "return": {
-                "type": {
-                  "text": "Promise<Array<Link>>"
+              "name": "prepareLinkDevicesRecipient",
+              "parameters": [
+                {
+                  "name": "requestor",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                },
+                {
+                  "name": "myPasscode",
+                  "type": {
+                    "text": "number[]"
+                  }
                 }
-              }
+              ]
             },
             {
               "kind": "method",
-              "name": "clearLinkDevices"
+              "name": "clearLinkDevicesCapGrants"
             },
             {
               "kind": "method",
-              "name": "initLinkDevices",
+              "name": "requestLinkDevices",
               "parameters": [
                 {
                   "name": "recipient",
@@ -225,7 +285,7 @@
             },
             {
               "kind": "method",
-              "name": "requestLinkDevices",
+              "name": "acceptLinkDevices",
               "parameters": [
                 {
                   "name": "requestor",
@@ -276,8 +336,7 @@
             },
             {
               "kind": "field",
-              "name": "linkingAgents",
-              "description": "Link agents"
+              "name": "myLinkedDevices"
             }
           ]
         }
@@ -368,7 +427,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/elements/link-device-recipient.ts",
+      "path": "src/utils.ts",
       "declarations": [
         {
           "kind": "function",
@@ -383,6 +442,199 @@
           ]
         },
         {
+          "kind": "variable",
+          "name": "MOBILE_WIDTH_PX",
+          "type": {
+            "text": "number"
+          },
+          "default": "600"
+        },
+        {
+          "kind": "function",
+          "name": "isTauriEnv"
+        },
+        {
+          "kind": "function",
+          "name": "barcodeScanner"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "randomPasscode",
+          "declaration": {
+            "name": "randomPasscode",
+            "module": "src/utils.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MOBILE_WIDTH_PX",
+          "declaration": {
+            "name": "MOBILE_WIDTH_PX",
+            "module": "src/utils.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "isTauriEnv",
+          "declaration": {
+            "name": "isTauriEnv",
+            "module": "src/utils.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "barcodeScanner",
+          "declaration": {
+            "name": "barcodeScanner",
+            "module": "src/utils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/discover-agent.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "scanQrcode",
+          "return": {
+            "type": {
+              "text": "Promise<string>"
+            }
+          }
+        },
+        {
+          "kind": "function",
+          "name": "scanMsgpackQrCode",
+          "return": {
+            "type": {
+              "text": "Promise<T>"
+            }
+          }
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "DiscoverAgent",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "attribute": "store"
+            },
+            {
+              "kind": "field",
+              "name": "isMobile",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "attemptDiscoverAgent",
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "scanAndDiscover"
+            },
+            {
+              "kind": "method",
+              "name": "renderQrcode"
+            },
+            {
+              "kind": "method",
+              "name": "renderTauriEnv"
+            }
+          ],
+          "events": [
+            {
+              "name": "agent-discovered",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "link-devices-cancelled",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@tnesh-stack/signals"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "discover-agent",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "scanQrcode",
+          "declaration": {
+            "name": "scanQrcode",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "scanMsgpackQrCode",
+          "declaration": {
+            "name": "scanMsgpackQrCode",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DiscoverAgent",
+          "declaration": {
+            "name": "DiscoverAgent",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "discover-agent",
+          "declaration": {
+            "name": "DiscoverAgent",
+            "module": "src/elements/discover-agent.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/link-device-recipient.ts",
+      "declarations": [
+        {
           "kind": "class",
           "description": "",
           "name": "LinkDevicesRecipient",
@@ -395,6 +647,53 @@
               },
               "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
               "attribute": "store"
+            },
+            {
+              "kind": "field",
+              "name": "recipientPasscode",
+              "type": {
+                "text": "number[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "discoveredRequestor",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "initialized",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "interval",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "prepareLinkDevices",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "requestor",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -417,7 +716,7 @@
             },
             {
               "kind": "method",
-              "name": "renderRequestLinkAgent",
+              "name": "renderAcceptLinkAgent",
               "privacy": "private",
               "parameters": [
                 {
@@ -464,14 +763,6 @@
       "exports": [
         {
           "kind": "js",
-          "name": "randomPasscode",
-          "declaration": {
-            "name": "randomPasscode",
-            "module": "src/elements/link-device-recipient.ts"
-          }
-        },
-        {
-          "kind": "js",
           "name": "LinkDevicesRecipient",
           "declaration": {
             "name": "LinkDevicesRecipient",
@@ -507,14 +798,46 @@
               "attribute": "store"
             },
             {
-              "kind": "method",
-              "name": "maybeRequestLink",
+              "kind": "field",
+              "name": "requestorPasscode",
+              "type": {
+                "text": "number[]"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "discoveredRecipient",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "initialized",
+              "type": {
+                "text": "boolean"
+              },
               "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "interval",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "prepareLinkDevices",
               "parameters": [
                 {
-                  "name": "passcode",
+                  "name": "recipient",
                   "type": {
-                    "text": "number[]"
+                    "text": "AgentPubKey"
                   }
                 }
               ]
