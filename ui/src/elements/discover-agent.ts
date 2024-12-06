@@ -3,7 +3,6 @@ import {
 	decodeHashFromBase64,
 	encodeHashToBase64,
 } from '@holochain/client';
-import { ResizeController } from '@lit-labs/observers/resize-controller.js';
 import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
 import { decode } from '@msgpack/msgpack';
@@ -33,13 +32,6 @@ export async function scanQrcode(): Promise<string> {
 	return result.content;
 }
 
-export async function scanMsgpackQrCode<T>(): Promise<T> {
-	const content = await scanQrcode();
-	const payload = decode(toUint8Array(content)) as T;
-
-	return payload;
-}
-
 @localized()
 @customElement('discover-agent')
 export class DiscoverAgent extends SignalWatcher(LitElement) {
@@ -66,10 +58,11 @@ export class DiscoverAgent extends SignalWatcher(LitElement) {
 	}
 
 	async scanAndDiscover() {
-		const agentPubKey: AgentPubKey = await scanMsgpackQrCode();
+		const agentPubKey: AgentPubKey = decodeHashFromBase64(await scanQrcode());
 		try {
 			await this.attemptDiscoverAgent(agentPubKey);
 		} catch (e) {
+			console.error(e);
 			await this.scanAndDiscover();
 		}
 	}
@@ -95,6 +88,7 @@ export class DiscoverAgent extends SignalWatcher(LitElement) {
 			try {
 				await this.scanAndDiscover();
 			} catch (e) {
+				notifyError(msg('Error discovering agent. Please try again.'));
 				this.dispatchEvent(
 					new CustomEvent('link-devices-cancelled', {
 						bubbles: true,

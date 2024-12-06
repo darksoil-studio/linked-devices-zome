@@ -95,7 +95,6 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 			this.store.config.linkDevicePasscodeLength,
 		);
 		this.interval = setInterval(async () => {
-			console.log('now');
 			this.requestorPasscode = randomPasscode(
 				this.store.config.linkDevicePasscodeLength,
 			);
