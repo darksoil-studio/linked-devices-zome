@@ -104,6 +104,7 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 			console.error(e);
 			notifyError(msg(`Error linking devices. Please try again.`));
 			this.requestor = undefined;
+			this.initialized = false;
 		}
 		(
 			this.shadowRoot!.querySelector('passcode-input') as PasscodeInput
@@ -145,6 +146,7 @@ export class LinkDevicesRecipient extends SignalWatcher(LitElement) {
 							notifyError(msg('Error linking devices. Please try again.'));
 							console.error(e);
 							this.requestor = undefined;
+							this.initialized = false;
 						}
 					}}
 				>

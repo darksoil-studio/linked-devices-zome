@@ -103,70 +103,12 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 				recipient,
 				this.requestorPasscode,
 			);
-			await this.store.client.requestLinkDevices(
-				recipient,
-				this.requestorPasscode,
-			);
 		}, TTL_CAP_GRANT);
 		await this.store.client.prepareLinkDevicesRequestor(
 			recipient,
 			this.requestorPasscode,
 		);
 	}
-
-	// private async maybeRequestLink(passcode: number[]) {
-	// 	const linkingAgentsLinks = await this.store.client.getLinkingAgents();
-
-	// 	const linkingAgents = linkingAgentsLinks.map(l =>
-	// 		retype(l.target, HashType.AGENT),
-	// 	);
-
-	// 	for (const linkingAgent of linkingAgents) {
-	// 		// if (!this.attemptedRecipients.has(linkingAgent)) {
-	// 		// 	this.attemptedRecipients.set(linkingAgent, 'requesting');
-	// 		try {
-
-	// 			this.requestorPasscode = randomPasscode(
-	// 				this.store.config.linkDevicePasscodeLength,
-	// 			);
-	// 			await this.store.client.prepareLinkDevicesRequestor(
-	// 				this.requestorPasscode,
-	// 			);
-
-	// 			this.interval = setInterval(async () => {
-	// 				this.requestorPasscode = randomPasscode(
-	// 					this.store.config.linkDevicePasscodeLength,
-	// 				);
-	// 				await this.store.client.clearLinkDevicesCapGrants();
-	// 				await this.store.client.prepareLinkDevicesRequestor(
-	// 					this.requestorPasscode,
-	// 				);
-	// 			}, TTL_CAP_GRANT);
-	// 			this.discoveredRecipient = linkingAgent;
-	// 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	// 		} catch (e: any) {
-	// 			console.error(e);
-	// 			if (e.toString().includes('Unauthorized')) {
-	// 				// this.attemptedRecipients.set(linkingAgent, 'unauthorized');
-	// 				// notifyError(msg(``));
-	// 				// Two possibilities: either its the wrong agent, or the user messed up entering the pass code
-	// 			} else {
-	// 				notifyError(msg('Error linking devices: please try again'));
-	// 				// this.attemptedRecipients.set(linkingAgent, 'error');
-	// 				(
-	// 					this.shadowRoot!.querySelector('passcode-input') as PasscodeInput
-	// 				).clearPasscode();
-	// 				// }
-	// 			}
-	// 		}
-	// 	}
-	// 	if (!this.discoveredRecipient) {
-	// 		notifyError(msg('Incorrect pass code'));
-	// 		(
-	// 			this.shadowRoot!.querySelector('passcode-input') as PasscodeInput
-	// 		).clearPasscode();
-	// 	}
-	// }
 
 	private renderNumber() {
 		return html`<div
@@ -190,6 +132,7 @@ export class LinkDevicesRequestor extends SignalWatcher(LitElement) {
 							notifyError(msg('Error linking devices. Please try again.'));
 							console.error(e);
 							this.recipient = undefined;
+							this.initialized = false;
 						}
 					}}
 				>
