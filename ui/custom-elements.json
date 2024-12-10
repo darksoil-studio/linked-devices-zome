@@ -263,10 +263,6 @@
             },
             {
               "kind": "method",
-              "name": "clearLinkDevicesCapGrants"
-            },
-            {
-              "kind": "method",
               "name": "requestLinkDevices",
               "parameters": [
                 {
@@ -300,6 +296,10 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "clearLinkDevicesCapGrants"
             }
           ],
           "superclass": {
@@ -454,8 +454,8 @@
           "name": "isTauriEnv"
         },
         {
-          "kind": "function",
-          "name": "barcodeScanner"
+          "kind": "variable",
+          "name": "isMobile"
         }
       ],
       "exports": [
@@ -485,9 +485,9 @@
         },
         {
           "kind": "js",
-          "name": "barcodeScanner",
+          "name": "isMobile",
           "declaration": {
-            "name": "barcodeScanner",
+            "name": "isMobile",
             "module": "src/utils.ts"
           }
         }
@@ -507,15 +507,6 @@
           }
         },
         {
-          "kind": "function",
-          "name": "scanMsgpackQrCode",
-          "return": {
-            "type": {
-              "text": "Promise<T>"
-            }
-          }
-        },
-        {
           "kind": "class",
           "description": "",
           "name": "DiscoverAgent",
@@ -527,11 +518,6 @@
                 "text": "LinkedDevicesStore"
               },
               "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "isMobile",
-              "readonly": true
             },
             {
               "kind": "method",
@@ -552,10 +538,6 @@
             {
               "kind": "method",
               "name": "renderQrcode"
-            },
-            {
-              "kind": "method",
-              "name": "renderTauriEnv"
             }
           ],
           "events": [
@@ -606,14 +588,6 @@
         },
         {
           "kind": "js",
-          "name": "scanMsgpackQrCode",
-          "declaration": {
-            "name": "scanMsgpackQrCode",
-            "module": "src/elements/discover-agent.ts"
-          }
-        },
-        {
-          "kind": "js",
           "name": "DiscoverAgent",
           "declaration": {
             "name": "DiscoverAgent",
@@ -650,20 +624,21 @@
             },
             {
               "kind": "field",
+              "name": "requestor",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "(Optional) Requestor agent to link devices with\nIf this is not set an agent discovery process will try to discover the requestor",
+              "attribute": "requestor"
+            },
+            {
+              "kind": "field",
               "name": "recipientPasscode",
               "type": {
                 "text": "number[]"
               },
               "privacy": "private",
               "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "discoveredRequestor",
-              "type": {
-                "text": "AgentPubKey | undefined"
-              },
-              "privacy": "private"
             },
             {
               "kind": "field",
@@ -744,6 +719,14 @@
               },
               "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
               "fieldName": "store"
+            },
+            {
+              "name": "requestor",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "(Optional) Requestor agent to link devices with\nIf this is not set an agent discovery process will try to discover the requestor",
+              "fieldName": "requestor"
             }
           ],
           "mixins": [
@@ -799,17 +782,18 @@
             },
             {
               "kind": "field",
-              "name": "requestorPasscode",
+              "name": "recipient",
               "type": {
-                "text": "number[]"
+                "text": "AgentPubKey | undefined"
               },
-              "privacy": "private"
+              "description": "(Optional) Recipient agent to link devices with\nIf this is not set an agent discovery process will try to discover the recipient",
+              "attribute": "recipient"
             },
             {
               "kind": "field",
-              "name": "discoveredRecipient",
+              "name": "requestorPasscode",
               "type": {
-                "text": "AgentPubKey | undefined"
+                "text": "number[]"
               },
               "privacy": "private"
             },
@@ -865,6 +849,14 @@
               },
               "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
               "fieldName": "store"
+            },
+            {
+              "name": "recipient",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "(Optional) Recipient agent to link devices with\nIf this is not set an agent discovery process will try to discover the recipient",
+              "fieldName": "recipient"
             }
           ],
           "mixins": [
