@@ -18,13 +18,18 @@ import {
 } from '@tauri-apps/plugin-barcode-scanner';
 import { notifyError, sharedStyles } from '@tnesh-stack/elements';
 import { SignalWatcher } from '@tnesh-stack/signals';
-import { toUint8Array } from 'js-base64';
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { linkedDevicesStoreContext } from '../context.js';
 import { LinkedDevicesStore } from '../linked-devices-store.js';
-import { isMobile, isTauriEnv } from '../utils.js';
+
+export function isTauriEnv() {
+	// eslint-disable-next-line
+	return !!(window as any).__TAURI_INTERNALS__;
+}
+
+export const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 export async function scanQrcode(): Promise<string> {
 	await requestPermissions();

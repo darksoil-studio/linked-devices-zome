@@ -29,16 +29,16 @@
     "./locales/*": "./locales/*"
   },
   "dependencies": {
-    "@holochain/client": "^0.18.0-rc",
+    "@holochain/client": "^0.18.0",
     "@lit/context": "^1.0.0",
     "@lit/localize": "^0.12.0",
     "@mdi/js": "^7.2.0",
     "@msgpack/msgpack": "^2.8.0",
     "@shoelace-style/shoelace": "^2.11.0",
     "@tauri-apps/plugin-barcode-scanner": "^2.0.0",
-    "@tnesh-stack/elements": "^0.400.0-rc.1",
-    "@tnesh-stack/signals": "^0.400.0-rc",
-    "@tnesh-stack/utils": "^0.400.0-rc",
+    "@tnesh-stack/elements": "^0.400.0",
+    "@tnesh-stack/signals": "^0.400.0",
+    "@tnesh-stack/utils": "^0.400.0",
     "js-base64": "^3.7.7",
     "lit": "^3.0.0"
   },
