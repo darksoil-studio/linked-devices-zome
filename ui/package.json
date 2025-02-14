@@ -3,7 +3,7 @@
 	"version": "0.400.0",
 	"scripts": {
 		"start": "vite --clearScreen false --port $UI_PORT",
-		"build": "pnpm lint && tsc && pnpm analyze",
+		"build": "pnpm lint && tsc && pnpm localize:build && pnpm analyze",
 		"lint": "eslint src && prettier \"src/**/*.ts\" --check --ignore-path .gitignore",
 		"format": "eslint src --fix && prettier \"src/**/*.ts\" --write --ignore-path .gitignore",
 		"localize:extract": "lit-localize extract",
@@ -16,7 +16,7 @@
 	"files": ["dist", "locales", "src"],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/darksoil-studio/linked-devices.git"
+		"url": "git+https://github.com/darksoil-studio/linked-devices-zome.git"
 	},
 	"exports": {
 		".": "./dist/index.js",
