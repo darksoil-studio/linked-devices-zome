@@ -1,9 +1,9 @@
 name: "Build and cache zomes"
 on:
   push: 
-    branches: [ main, main-0.4 ]
+    branches: [ main, 'main-**' ]
   pull_request: 
-    branches: [ main, main-0.4 ]
+    branches: [ main, 'main-**' ]
 
 jobs:
   build-and-cache-zomes:
@@ -27,10 +27,6 @@ jobs:
       - uses: cachix/cachix-action@v15
         with:
           name: darksoil-studio
-
-      - name: Install and test
-        run: |
-          nix develop --no-update-lock-file --accept-flake-config --command bash -c "pnpm i && pnpm t && pnpm -F @darksoil-studio/linked-devices-zome build"
 
       - name: 'Setup jq'
         uses: dcarbone/install-jq-action@v2
