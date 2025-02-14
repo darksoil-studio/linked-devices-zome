@@ -164,6 +164,15 @@
           "members": [
             {
               "kind": "method",
+              "name": "linkTransitiveDevices",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
               "name": "getLinkedDevicesForAgent",
               "return": {
                 "type": {
@@ -191,29 +200,66 @@
             },
             {
               "kind": "method",
-              "name": "prepareLinkDevices",
+              "name": "prepareDiscoverAgent",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "description": "Link Devices process"
+            },
+            {
+              "kind": "method",
+              "name": "attemptDiscoverAgent",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
               "parameters": [
+                {
+                  "name": "agent",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "prepareLinkDevicesRequestor",
+              "parameters": [
+                {
+                  "name": "recipient",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                },
                 {
                   "name": "myPasscode",
                   "type": {
                     "text": "number[]"
                   }
                 }
-              ],
-              "description": "Link Devices process"
+              ]
             },
             {
               "kind": "method",
-              "name": "getLinkingAgents",
-              "return": {
-                "type": {
-                  "text": "Promise<Array<Link>>"
+              "name": "prepareLinkDevicesRecipient",
+              "parameters": [
+                {
+                  "name": "requestor",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                },
+                {
+                  "name": "myPasscode",
+                  "type": {
+                    "text": "number[]"
+                  }
                 }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "clearLinkDevices"
+              ]
             },
             {
               "kind": "method",
@@ -250,6 +296,10 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "clearLinkDevicesCapGrants"
             }
           ],
           "superclass": {
@@ -287,11 +337,6 @@
             {
               "kind": "field",
               "name": "myLinkedDevices"
-            },
-            {
-              "kind": "field",
-              "name": "linkingAgents",
-              "description": "Link agents"
             }
           ]
         }
@@ -382,7 +427,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/elements/link-device-recipient.ts",
+      "path": "src/utils.ts",
       "declarations": [
         {
           "kind": "function",
@@ -395,7 +440,158 @@
               }
             }
           ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "randomPasscode",
+          "declaration": {
+            "name": "randomPasscode",
+            "module": "src/utils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/discover-agent.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "isTauriEnv"
         },
+        {
+          "kind": "variable",
+          "name": "isMobile"
+        },
+        {
+          "kind": "function",
+          "name": "scanQrcode",
+          "return": {
+            "type": {
+              "text": "Promise<string>"
+            }
+          }
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "DiscoverAgent",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "attemptDiscoverAgent",
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "scanAndDiscover"
+            },
+            {
+              "kind": "method",
+              "name": "renderQrcode"
+            }
+          ],
+          "events": [
+            {
+              "name": "agent-discovered",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "link-devices-cancelled",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "LinkedDevicesStore"
+              },
+              "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@tnesh-stack/signals"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "discover-agent",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "isTauriEnv",
+          "declaration": {
+            "name": "isTauriEnv",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "isMobile",
+          "declaration": {
+            "name": "isMobile",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "scanQrcode",
+          "declaration": {
+            "name": "scanQrcode",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DiscoverAgent",
+          "declaration": {
+            "name": "DiscoverAgent",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "discover-agent",
+          "declaration": {
+            "name": "DiscoverAgent",
+            "module": "src/elements/discover-agent.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/link-device-recipient.ts",
+      "declarations": [
         {
           "kind": "class",
           "description": "",
@@ -409,6 +605,54 @@
               },
               "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
               "attribute": "store"
+            },
+            {
+              "kind": "field",
+              "name": "requestor",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "(Optional) Requestor agent to link devices with\nIf this is not set an agent discovery process will try to discover the requestor",
+              "attribute": "requestor"
+            },
+            {
+              "kind": "field",
+              "name": "recipientPasscode",
+              "type": {
+                "text": "number[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "initialized",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "interval",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "prepareLinkDevices",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "requestor",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -431,7 +675,7 @@
             },
             {
               "kind": "method",
-              "name": "renderRequestLinkAgent",
+              "name": "renderAcceptLinkAgent",
               "privacy": "private",
               "parameters": [
                 {
@@ -459,6 +703,14 @@
               },
               "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
               "fieldName": "store"
+            },
+            {
+              "name": "requestor",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "(Optional) Requestor agent to link devices with\nIf this is not set an agent discovery process will try to discover the requestor",
+              "fieldName": "requestor"
             }
           ],
           "mixins": [
@@ -476,14 +728,6 @@
         }
       ],
       "exports": [
-        {
-          "kind": "js",
-          "name": "randomPasscode",
-          "declaration": {
-            "name": "randomPasscode",
-            "module": "src/elements/link-device-recipient.ts"
-          }
-        },
         {
           "kind": "js",
           "name": "LinkDevicesRecipient",
@@ -521,14 +765,47 @@
               "attribute": "store"
             },
             {
-              "kind": "method",
-              "name": "maybeRequestLink",
+              "kind": "field",
+              "name": "recipient",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "(Optional) Recipient agent to link devices with\nIf this is not set an agent discovery process will try to discover the recipient",
+              "attribute": "recipient"
+            },
+            {
+              "kind": "field",
+              "name": "requestorPasscode",
+              "type": {
+                "text": "number[]"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "initialized",
+              "type": {
+                "text": "boolean"
+              },
               "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "interval",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "prepareLinkDevices",
               "parameters": [
                 {
-                  "name": "passcode",
+                  "name": "recipient",
                   "type": {
-                    "text": "number[]"
+                    "text": "AgentPubKey"
                   }
                 }
               ]
@@ -556,6 +833,14 @@
               },
               "description": "LinkedDevicesStore for this element, not required if you embed this element inside a <linked-devices-context>",
               "fieldName": "store"
+            },
+            {
+              "name": "recipient",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "(Optional) Recipient agent to link devices with\nIf this is not set an agent discovery process will try to discover the recipient",
+              "fieldName": "recipient"
             }
           ],
           "mixins": [
