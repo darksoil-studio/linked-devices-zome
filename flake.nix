@@ -50,6 +50,7 @@
             inputs'.playground.packages.hc-playground
           ];
         };
+        devShells.npm-ci = inputs'.tnesh-stack.devShells.synchronized-pnpm;
 
         packages.scaffold = pkgs.symlinkJoin {
           name = "scaffold-remote-zome";
