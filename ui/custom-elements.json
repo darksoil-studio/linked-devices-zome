@@ -4,6 +4,62 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "locales/locales.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sourceLocale",
+          "default": "`en`",
+          "description": "The locale code that templates in this source code are written in."
+        },
+        {
+          "kind": "variable",
+          "name": "targetLocales",
+          "type": {
+            "text": "array"
+          },
+          "default": "[\n  ,\n]",
+          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
+        },
+        {
+          "kind": "variable",
+          "name": "allLocales",
+          "type": {
+            "text": "array"
+          },
+          "default": "[\n  `en`,\n]",
+          "description": "All valid project locale codes. Sorted lexicographically."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sourceLocale",
+          "declaration": {
+            "name": "sourceLocale",
+            "module": "locales/locales.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "targetLocales",
+          "declaration": {
+            "name": "targetLocales",
+            "module": "locales/locales.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "allLocales",
+          "declaration": {
+            "name": "allLocales",
+            "module": "locales/locales.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/config.ts",
       "declarations": [
         {
@@ -384,22 +440,6 @@
               }
             }
           ]
-        },
-        {
-          "kind": "variable",
-          "name": "MOBILE_WIDTH_PX",
-          "type": {
-            "text": "number"
-          },
-          "default": "600"
-        },
-        {
-          "kind": "function",
-          "name": "isTauriEnv"
-        },
-        {
-          "kind": "variable",
-          "name": "isMobile"
         }
       ],
       "exports": [
@@ -410,86 +450,6 @@
             "name": "randomPasscode",
             "module": "src/utils.ts"
           }
-        },
-        {
-          "kind": "js",
-          "name": "MOBILE_WIDTH_PX",
-          "declaration": {
-            "name": "MOBILE_WIDTH_PX",
-            "module": "src/utils.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "isTauriEnv",
-          "declaration": {
-            "name": "isTauriEnv",
-            "module": "src/utils.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "isMobile",
-          "declaration": {
-            "name": "isMobile",
-            "module": "src/utils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "locales/locales.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sourceLocale",
-          "default": "`en`",
-          "description": "The locale code that templates in this source code are written in."
-        },
-        {
-          "kind": "variable",
-          "name": "targetLocales",
-          "type": {
-            "text": "array"
-          },
-          "default": "[\n  ,\n]",
-          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
-        },
-        {
-          "kind": "variable",
-          "name": "allLocales",
-          "type": {
-            "text": "array"
-          },
-          "default": "[\n  `en`,\n]",
-          "description": "All valid project locale codes. Sorted lexicographically."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sourceLocale",
-          "declaration": {
-            "name": "sourceLocale",
-            "module": "locales/locales.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "targetLocales",
-          "declaration": {
-            "name": "targetLocales",
-            "module": "locales/locales.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "allLocales",
-          "declaration": {
-            "name": "allLocales",
-            "module": "locales/locales.js"
-          }
         }
       ]
     },
@@ -497,6 +457,14 @@
       "kind": "javascript-module",
       "path": "src/elements/discover-agent.ts",
       "declarations": [
+        {
+          "kind": "function",
+          "name": "isTauriEnv"
+        },
+        {
+          "kind": "variable",
+          "name": "isMobile"
+        },
         {
           "kind": "function",
           "name": "scanQrcode",
@@ -578,6 +546,22 @@
         }
       ],
       "exports": [
+        {
+          "kind": "js",
+          "name": "isTauriEnv",
+          "declaration": {
+            "name": "isTauriEnv",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "isMobile",
+          "declaration": {
+            "name": "isMobile",
+            "module": "src/elements/discover-agent.ts"
+          }
+        },
         {
           "kind": "js",
           "name": "scanQrcode",

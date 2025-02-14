@@ -62,7 +62,6 @@
                 --coordinator-zome-name linked_devices \
                 --remote-zome-git-url github:darksoil-studio/linked-devices-zome \
                 --remote-npm-package-name @darksoil-studio/linked-devices-zome \
-                --remote-npm-package-path ui \
                 --remote-zome-git-branch main-0.4 \
                 --context-element linked-devices-context \
                 --context-element-import @darksoil-studio/linked-devices-zome/dist/elements/linked-devices-context.js " 
