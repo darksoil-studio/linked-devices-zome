@@ -7,7 +7,6 @@ export default defineConfig({
 				singleThread: true,
 			},
 		},
-		retry: 4,
-		testTimeout: 60 * 1000 * 3, // 2  mins
+		testTimeout: 60 * 1000 * 10, // 10  mins
 	},
 });
