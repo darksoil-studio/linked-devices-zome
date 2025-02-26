@@ -1734,11 +1734,11 @@
         "tnesh-stack": "tnesh-stack_3"
       },
       "locked": {
-        "lastModified": 1739532516,
-        "narHash": "sha256-SY6htljIvrOafa9r520H3j3BtSd/I6i0HpZbRE4h7rg=",
+        "lastModified": 1740487746,
+        "narHash": "sha256-7iQIiQJ53Mw+L/UHfWwCFqsB9wJwo5oCCoFAPDZ2pR4=",
         "owner": "darksoil-studio",
         "repo": "holochain-playground",
-        "rev": "5ff1623d1650690e9175a33a6c2d3a2240931ce5",
+        "rev": "14c9010d69413959afc69bc05dfa22d9e9e8aa7e",
         "type": "github"
       },
       "original": {
