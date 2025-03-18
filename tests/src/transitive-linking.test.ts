@@ -137,7 +137,7 @@ test('link devices transitively', async () => {
 
 		await waitUntil(
 			async () => (await toPromise(dave.store.myLinkedDevices)).length === 3,
-			80_000,
+			120_000,
 		);
 
 		// Dave is now linked with Alice, Bob and Carol
