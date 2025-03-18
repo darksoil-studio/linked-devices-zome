@@ -5,7 +5,6 @@ import {
 } from '@holochain/client';
 import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
-import { decode } from '@msgpack/msgpack';
 import '@shoelace-style/shoelace/dist/components/copy-button/copy-button.js';
 import '@shoelace-style/shoelace/dist/components/input/input.js';
 import SlInput from '@shoelace-style/shoelace/dist/components/input/input.js';
@@ -130,7 +129,7 @@ export class DiscoverAgent extends SignalWatcher(LitElement) {
 					<div class="column" style="gap: 8px">
 						<span>${msg('Send this code to your other device...')} </span>
 						<div class="row" style="align-items: center; gap: 8px">
-							<sl-tag style="flex: 1"
+							<sl-tag style="flex: 1; "
 								>${encodeHashToBase64(this.store.client.client.myPubKey)}
 							</sl-tag>
 							<sl-copy-button
@@ -180,6 +179,10 @@ export class DiscoverAgent extends SignalWatcher(LitElement) {
 		css`
 			sl-tag::part(base) {
 				font-size: 12px;
+				overflow: hidden;
+			}
+			sl-tag {
+				max-width: 85vw;
 			}
 		`,
 	];
