@@ -1958,11 +1958,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1742629334,
-        "narHash": "sha256-q1aoaeZ6KUy/Cyblp2oLBfwFNLNcVX6PF1Lo2NsjFlI=",
+        "lastModified": 1742997205,
+        "narHash": "sha256-RHtlgVHuU+DXx4rqMz41lvk2ZSUZbyccDd6daNTTyEA=",
         "owner": "darksoil-studio",
         "repo": "tnesh-stack",
-        "rev": "1e8c27e1ea3805a06c29b9415eac6f7fb6a9d397",
+        "rev": "bd5bc5ba705b0d7bf88e4b9f1fb80564b5d63953",
         "type": "github"
       },
       "original": {
