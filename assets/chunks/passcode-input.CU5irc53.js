@@ -1,4 +1,4 @@
-var yo=Object.defineProperty;var bo=(t,e,o)=>e in t?yo(t,e,{enumerable:!0,configurable:!0,writable:!0,value:o}):t[e]=o;var Jt=(t,e,o)=>bo(t,typeof e!="symbol"?e+"":e,o);import{S as $e,d as ne,e as Ot}from"./linked-devices-client.DVv9Vanq.js";import{i as U,r as fe,x as L,T as yt,E as Ue,a as ze,u as wo,b as ke}from"./static.DUZ9MXPw.js";import{a as y,b as je,c as _o,l as xo,t as We}from"./context.DydGRr3S.js";/**
+var yo=Object.defineProperty;var bo=(t,e,o)=>e in t?yo(t,e,{enumerable:!0,configurable:!0,writable:!0,value:o}):t[e]=o;var Jt=(t,e,o)=>bo(t,typeof e!="symbol"?e+"":e,o);import{S as $e,d as ne,e as Ot}from"./linked-devices-client.UHpnba5E.js";import{i as U,r as fe,x as L,T as yt,E as Ue,a as ze,u as wo,b as ke}from"./static.DUZ9MXPw.js";import{a as y,b as je,c as _o,l as xo,t as We}from"./context.DydGRr3S.js";/**
  * @license
  * Copyright 2023 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1285,7 +1285,7 @@ var yo=Object.defineProperty;var bo=(t,e,o)=>e in t?yo(t,e,{enumerable:!0,config
 					<div class="column" style="gap: 8px">
 						<span>${ht("Send this code to your other device...")} </span>
 						<div class="row" style="align-items: center; gap: 8px">
-							<sl-tag style="flex: 1"
+							<sl-tag style="flex: 1; "
 								>${Ot(this.store.client.client.myPubKey)}
 							</sl-tag>
 							<sl-copy-button
@@ -1309,6 +1309,10 @@ var yo=Object.defineProperty;var bo=(t,e,o)=>e in t?yo(t,e,{enumerable:!0,config
 		`}};qt.styles=[...je,U`
 			sl-tag::part(base) {
 				font-size: 12px;
+				overflow: hidden;
+			}
+			sl-tag {
+				max-width: 85vw;
 			}
 		`];mo([_o({context:xo,subscribe:!0}),y()],qt.prototype,"store",2);qt=mo([Bo(),We("discover-agent")],qt);var wr=Object.defineProperty,_r=Object.getOwnPropertyDescriptor,go=(t,e,o,i)=>{for(var r=i>1?void 0:i?_r(e,o):e,s=t.length-1,u;s>=0;s--)(u=t[s])&&(r=(i?u(e,o,r):u(r))||r);return i&&r&&wr(e,o,r),r};let Yt=class extends fe{constructor(){super(...arguments),this.passcodeLength=4}firstUpdated(){setTimeout(()=>{var t;(t=this.shadowRoot.getElementById("input-0"))==null||t.focus()})}get passcode(){const t=Array.from(this.shadowRoot.querySelectorAll("sl-input")),e=Array.from(Array(this.passcodeLength)).map(()=>{});for(let o=0;o<t.length;o++){if(t[o].value==="")return;const i=parseInt(t[o].value,10);if(i>9)return;e[o]=i}return e}clearPasscode(){Array.from(this.shadowRoot.querySelectorAll("sl-input")).forEach(e=>e.value=""),setTimeout(()=>{var e;(e=this.shadowRoot.getElementById("input-0"))==null||e.focus()})}maybeDispatchEvent(){const t=this.passcode;t&&this.dispatchEvent(new CustomEvent("passcode-change",{bubbles:!0,composed:!0,detail:{passcode:t}}))}render(){return L`
 			<div class="row">
