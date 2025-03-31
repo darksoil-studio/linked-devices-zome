@@ -18,7 +18,7 @@ jobs:
       - uses: cachix/install-nix-action@v27
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          nix_path: nixpkgs=channel:nixos-24.05
+          nix_path: nixpkgs=channel:nixos-24.11
 
       - uses: cachix/cachix-action@v15
         with:
@@ -37,8 +37,6 @@ jobs:
         id: changes
         with:
           filters: |
-            flake_lock:
-              - 'flake.lock'
             package_json:
               - '**/*/package.json'
 
