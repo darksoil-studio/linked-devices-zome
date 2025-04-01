@@ -42,7 +42,7 @@ jobs:
 
       - name: Create Pull Request
         id: cpr
-        if: steps.changes.outputs.flake_lock == 'true' || steps.changes.outputs.package_json == 'true'
+        if: steps.changes.outputs.package_json == 'true'
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.PULL_REQUESTS_ENABLE_CHECKS_TOKEN }}
