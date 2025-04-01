@@ -182,7 +182,7 @@ export class DiscoverAgent extends SignalWatcher(LitElement) {
 				overflow: hidden;
 			}
 			sl-tag {
-				max-width: 85vw;
+				max-width: 70%;
 			}
 		`,
 	];
