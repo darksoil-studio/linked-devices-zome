@@ -12,8 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: main
 
       - uses: cachix/install-nix-action@v27
         with:
@@ -36,6 +34,8 @@ jobs:
       - uses: dorny/paths-filter@v3
         id: changes
         with:
+          base: 'main'
+          ref: 'main'
           filters: |
             package_json:
               - '**/*/package.json'
@@ -48,9 +48,9 @@ jobs:
           token: ${{ secrets.PULL_REQUESTS_ENABLE_CHECKS_TOKEN }}
 
       - name: Enable Pull Request Automerge
-        if: (steps.changes.outputs.flake_lock == 'true' || steps.changes.outputs.package_json == 'true') && steps.cpr.outputs.pull-request-operation == 'created'
+        if: steps.changes.outputs.package_json == 'true' && steps.cpr.outputs.pull-request-operation == 'created'
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.PULL_REQUESTS_ENABLE_CHECKS_TOKEN }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash
+          merge-method: merge
