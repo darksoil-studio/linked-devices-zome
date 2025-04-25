@@ -1,6 +1,6 @@
+import { sharedStyles } from '@darksoil-studio/holochain-elements';
 import { SlInput } from '@shoelace-style/shoelace';
 import '@shoelace-style/shoelace/dist/components/input/input.js';
-import { sharedStyles } from '@tnesh-stack/elements';
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 

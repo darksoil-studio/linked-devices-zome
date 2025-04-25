@@ -1,14 +1,14 @@
-import { AgentPubKey, encodeHashToBase64 } from '@holochain/client';
-import { consume } from '@lit/context';
-import { msg } from '@lit/localize';
-import '@shoelace-style/shoelace/dist/components/alert/alert.js';
 import {
 	hashProperty,
 	notify,
 	notifyError,
 	sharedStyles,
-} from '@tnesh-stack/elements';
-import { SignalWatcher } from '@tnesh-stack/signals';
+} from '@darksoil-studio/holochain-elements';
+import { SignalWatcher } from '@darksoil-studio/holochain-signals';
+import { AgentPubKey, encodeHashToBase64 } from '@holochain/client';
+import { consume } from '@lit/context';
+import { msg } from '@lit/localize';
+import '@shoelace-style/shoelace/dist/components/alert/alert.js';
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 

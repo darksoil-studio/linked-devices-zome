@@ -4,7 +4,6 @@ name: linked_devices_test
 integrity:
   network_seed: ~
   properties: ~
-  origin_time: 1676140846503210
   zomes:
     - name: linked_devices_integrity
       hash: ~

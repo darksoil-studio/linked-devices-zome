@@ -30,10 +30,30 @@ export async function setup(scenario: Scenario) {
 	// Add 2 players with the test hApp to the Scenario. The returned players
 	// can be destructured.
 	const [alice, bob, carol, dave] = await scenario.addPlayersWithApps([
-		{ appBundleSource: { path: testHappUrl } },
-		{ appBundleSource: { path: testHappUrl } },
-		{ appBundleSource: { path: testHappUrl } },
-		{ appBundleSource: { path: testHappUrl } },
+		{
+			appBundleSource: {
+				type: 'path',
+				value: testHappUrl,
+			},
+		},
+		{
+			appBundleSource: {
+				type: 'path',
+				value: testHappUrl,
+			},
+		},
+		{
+			appBundleSource: {
+				type: 'path',
+				value: testHappUrl,
+			},
+		},
+		{
+			appBundleSource: {
+				type: 'path',
+				value: testHappUrl,
+			},
+		},
 	]);
 
 	await alice.conductor

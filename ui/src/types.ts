@@ -1,5 +1,5 @@
+import { ActionCommittedSignal } from '@darksoil-studio/holochain-utils';
 import { AgentPubKey, Signature, Timestamp } from '@holochain/client';
-import { ActionCommittedSignal } from '@tnesh-stack/utils';
 
 export type LinkedDevicesSignal =
 	| ActionCommittedSignal<EntryTypes, LinkTypes>
