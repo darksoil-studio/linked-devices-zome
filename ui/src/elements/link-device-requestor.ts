@@ -14,9 +14,9 @@ import {
 	notify,
 	notifyError,
 	sharedStyles,
-} from '@tnesh-stack/elements';
-import { Signal, SignalWatcher, toPromise } from '@tnesh-stack/signals';
-import { HashType, HoloHashMap, retype } from '@tnesh-stack/utils';
+} from '@darksoil-studio/holochain-elements';
+import { Signal, SignalWatcher, toPromise } from '@darksoil-studio/holochain-signals';
+import { HashType, HoloHashMap, retype } from '@darksoil-studio/holochain-utils';
 import { LitElement, css, html } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 

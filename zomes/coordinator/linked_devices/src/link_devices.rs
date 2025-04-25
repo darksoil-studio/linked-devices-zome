@@ -209,7 +209,7 @@ pub struct AcceptLinkDevicesInput {
 // Called by the recipient
 #[hdk_extern]
 pub fn accept_link_devices(input: AcceptLinkDevicesInput) -> ExternResult<()> {
-    let my_pub_key = agent_info()?.agent_latest_pubkey;
+    let my_pub_key = agent_info()?.agent_initial_pubkey;
 
     let linked_devices = LinkedDevices {
         agents: vec![my_pub_key.clone(), input.requestor.clone()],
@@ -260,7 +260,7 @@ pub fn receive_accept_link_devices(
     incomplete_proof: LinkedDevicesProof,
 ) -> ExternResult<Signature> {
     let linked_devices = incomplete_proof.linked_devices;
-    let my_pub_key = agent_info()?.agent_latest_pubkey;
+    let my_pub_key = agent_info()?.agent_initial_pubkey;
     let call_info = call_info()?;
     let caller = call_info.provenance;
 
@@ -313,7 +313,7 @@ pub fn create_link_devices_link(
     target_linked_device: AgentPubKey,
     tag: AgentToLinkedDevicesLinkTag,
 ) -> ExternResult<()> {
-    let my_pub_key = agent_info()?.agent_latest_pubkey;
+    let my_pub_key = agent_info()?.agent_initial_pubkey;
 
     let tag_bytes = SerializedBytes::try_from(tag).map_err(|err| wasm_error!(err))?;
 

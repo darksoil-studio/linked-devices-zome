@@ -4,7 +4,7 @@ import {
 	AppClient,
 	Link,
 } from '@holochain/client';
-import { ZomeClient } from '@tnesh-stack/utils';
+import { ZomeClient } from '@darksoil-studio/holochain-utils';
 
 import { LinkedDevicesProof, LinkedDevicesSignal } from './types.js';
 

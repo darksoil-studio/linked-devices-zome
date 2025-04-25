@@ -81,7 +81,7 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                 )?;
 
                 call_remote(
-                    agent_info()?.agent_latest_pubkey,
+                    agent_info()?.agent_initial_pubkey,
                     zome_info()?.name,
                     "link_transitive_devices_for_device".into(),
                     None,
