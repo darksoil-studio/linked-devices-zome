@@ -331,7 +331,7 @@
             {
               "kind": "field",
               "name": "linkedDevicesForAgent",
-              "default": "new MemoHoloHashMap((agent: AgentPubKey) =>\n\t\tpipe(\n\t\t\tliveLinksSignal(\n\t\t\t\tthis.client,\n\t\t\t\tagent,\n\t\t\t\t() => this.client.getLinkedDevicesForAgent(agent),\n\t\t\t\t'AgentToLinkedDevices',\n\t\t\t),\n\t\t\tlinks => uniquify(links.map(l => retype(l.target, HashType.AGENT))),\n\t\t),\n\t)",
+              "default": "new MemoHoloHashMap((agent: AgentPubKey) =>\n\t\tmapCompleted(\n\t\t\tliveLinksSignal(\n\t\t\t\tthis.client,\n\t\t\t\tagent,\n\t\t\t\t() => this.client.getLinkedDevicesForAgent(agent),\n\t\t\t\t'AgentToLinkedDevices',\n\t\t\t),\n\t\t\tlinks => uniquify(links.map(l => retype(l.target, HashType.AGENT))),\n\t\t),\n\t)",
               "description": "Linked Devices for Agent"
             },
             {
