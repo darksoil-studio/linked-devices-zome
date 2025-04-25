@@ -1,6 +1,14 @@
+import {
+	liveLinksSignal,
+	mapCompleted,
+	uniquify,
+} from '@darksoil-studio/holochain-signals';
+import {
+	HashType,
+	MemoHoloHashMap,
+	retype,
+} from '@darksoil-studio/holochain-utils';
 import { AgentPubKey } from '@holochain/client';
-import { liveLinksSignal, mapCompleted, uniquify } from '@darksoil-studio/holochain-signals';
-import { HashType, MemoHoloHashMap, retype } from '@darksoil-studio/holochain-utils';
 
 import { LinkedDevicesConfig, defaultLinkedDevicesConfig } from './config.js';
 import { LinkedDevicesClient } from './linked-devices-client.js';

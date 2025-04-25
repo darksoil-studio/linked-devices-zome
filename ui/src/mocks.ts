@@ -1,20 +1,4 @@
 import {
-	ActionHash,
-	AgentPubKey,
-	AppClient,
-	Delete,
-	EntryHash,
-	Link,
-	NewEntryAction,
-	Record,
-	SignedActionHashed,
-	decodeHashFromBase64,
-	fakeActionHash,
-	fakeAgentPubKey,
-	fakeDnaHash,
-	fakeEntryHash,
-} from '@holochain/client';
-import {
 	AgentPubKeyMap,
 	HashType,
 	HoloHashMap,
@@ -30,6 +14,22 @@ import {
 	hash,
 	pickBy,
 } from '@darksoil-studio/holochain-utils';
+import {
+	ActionHash,
+	AgentPubKey,
+	AppClient,
+	Delete,
+	EntryHash,
+	Link,
+	NewEntryAction,
+	Record,
+	SignedActionHashed,
+	decodeHashFromBase64,
+	fakeActionHash,
+	fakeAgentPubKey,
+	fakeDnaHash,
+	fakeEntryHash,
+} from '@holochain/client';
 
 import { LinkedDevicesClient } from './linked-devices-client.js';
 

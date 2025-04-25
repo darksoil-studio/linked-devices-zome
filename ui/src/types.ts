@@ -1,5 +1,5 @@
-import { AgentPubKey, Signature, Timestamp } from '@holochain/client';
 import { ActionCommittedSignal } from '@darksoil-studio/holochain-utils';
+import { AgentPubKey, Signature, Timestamp } from '@holochain/client';
 
 export type LinkedDevicesSignal =
 	| ActionCommittedSignal<EntryTypes, LinkTypes>
