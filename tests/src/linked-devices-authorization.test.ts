@@ -1,6 +1,6 @@
 import { ActionHash, Record, encodeHashToBase64 } from '@holochain/client';
 import { dhtSync, runScenario } from '@holochain/tryorama';
-import { toPromise } from '@tnesh-stack/signals';
+import { toPromise } from '@darksoil-studio/holochain-signals';
 import { assert, expect, test } from 'vitest';
 
 import { setup } from './setup.js';

@@ -1,7 +1,7 @@
 import { ActionHash, Record, encodeHashToBase64 } from '@holochain/client';
 import { dhtSync, pause, runScenario } from '@holochain/tryorama';
 import { decode } from '@msgpack/msgpack';
-import { toPromise } from '@tnesh-stack/signals';
+import { toPromise } from '@darksoil-studio/holochain-signals';
 import { assert, test } from 'vitest';
 
 import { linkDevices, setup, waitUntil } from './setup.js';

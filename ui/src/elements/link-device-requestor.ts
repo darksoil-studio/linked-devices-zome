@@ -1,4 +1,20 @@
 import {
+	hashProperty,
+	notify,
+	notifyError,
+	sharedStyles,
+} from '@darksoil-studio/holochain-elements';
+import {
+	Signal,
+	SignalWatcher,
+	toPromise,
+} from '@darksoil-studio/holochain-signals';
+import {
+	HashType,
+	HoloHashMap,
+	retype,
+} from '@darksoil-studio/holochain-utils';
+import {
 	ActionHash,
 	AgentPubKey,
 	AgentPubKeyB64,
@@ -9,14 +25,6 @@ import { consume } from '@lit/context';
 import { msg } from '@lit/localize';
 import { SlInput } from '@shoelace-style/shoelace';
 import '@shoelace-style/shoelace/dist/components/alert/alert.js';
-import {
-	hashProperty,
-	notify,
-	notifyError,
-	sharedStyles,
-} from '@tnesh-stack/elements';
-import { Signal, SignalWatcher, toPromise } from '@tnesh-stack/signals';
-import { HashType, HoloHashMap, retype } from '@tnesh-stack/utils';
 import { LitElement, css, html } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 

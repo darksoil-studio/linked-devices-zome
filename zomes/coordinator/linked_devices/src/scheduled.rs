@@ -111,7 +111,7 @@ pub fn link_transitive_devices_for_device(linked_device: AgentPubKey) -> ExternR
     let linked_devices_proof_for_this_device =
         AgentToLinkedDevicesLinkTag::try_from(bytes).map_err(|err| wasm_error!(err))?;
 
-    let my_pub_key = agent_info()?.agent_latest_pubkey;
+    let my_pub_key = agent_info()?.agent_initial_pubkey;
 
     for transitive_linked_device_link in transitive_linked_devices_links {
         let Some(transitive_linked_device) =
