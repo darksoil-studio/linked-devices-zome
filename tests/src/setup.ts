@@ -1,20 +1,5 @@
-import {
-	ActionHash,
-	AgentPubKey,
-	AppBundleSource,
-	AppCallZomeRequest,
-	AppWebsocket,
-	EntryHash,
-	NewEntryAction,
-	Record,
-	encodeHashToBase64,
-	fakeActionHash,
-	fakeAgentPubKey,
-	fakeDnaHash,
-	fakeEntryHash,
-} from '@holochain/client';
-import { Scenario, pause } from '@holochain/tryorama';
-import { encode } from '@msgpack/msgpack';
+import { AsyncSignal, Signal } from '@darksoil-studio/holochain-signals';
+import { Scenario, dhtSync, pause } from '@holochain/tryorama';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -22,134 +7,70 @@ import { LinkedDevicesClient } from '../../ui/src/linked-devices-client.js';
 import { LinkedDevicesStore } from '../../ui/src/linked-devices-store.js';
 import { randomPasscode } from '../../ui/src/utils.js';
 
-export async function setup(scenario: Scenario) {
+export async function setup(scenario: Scenario, playerAmount = 2) {
 	const testHappUrl =
 		dirname(fileURLToPath(import.meta.url)) +
 		'/../../workdir/linked-devices_test.happ';
 
 	// Add 2 players with the test hApp to the Scenario. The returned players
 	// can be destructured.
-	const [alice, bob, carol, dave] = await scenario.addPlayersWithApps([
+	const players = await scenario.addPlayersWithSameApp(
 		{
 			appBundleSource: {
 				type: 'path',
 				value: testHappUrl,
 			},
 		},
-		{
-			appBundleSource: {
-				type: 'path',
-				value: testHappUrl,
-			},
-		},
-		{
-			appBundleSource: {
-				type: 'path',
-				value: testHappUrl,
-			},
-		},
-		{
-			appBundleSource: {
-				type: 'path',
-				value: testHappUrl,
-			},
-		},
-	]);
+		playerAmount,
+	);
 
-	await alice.conductor
-		.adminWs()
-		.authorizeSigningCredentials(alice.cells[0].cell_id);
-
-	await bob.conductor
-		.adminWs()
-		.authorizeSigningCredentials(bob.cells[0].cell_id);
-
-	await carol.conductor
-		.adminWs()
-		.authorizeSigningCredentials(carol.cells[0].cell_id);
-
-	await dave.conductor
-		.adminWs()
-		.authorizeSigningCredentials(dave.cells[0].cell_id);
+	for (const player of players) {
+		await player.conductor
+			.adminWs()
+			.authorizeSigningCredentials(player.cells[0].cell_id);
+	}
 
 	// Shortcut peer discovery through gossip and register all agents in every
 	// conductor of the scenario.
 	await scenario.shareAllAgents();
 
-	const aliceStore = new LinkedDevicesStore(
-		new LinkedDevicesClient(
-			alice.appWs as any,
-			'linked_devices_test',
-			'linked_devices',
-		),
-	);
-
-	const bobStore = new LinkedDevicesStore(
-		new LinkedDevicesClient(
-			bob.appWs as any,
-			'linked_devices_test',
-			'linked_devices',
-		),
-	);
-
-	const carolStore = new LinkedDevicesStore(
-		new LinkedDevicesClient(
-			carol.appWs as any,
-			'linked_devices_test',
-			'linked_devices',
-		),
-	);
-
-	const daveStore = new LinkedDevicesStore(
-		new LinkedDevicesClient(
-			dave.appWs as any,
-			'linked_devices_test',
-			'linked_devices',
-		),
-	);
+	const playersWithStores = players.map(player => {
+		const store = new LinkedDevicesStore(
+			new LinkedDevicesClient(
+				player.appWs as any,
+				'linked_devices_test',
+				'linked_devices',
+			),
+		);
+		return {
+			player,
+			store,
+			startUp: async () => {
+				await player.conductor.startUp();
+				const port = await player.conductor.attachAppInterface();
+				const issued = await player.conductor
+					.adminWs()
+					.issueAppAuthenticationToken({
+						installed_app_id: player.appId,
+					});
+				const appWs = await player.conductor.connectAppWs(issued.token, port);
+				store.client = new LinkedDevicesClient(appWs, 'linked_devices_test');
+			},
+		};
+	});
 
 	// Shortcut peer discovery through gossip and register all agents in every
 	// conductor of the scenario.
 	await scenario.shareAllAgents();
 
 	// Prevent race condition when two zome calls are made instantly at the beginning of the lifecycle that cause a ChainHeadMoved error because they trigger 2 parallel init workflows
-	await aliceStore.client.clearLinkDevicesCapGrants();
-	await bobStore.client.clearLinkDevicesCapGrants();
-	await carolStore.client.clearLinkDevicesCapGrants();
-	await daveStore.client.clearLinkDevicesCapGrants();
+	for (const pws of playersWithStores) {
+		await pws.store.client.clearLinkDevicesCapGrants();
+	}
 
-	return {
-		alice: {
-			player: alice,
-			store: aliceStore,
-		},
-		bob: {
-			player: bob,
-			store: bobStore,
-		},
-		carol: {
-			player: carol,
-			store: carolStore,
-		},
-		dave: {
-			player: dave,
-			store: daveStore,
-			startUp: async () => {
-				await dave.conductor.startUp();
-				const port = await dave.conductor.attachAppInterface();
-				const issued = await dave.conductor
-					.adminWs()
-					.issueAppAuthenticationToken({
-						installed_app_id: dave.appId,
-					});
-				const appWs = await dave.conductor.connectAppWs(issued.token, port);
-				daveStore.client = new LinkedDevicesClient(
-					appWs,
-					'linked_devices_test',
-				);
-			},
-		},
-	};
+	await dhtSync(players, players[0].cells[0].cell_id[0]);
+
+	return playersWithStores;
 }
 
 export async function waitUntil(
@@ -188,4 +109,68 @@ export async function linkDevices(
 		store1.client.client.myPubKey,
 		store1Passcode,
 	);
+}
+
+export async function eventually<T>(
+	signal: AsyncSignal<T>,
+	check: (v: T) => void,
+	timeoutMs = 240_000,
+) {
+	const timeoutError = new Error('Timeout');
+	return new Promise((resolve, reject) => {
+		let error;
+		setTimeout(() => {
+			reject(error ? error : timeoutError);
+		}, timeoutMs);
+		effect(() => {
+			const value = signal.get();
+			if (value.status === 'pending') return;
+			if (value.status === 'error') {
+				error = new Error(value.error.toString());
+				return;
+			}
+
+			try {
+				check(value.value);
+				resolve(undefined);
+			} catch (e) {}
+		});
+	});
+}
+
+let needsEnqueue = true;
+
+const w = new Signal.subtle.Watcher(() => {
+	if (needsEnqueue) {
+		needsEnqueue = false;
+		queueMicrotask(processPending);
+	}
+});
+
+function processPending() {
+	needsEnqueue = true;
+
+	for (const s of w.getPending()) {
+		s.get();
+	}
+
+	w.watch();
+}
+
+export function effect(callback) {
+	let cleanup;
+
+	const computed = new Signal.Computed(() => {
+		typeof cleanup === 'function' && cleanup();
+		cleanup = callback();
+	});
+
+	w.watch(computed);
+	computed.get();
+
+	return () => {
+		w.unwatch(computed);
+		typeof cleanup === 'function' && cleanup();
+		cleanup = undefined;
+	};
 }

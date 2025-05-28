@@ -47,6 +47,7 @@
           ];
 
           packages = [
+            # inputs'.holochain-nix-builders.packages.holochain-iroh-transport
             inputs'.holochain-nix-builders.packages.holochain
             inputs'.scaffolding.packages.hc-scaffold-zome
             inputs'.tauri-plugin-holochain.packages.hc-pilot
