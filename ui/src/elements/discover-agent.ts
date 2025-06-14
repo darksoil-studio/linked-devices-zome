@@ -93,6 +93,7 @@ export class DiscoverAgent extends SignalWatcher(LitElement) {
 				await this.scanAndDiscover();
 			} catch (e) {
 				notifyError(msg('Error discovering agent. Please try again.'));
+				console.error(e);
 				this.dispatchEvent(
 					new CustomEvent('link-devices-cancelled', {
 						bubbles: true,
