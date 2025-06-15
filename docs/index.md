@@ -8,10 +8,7 @@ hero:
   tagline: Plug-and-play multi-devices management for your hApps
   actions:
     - theme: brand
-      text: Pricing
-      link: /pricing/pricing.md
-    - theme: alt
-      text: Start building
+      text: Setup
       link: /setup.md
     - theme: alt
       text: Integrity Zome API
