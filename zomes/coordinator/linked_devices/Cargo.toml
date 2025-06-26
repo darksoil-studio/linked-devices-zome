@@ -10,6 +10,7 @@ name = "linked_devices"
 [dependencies]
 hdk = { workspace = true }
 
+holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 
 linked_devices_integrity = { path = "../../integrity/linked_devices", package = "linked_devices_integrity" }
