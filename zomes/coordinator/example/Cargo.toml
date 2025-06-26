@@ -9,6 +9,7 @@ name = "example"
 
 [dependencies]
 hdk = { workspace = true }
+holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 
 example_integrity = { path = "../../integrity/example" } 
