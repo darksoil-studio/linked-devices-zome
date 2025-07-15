@@ -5,7 +5,6 @@
     holonix.url = "github:holochain/holonix/main-0.5";
 
     nixpkgs.follows = "holonix/nixpkgs";
-    flake-parts.follows = "holonix/flake-parts";
 
     holochain-utils.url = "github:darksoil-studio/holochain-utils/main-0.5";
     holochain-utils.inputs.holonix.follows = "holonix";
@@ -23,7 +22,7 @@
   };
 
   outputs = inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+    inputs.holonix.inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./zomes/integrity/linked_devices/zome.nix
         ./zomes/coordinator/linked_devices/zome.nix
