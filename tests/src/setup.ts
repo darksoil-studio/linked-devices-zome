@@ -70,6 +70,8 @@ export async function setup(scenario: Scenario, playerAmount = 2) {
 
 	await dhtSync(players, players[0].cells[0].cell_id[0]);
 
+	console.log('Setup completed!');
+
 	return playersWithStores;
 }
 
