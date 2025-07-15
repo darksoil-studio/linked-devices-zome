@@ -302,10 +302,6 @@
     },
     "root": {
       "inputs": {
-        "flake-parts": [
-          "holonix",
-          "flake-parts"
-        ],
         "holochain-utils": "holochain-utils",
         "holonix": "holonix",
         "nixpkgs": [
