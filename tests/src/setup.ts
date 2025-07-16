@@ -68,7 +68,7 @@ export async function setup(scenario: Scenario, playerAmount = 2) {
 		await pws.store.client.clearLinkDevicesCapGrants();
 	}
 
-	await dhtSync(players, players[0].cells[0].cell_id[0], 1000, 120_000);
+	await dhtSync(players, players[0].cells[0].cell_id[0], 1000, 240_000);
 
 	console.log('Setup completed!');
 
